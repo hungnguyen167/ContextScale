@@ -1,0 +1,12 @@
+name: metabert
+channels:
+  - defaults
+  - anaconda
+dependencies:
+  - jupyter
+  - matplotlib
+  - numpy
+  - pytorch
+  - scikit-learn
+  - transformers
+  - seaborn
