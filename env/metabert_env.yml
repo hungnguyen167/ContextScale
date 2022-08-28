@@ -6,7 +6,9 @@ dependencies:
   - jupyter
   - matplotlib
   - numpy
-  - pytorch
+  - pytorch=
   - scikit-learn
   - transformers
   - seaborn
+  - sentencepiece
+
