@@ -3,12 +3,13 @@ channels:
   - defaults
   - anaconda
 dependencies:
+  - python=3.9.4
   - jupyter
   - matplotlib
   - numpy
-  - pytorch=
   - scikit-learn
-  - transformers
   - seaborn
-  - sentencepiece
+  - pip
+  - pip:
+    - scipy==1.9.1
 
