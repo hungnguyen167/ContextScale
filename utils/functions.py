@@ -237,3 +237,61 @@ def test_normal(dataloader, model):
   accuracy = correct*100
   print(f"Test Error: \n Accuracy: {(accuracy):>0.1f}%, Avg loss: {test_loss:>8f} \n")
   return(accuracy)
+
+def train_loop(dataloader, model, optimizer, scheduler, device):
+    print("")
+    print('Training...')
+
+    # Measure how long the training epoch takes.
+    t0 = time.time()
+    train_loss = 0
+    # Put the model into training mode. 
+    size = len(dataloader.dataset)
+    model.train()
+    # For each batch of training data...optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5)
+    
+    for batch_num, batch in enumerate(dataloader):
+      batch = {k: v.to(device) for k, v in batch.items()}
+      output = model(batch['input_ids'],batch['attention_mask'])
+      y = batch['labels'].long()
+      loss_fct = nn.CrossEntropyLoss(weight=torch.Tensor(class_weights)).to(device)
+      loss = loss_fct(output, y)
+      optimizer.zero_grad()
+      # Backpropagation
+      loss.backward()
+      train_loss += loss.item()
+      torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+      optimizer.step()
+      scheduler.step()   
+
+      # Report
+      if batch_num % 100 == 0 and batch_num !=0:
+        elapsed = format_time(time.time() - t0)
+        current = batch_num * len(batch['input_ids'])
+        train_loss_current = train_loss/batch_num
+        print(f"loss: {train_loss_current:>7f}  [{current:>5d}/{size:>5d}]. Took {elapsed}")     
+  
+    # Measure how long this epoch took.
+    training_time = format_time(time.time() - t0)
+
+    print("")
+    print("  Training epoch took: {:}".format(training_time))
+    
+def eval_loop(dataloader, model, loss_fct, device):
+  size = len(dataloader.dataset)
+  num_batches = len(dataloader)
+  test_loss, correct = 0, 0
+  model.eval()
+  with torch.no_grad():  
+    for batch in dataloader:        
+        batch = {k: v.to(device) for k, v in batch.items()}
+        output = model(batch['input_ids'],batch['attention_mask'])
+        y = batch['labels'].long()
+        test_loss += loss_fct(output, y).item()
+        correct += (output.argmax(1) == y).type(torch.float).sum().item()
+
+  test_loss /= num_batches
+  correct /= size
+  accuracy = correct*100
+  print(f"Test Error: \n Accuracy: {(accuracy):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+  return(accuracy)
