@@ -43,5 +43,33 @@ class MetaBERT(nn.Module):
         return logits
 
 
+class BERTLSTM(nn.Module):
+    def __init__(self, bert_model, labels_count, dropout=0.1, lstm_lay=1, lstm_dim=128,bidirectional=True,num_last_layers=4):
+        super().__init__()
+        self.bert = BertModel.from_pretrained(bert_model)
+        self.dropout = nn.Dropout(dropout)
+        if bidirectional:
+            self.lin = nn.Linear(lstm_dim*2, labels_count)
+        else:
+            self.lin = nn.Linear(lstm_dim, labels_count)
+        self.lstm_lay = lstm_lay
+        self.num_last_layers = num_last_layers
+        if bidirectional: 
+            self.lstm = nn.LSTM(768*num_last_layers,lstm_dim,lstm_lay,batch_first=True,bidirectional=bidirectional)
+        else: 
+            self.lstm = nn.LSTM(768*num_last_layers,lstm_dim,lstm_lay,batch_first=True,bidirectional=bidirectional)
+        self.bilstm = bidirectional
+    def forward(self, input_ids, attention_mask):
+        hidden_states = self.bert(input_ids=input_ids, attention_mask=attention_mask,output_hidden_states=True)['hidden_states'] 
+        bert_output = torch.cat(tuple([hidden_states[i] for i in range(-self.num_last_layers,0)]), dim=-1)
+        _, (hidden_last, _) = self.lstm(bert_output)
+        if self.bilstm:
+            hidden_last_out = torch.cat([hidden_last[-2],hidden_last[-1]],dim=-1)
+        else: 
+            hidden_last_out = hidden_last[-1]
+        dropout_output = self.dropout(hidden_last_out)
+        logits = self.lin(dropout_output)
+        return logits
+
 
         

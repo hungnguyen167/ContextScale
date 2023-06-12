@@ -8,6 +8,7 @@ data/fasttext/cc.de.300.vec
 data/py_outputs/manifesto_cleaned.csv
 data/py_outputs/welfare.csv
 data/r_outputs/germaparl.csv
+results/
 results/bert/bert_3class_std/checkpoint-1416/pytorch_model.bin
 results/bert/bert_3class_std/checkpoint-1416/rng_state.pth
 results/bert/bert_3class_std/checkpoint-1416/training_args.bin
