@@ -1,0 +1,116 @@
+---
+title: "manifesto_pull"
+output: html_document
+date: "2022-12-02"
+---
+
+```{r setup }
+knitr::opts_chunk$set(echo = TRUE)
+pacman::p_load(tidyverse, manifestoR)
+```
+
+
+```{r pull}
+rm(list=ls())
+cmp_parties <- read.csv(here::here("data","CMP","cmp_parties.csv"))
+mp_setapikey("manifesto_apikey.txt")
+corpora <-  mp_corpus(countryname %in% c("Germany", "Spain", "France", "United Kingdom", "Italy", "United States"))
+## 90/Greens: 41113, PDS: 41221, L_PDS: 41222, LINKE: 41223, SPD: 41320, FDP: 41420, CDU/CSU: 41521
+## Year: 199809, 200209, 200509, 200909, 201309, 201709, 202109
+
+parties <- cmp_parties %>%
+    filter(countryname %in% c("Germany", "Spain", "France", "United Kingdom", "Italy", 
+                              "United States")) %>%
+    select(party, name, name_english) 
+
+ls_corpus <- names(corpora)
+
+pull_manifestoes <- function(corpora, ls_corpus){
+    ls_dfs <- vector(mode="list", length = length(ls_corpus))
+    for (i in seq_along(ls_corpus)){
+        corpus_name <- ls_corpus[i]
+        current_corpus <- corpora[[corpus_name]]$content
+        if(!is.null(current_corpus)){
+            df <- current_corpus %>%
+                mutate(
+                    pos = row_number(),
+                    election = substr(corpus_name, 7,10),
+                    party_code = rep(corpus_name, n())
+                ) %>%
+                rename(code = cmp_code) %>%
+                select(text, election, code, pos, party_code)
+            ls_dfs[[i]] <- df
+            names(ls_dfs)[i] <- corpus_name
+            
+        }
+    }
+    return(ls_dfs)
+}
+pulled_res <- pull_manifestoes(corpora, ls_corpus)
+pulled_df <- bind_rows(pulled_res)
+
+pulled_df <- pulled_df %>%
+    filter(!is.na(code)) %>%
+    mutate(
+        country_code = as.numeric(substr(party_code,1,2)),
+        party = as.numeric(substr(party_code,1,5)),
+        country = case_when(
+            country_code == 31 ~ "France",
+            country_code == 32 ~ "Italy",
+            country_code == 33 ~ "Spain",
+            country_code == 41 ~ "Germany",
+            country_code == 51 ~ "United Kingdom",
+            country_code == 61 ~ "United States"
+        )
+    ) %>%
+    left_join(parties, by = "party")
+
+write.csv(pulled_df,here::here("data", "r_outputs", "pulled_manifestoes.csv"), row.names=FALSE)
+```
+
+
+## Try Wordfish
+
+
+```{r}
+library(quanteda, quanteda.textmodels)
+head(df_manifesto)
+df_manifesto <- read.csv("shared_data/py_outputs/manifesto_cleaned.csv", encoding="utf-8")
+df_manifesto$domain <- stringr::str_extract(string=as.character(df_manifesto$code), pattern="[0-9]")
+
+df_welfare <- df_manifesto[which(df_manifesto$code %in% c("504")),]
+grouped_texts <- df_welfare %>% 
+    mutate(
+        party_cabinet = paste(party, cabinet, sep="_")
+    ) %>%
+    group_by(party_cabinet) %>%
+    summarise(
+        text_new = paste(text, collapse = " "),
+        num_speeches = n()
+    )
+library(tidyr)
+
+
+dfmat <- corpus(grouped_texts, text_field = "text_new") %>%
+             tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
+             tokens_remove(stopwords("de")) %>%
+             dfm() %>%
+             dfm_trim(min_termfreq = 50, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
+             dfm_subset(ntoken(.) > 0, drop_docid = TRUE)
+
+wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", 
+                                 sparse = TRUE)
+results <- grouped_texts %>% select(-text_new)
+results$score <- wf_mod$theta
+
+results <- results %>%
+    tidyr::separate(party_cabinet, into=c("party", "cabinet"), sep="_")
+library(ggplot2)
+plot2.1 <- ggplot(data = results,
+                  aes(x=cabinet, y=score, color=party)) +
+    geom_point() +
+    geom_line() 
+
+    
+```
+

@@ -1,0 +1,316 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+## Df
+```{r}
+library(quanteda, quanteda.textmodels)
+library(tidyverse)
+
+df <- read.csv("data/py_outputs/lr_deu_party.csv")
+
+
+library(readr)
+pulled_manifestoes <- read_csv("data/CMP/pulled_manifestoes.csv")
+
+
+pulled_manifestoes$domain <- stringr::str_extract(string=as.character(pulled_manifestoes$code), pattern="[0-9]")
+
+manifesto_deu <- pulled_manifestoes[which(pulled_manifestoes$country == "Germany"),]
+
+
+grouped_texts <- manifesto_deu %>% 
+    filter(!(code %in% c("H","000"))) %>%
+    mutate(
+        party_election = paste(party, election, sep="_"),
+        party = case_when(
+            grepl("Linke|Sozialismus", name) ~ "PDS/Die Linke",
+            grepl("Sozialdemokratische", name) ~ "SPD",
+            grepl("Christlich", name) ~ "CDU/CSU",
+            grepl("Freie", name) ~ "FDP",
+            grepl("Grünen", name) ~ "Die Grünen",
+            grepl("Alternative", name) ~ "AfD",
+            TRUE ~ NA_character_
+        )
+    ) %>%
+    filter(!is.na(party)) %>%
+    group_by(party, election) %>%
+    summarise(
+        text_new = paste(text, collapse = " "),
+        num_speeches = n()
+    )
+
+
+dfmat <- corpus(grouped_texts, text_field = "text_new") %>%
+             tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
+             tokens_remove(stopwords("de")) %>%
+             dfm() %>%
+             dfm_trim(min_termfreq = 50, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
+             dfm_subset(ntoken(.) > 0, drop_docid = TRUE)
+
+wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", 
+                                 sparse = TRUE)
+results <- grouped_texts %>% select(-text_new)
+
+results$wf_score <- wf_mod$theta
+
+
+library(ggplot2)
+
+
+
+df <-  df %>%
+    rename(election=year) %>%
+    left_join(results, by = c("party", "election"))
+
+
+
+```
+## Figure 1
+```{r figure 1}
+plot_wf <- ggplot(data = df,
+                  aes(x=election, y=wf_score, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.5, size = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("Wordfish")
+
+
+plot_d2v <- ggplot(data = df,
+                  aes(x=election, y= d2v_dim, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.5, size = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("Doc2Vec - UMAP")
+
+plot_d2v_org <- ggplot(data = df,
+                  aes(x=election, y= d2v_org, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.5, size = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("Doc2Vec - Original")
+
+
+plot_roberta <- ggplot(data = df,
+                  aes(x=election, y=roberta_dim, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.5, size = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("Transformer - UMAP")
+
+
+plot_bow <- ggplot(data = df,
+                  aes(x=election, y=bow_dim, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.5, size = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("BOW - UMAP")
+
+
+plot_cmplog <- ggplot(data = df,
+                  aes(x=election, y=lr_log, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.5, size = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("CMP - Log")
+
+
+
+
+library(ragg)
+library(ggpubr)
+figure_1 <- ggarrange(plot_roberta, plot_wf, plot_cmplog, plot_d2v, plot_d2v_org, plot_bow,  
+                      common.legend = TRUE)
+
+agg_png(filename = here::here("results","tabs and figs","figure 1.png"), res = 360, width = 4800, height = 3200)
+figure_1
+invisible(dev.off())
+
+cor_table <- data.frame(cor(df[,c("lr_log","roberta_dim","wf_score","d2v_dim","d2v_org","bow_dim")]))
+cor_table <- round(cor_table, 2)
+library(gt)
+
+
+
+```
+
+## Df_env
+
+```{r env}
+df_env <- read.csv("data/py_outputs/env_scores.csv")
+
+manifesto_env = manifesto_deu[which(manifesto_deu$code %in% c("501","416","410")),]
+grouped_texts <- manifesto_env %>% 
+    mutate(
+        party_election = paste(party, election, sep="_"),
+        party = case_when(
+            grepl("Linke|Sozialismus", name) ~ "PDS/Die Linke",
+            grepl("Sozialdemokratische", name) ~ "SPD",
+            grepl("Christlich", name) ~ "CDU/CSU",
+            grepl("Freie", name) ~ "FDP",
+            grepl("Grünen", name) ~ "Die Grünen",
+            grepl("Alternative", name) ~ "AfD",
+            TRUE ~ NA_character_
+        )
+    ) %>%
+    filter(!is.na(party)) %>%
+    group_by(party, election) %>%
+    summarise(
+        text_new = paste(text, collapse = " "),
+        num_speeches = n()
+    )
+dfmat <- corpus(grouped_texts, text_field = "text_new") %>%
+             tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
+             tokens_remove(stopwords("de")) %>%
+             dfm() %>%
+             dfm_trim(min_termfreq = 50, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
+             dfm_subset(ntoken(.) > 0, drop_docid = TRUE)
+
+wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", 
+                                 sparse = TRUE)
+results <- grouped_texts %>% select(-text_new)
+
+results$wf_score <- wf_mod$theta
+
+df_env <-  df_env %>%
+    rename(election=year) %>%
+    left_join(results, by = c("party", "election"))
+
+
+```
+## Figure 2
+
+```{r figure 2}
+plot_wf <- ggplot(data = df_env,
+                  aes(x=election, y=wf_score, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.5, size = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("Wordfish")
+
+
+
+plot_roberta <- ggplot(data = df_env,
+                  aes(x=election, y=dim1, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.5, size = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("Transformer - UMAP")
+
+plot_cmplog <- ggplot(data = df_env,
+                  aes(x=election, y=lr_log, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.5, size = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("CMP - Log")
+plot_cmpabs <- ggplot(data = df_env,
+                  aes(x=election, y=lr_abs, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.5, size = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("CMP - Original")
+
+
+
+
+
+
+figure_2 <- ggarrange(plot_roberta, plot_wf, plot_cmplog, 
+                      plot_cmpabs, common.legend = TRUE)
+
+agg_png(filename = here::here("results","tabs and figs","figure 2.png"), res = 360, width = 4800, height = 3200)
+figure_2
+invisible(dev.off())
+library(quanteda.textstats)
+tstat_freq <- textstat_frequency(dfmat, n = 20, groups = party)
+
+```
+
+## Count
+
+```{r}
+env <- read_csv("data/py_outputs/env.csv")
+count_df <- env %>% 
+    mutate(
+        party_election = paste(party, election, sep="_"),
+        party = case_when(
+            grepl("Linke|Sozialismus", name) ~ "PDS/Die Linke",
+            grepl("Sozialdemokratische", name) ~ "SPD",
+            grepl("Christlich", name) ~ "CDU/CSU",
+            grepl("Freie", name) ~ "FDP",
+            grepl("Grünen", name) ~ "Die Grünen",
+            grepl("Alternative", name) ~ "AfD",
+            TRUE ~ NA_character_
+        )
+    ) %>%
+    filter(!is.na(party)) %>%
+    group_by(party, election, sentiment) %>%
+    summarise(count = n())
+```
+## Correlation - hypothetical tests
+```{r}
+df <- read.csv("data/py_outputs/lr_deu_party.csv")
+
+df_corr <- round(data.frame(cor(df[,c("roberta_dim","d2v_dim","d2v_tfp","tf_d2vp", "roberta_05")])),2)
+cor.test(df$roberta_dim, df$roberta_05)
+
+
+
+```
+## Figure 3
+```{r}
+df_socwel <- read.csv("data/py_outputs/socwel.csv")
+
+figure_3 <- ggplot(data = df_socwel,
+                  aes(x=year, y=dim1, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.5, size = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("Position scores")
+
+agg_png(filename = here::here("results","tabs and figs","figure 3.png"), res = 360, width = 4800, height = 3200)
+figure_3
+invisible(dev.off())
+
+```
+
+## ESW
+```{r}
+esw_empl <- read.csv(here::here("data","r_outputs","esw_employment.csv"))
+
+
+```
+

@@ -36,4 +36,14 @@ class BareDataset(torch.utils.data.Dataset):
         return len(self.labels)
 
 
-
+class TDataset(torch.utils.data.Dataset):
+    def __init__(self, dataset, device, tokenizer, label=None):
+        self.encodings = tokenizer.batch_encode_plus(dataset['text'].tolist(), padding=True, truncation=True, max_length=300)
+        self.labels = dataset[label].tolist()
+        self.device = device
+    def __getitem__(self, idx):
+        item = {key: torch.tensor(val[idx]).to(self.device) for key, val in self.encodings.items()}
+        item['labels'] = torch.tensor(self.labels[idx]).to(self.device)
+        return item
+    def __len__(self):
+        return len(self.labels)
