@@ -72,4 +72,27 @@ class BERTLSTM(nn.Module):
         return logits
 
 
+class Autoencoder(nn.Module):
+    def __init__(self, input_dim, hidden_dim, n_components):
+        super().__init__()
+        self.encoder = nn.Sequential(
+            nn.Linear(input_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, n_components)
+        )
+        self.decoder = nn.Sequential(
+            nn.Linear(n_components, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, input_dim)
+        )
+
+    def forward(self, x):
         
+        encoded = self.encoder(x)
+        decoded = self.decoder(encoded)
+
+        return encoded, decoded
