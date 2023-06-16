@@ -47,3 +47,16 @@ class TDataset(torch.utils.data.Dataset):
         return item
     def __len__(self):
         return len(self.labels)
+
+
+
+class AEDataset(torch.utils.data.Dataset):
+    def __init__(self, embeddings, y):
+        self.embeddings = embeddings
+        self.y = y
+    def __getitem__(self, idx):
+        embeddings = torch.tensor(self.embeddings[idx])
+        y = torch.tensor(self.y[idx])
+        return embeddings, y
+    def __len__(self):
+        return len(self.y)
