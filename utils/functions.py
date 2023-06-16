@@ -70,11 +70,11 @@ def get_prediction(model, texts, tokenizer, device):
 
 def scale_topic(document_embed, guide_labels, sparse=False, guidance_weight=0.8, n_components=1, **kwargs):
     y = guide_labels
-    if len(y) <= 10000:
+    if len(document_embed) <= 10000:
         k_recommended = 250
-    elif 10000 <= len(y) <= 50000:
+    elif 10000 <= len(document_embed) <= 50000:
         k_recommended = 500
-    elif len(y) >=50000:
+    elif len(document_embed) >=50000:
         k_recommended = 1000
     if sparse:
         svd = TruncatedSVD(n_components=50)
@@ -88,7 +88,7 @@ def scale_topic(document_embed, guide_labels, sparse=False, guidance_weight=0.8,
     return embeddings
         
 
-def train_loop(dataloader, model, optimizer, scheduler, device):
+def train_ae(dataloader, model, optimizer, device, ae_lossf, cf_lossf):
     print("")
     print('Training...')
 
@@ -101,47 +101,29 @@ def train_loop(dataloader, model, optimizer, scheduler, device):
     # For each batch of training data...optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5)
     
     for batch_num, batch in enumerate(dataloader):
-      batch = {k: v.to(device) for k, v in batch.items()}
-      output = model(batch['input_ids'],batch['attention_mask'])
-      y = batch['labels'].long()
-      loss_fct = nn.CrossEntropyLoss(weight=torch.Tensor(class_weights)).to(device)
-      loss = loss_fct(output, y)
+      batch = [i.to(device) for i in batch]
+      inputs, encoded, decoded, logits = model(batch[0])
+      y = batch[1].squeeze(1).long()
+      ae_loss = ae_lossf(decoded,inputs)
+      cf_loss = cf_lossf(logits,y)
+      loss = ae_loss*0.2 + cf_loss*0.8
+      train_loss += loss.item()
       optimizer.zero_grad()
       # Backpropagation
-      loss.backward()
-      train_loss += loss.item()
+      loss.backward() 
       torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
       optimizer.step()
-      scheduler.step()   
 
       # Report
       if batch_num % 100 == 0 and batch_num !=0:
         elapsed = format_time(time.time() - t0)
-        current = batch_num * len(batch['input_ids'])
+        current = batch_num * len(batch[0])
         train_loss_current = train_loss/batch_num
         print(f"loss: {train_loss_current:>7f}  [{current:>5d}/{size:>5d}]. Took {elapsed}")     
   
     # Measure how long this epoch took.
     training_time = format_time(time.time() - t0)
-
+    
     print("")
     print("  Training epoch took: {:}".format(training_time))
-    
-def eval_loop(dataloader, model, loss_fct, device):
-  size = len(dataloader.dataset)
-  num_batches = len(dataloader)
-  test_loss, correct = 0, 0
-  model.eval()
-  with torch.no_grad():  
-    for batch in dataloader:        
-        batch = {k: v.to(device) for k, v in batch.items()}
-        output = model(batch['input_ids'],batch['attention_mask'])
-        y = batch['labels'].long()
-        test_loss += loss_fct(output, y).item()
-        correct += (output.argmax(1) == y).type(torch.float).sum().item()
-
-  test_loss /= num_batches
-  correct /= size
-  accuracy = correct*100
-  print(f"Test Error: \n Accuracy: {(accuracy):>0.1f}%, Avg loss: {test_loss:>8f} \n")
-  return(accuracy)
+    return encoded
