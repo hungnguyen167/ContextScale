@@ -2,16 +2,46 @@
 title: "R Notebook"
 output: html_notebook
 ---
-## Df
+## Setup and load data
 ```{r}
-library(quanteda, quanteda.textmodels)
-library(tidyverse)
+pacman::p_load(quanteda, quanteda.textmodels, tidyverse, readr, ggplot2, rstatix, grid, gridExtra, viridis, ggsci, ggpubr, ragg)
 
-df <- read.csv("data/py_outputs/lr_deu_party.csv")
-
-
-library(readr)
 pulled_manifestoes <- read_csv("data/CMP/pulled_manifestoes.csv")
+lr_d2v <- read_csv("data/py_outputs/lr_d2v.csv",)
+d2v_wf <- read_csv("data/py_outputs/d2v_wf.csv")
+umap_s_embeds <- read_delim("results/arrays/umap_s_embeds.csv", col_names=c("umap_d1","umap_d2"), delim=" ")
+umap_wf_embeds <- read_delim("results/arrays/umap_wf_embeds.csv", col_names=c("umap_d1","umap_d2"), delim=" ")
+wf_cmp <- read_csv("results/arrays/wf_cmp.csv")
+df_cmp <- read_csv("results/arrays/df_cmp.csv")
+
+
+dr_valid <- read_csv("results/arrays/dr_valid_scores.csv")
+pca_scaled <- read_delim("results/arrays/pca_scaled.csv", col_names=c("pca_d1","pca_d2"), delim=" ")
+umap_s_scaled <- read_delim("results/arrays/umap_s_scaled.csv", col_names=c("umap_s_d1","umap_s_d2"), delim=" ")
+umap_us_scaled <- read_delim("results/arrays/umap_us_scaled.csv", col_names=c("umap_us_d1","umap_us_d2"), delim=" ")
+ae_scaled <- read_delim("results/arrays/ae_scaled.csv",col_names=c("ae_d1","ae_d2"), delim=" ")
+ivis_scaled <- read_delim("results/arrays/ivis_scaled.csv",col_names=c("ivis_d1","ivis_d2"), delim=" ")
+lda_scaled <- read_delim("results/arrays/lda_scaled.csv", col_names=c("lda_d1","lda_d2"), delim=" ")
+
+
+pca_embeds <- read_delim("results/arrays/pca_embeds.csv", col_names=c("pca_d1","pca_d2"), delim=" ")
+umap_s_embeds <- read_delim("results/arrays/umap_s_embeds.csv", col_names=c("umap_s_d1","umap_s_d2"), delim=" ")
+umap_us_embeds <- read_delim("results/arrays/umap_us_embeds.csv", col_names=c("umap_us_d1","umap_us_d2"), delim=" ")
+ae_embeds <- read_delim("results/arrays/ae_embeds.csv",col_names=c("ae_d1","ae_d2"), delim=" ")
+ivis_embeds <- read_delim("results/arrays/ivis_embeds.csv",col_names=c("ivis_d1","ivis_d2"), delim=" ")
+lda_embeds <- read_delim("results/arrays/lda_embeds.csv", col_names=c("lda_d1","lda_d2"), delim=" ")
+
+
+trump_embeds <- read_delim("results/arrays/trump_embeds.csv",col_names=c("emb_d1","emb_d2"), delim=" ")
+trump_scaled <- read_delim("results/arrays/trump_scaled.csv",col_names=c("emb_d1","emb_d2"), delim=" ")
+trump_embeds_30 <- read_delim("results/arrays/trump_embeds_30.csv",col_names=c("emb_30_d1","emb_30_d2"), delim=" ")
+trump_scaled_30 <- read_delim("results/arrays/trump_scaled_30.csv",col_names=c("emb_30_d1","emb_30_d2"), delim=" ")
+
+trump_tweets <- read_csv("data/sins_tweets/MOTN_responses_groundtruth.csv")
+```
+
+## Wordfish scaling
+```{r}
 
 
 pulled_manifestoes$domain <- stringr::str_extract(string=as.character(pulled_manifestoes$code), pattern="[0-9]")
@@ -53,25 +83,35 @@ wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson",
 results <- grouped_texts %>% select(-text_new)
 
 results$wf_score <- wf_mod$theta
-
-
-library(ggplot2)
-
-
-
-df <-  df %>%
-    rename(election=year) %>%
-    left_join(results, by = c("party", "election"))
+results$wf_sd <- wf_mod$se.theta
 
 
 
 ```
-## Figure 1
+
+
+## Merge datasets
+
+```{r}
+lr_d2v <- lr_d2v %>% separate("party_election", sep="\\_", into = c("party", "election")) %>%
+    mutate(election = as.numeric(election))
+
+df <-  df_cmp %>%
+    left_join(results, by = c("party", "election")) %>% 
+    left_join(lr_d2v, by = c("party", "election")) %>% 
+    bind_cols(umap_s_embeds)
+
+```
+
+
+
+
+## Figure 2
 ```{r figure 1}
 plot_wf <- ggplot(data = df,
-                  aes(x=election, y=wf_score, color=party,group=party)) +
+                  aes(x=factor(election), y=wf_score, color=party,group=party)) +
     geom_point() +
-    geom_line(alpha=0.5, size = 1) + 
+    geom_line(alpha=0.5, linewidth = 1) + 
     scale_color_manual(name = "Party",  
                        values = c("blue","black", "green","yellow", "purple", "red")) +
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
@@ -79,51 +119,50 @@ plot_wf <- ggplot(data = df,
     ylab("Wordfish")
 
 
-plot_d2v <- ggplot(data = df,
-                  aes(x=election, y= d2v_dim, color=party,group=party)) +
+plot_d2v1 <- ggplot(data = df,
+                  aes(x=factor(election), y= d2v_d1, color=party,group=party)) +
     geom_point() +
     geom_line(alpha=0.5, size = 1) + 
     scale_color_manual(name = "Party",  
                        values = c("blue","black", "green","yellow", "purple", "red")) +
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
     xlab("Election") +
-    ylab("Doc2Vec - UMAP")
+    ylab("Doc2Vec - Dim 1")
 
-plot_d2v_org <- ggplot(data = df,
-                  aes(x=election, y= d2v_org, color=party,group=party)) +
+plot_d2v2 <- ggplot(data = df,
+                  aes(x=factor(election), y= d2v_d2, color=party,group=party)) +
     geom_point() +
     geom_line(alpha=0.5, size = 1) + 
     scale_color_manual(name = "Party",  
                        values = c("blue","black", "green","yellow", "purple", "red")) +
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
     xlab("Election") +
-    ylab("Doc2Vec - Original")
+    ylab("Doc2Vec - Dim 2")
 
 
-plot_roberta <- ggplot(data = df,
-                  aes(x=election, y=roberta_dim, color=party,group=party)) +
+plot_tf1 <- ggplot(data = df,
+                  aes(x=factor(election), y=umap_d1, color=party,group=party)) +
     geom_point() +
     geom_line(alpha=0.5, size = 1) + 
     scale_color_manual(name = "Party",  
                        values = c("blue","black", "green","yellow", "purple", "red")) +
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
     xlab("Election") +
-    ylab("Transformer - UMAP")
+    ylab("TFScale - Dim 1")
 
 
-plot_bow <- ggplot(data = df,
-                  aes(x=election, y=bow_dim, color=party,group=party)) +
+plot_tf2 <- ggplot(data = df,
+                  aes(x=factor(election), y=umap_d2, color=party,group=party)) +
     geom_point() +
     geom_line(alpha=0.5, size = 1) + 
     scale_color_manual(name = "Party",  
                        values = c("blue","black", "green","yellow", "purple", "red")) +
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
     xlab("Election") +
-    ylab("BOW - UMAP")
-
+    ylab("TFScale - Dim 2")
 
 plot_cmplog <- ggplot(data = df,
-                  aes(x=election, y=lr_log, color=party,group=party)) +
+                  aes(x=factor(election), y=lr_log, color=party,group=party)) +
     geom_point() +
     geom_line(alpha=0.5, size = 1) + 
     scale_color_manual(name = "Party",  
@@ -137,28 +176,34 @@ plot_cmplog <- ggplot(data = df,
 
 library(ragg)
 library(ggpubr)
-figure_1 <- ggarrange(plot_roberta, plot_wf, plot_cmplog, plot_d2v, plot_d2v_org, plot_bow,  
+figure_1 <- ggarrange(plot_tf1, plot_wf, plot_d2v1, plot_tf2, plot_cmplog, plot_d2v2,
                       common.legend = TRUE)
 
 agg_png(filename = here::here("results","tabs and figs","figure 1.png"), res = 360, width = 4800, height = 3200)
 figure_1
 invisible(dev.off())
 
-cor_table <- data.frame(cor(df[,c("lr_log","roberta_dim","wf_score","d2v_dim","d2v_org","bow_dim")]))
-cor_table <- round(cor_table, 2)
-library(gt)
-
 
 
 ```
 
-## Df_env
+## Correlation table
+```{r}
+cor_table <- df %>% cor_test(vars = "lr_log", vars2=c("umap_d1", "wf_score", "d2v_d1", "umap_d2", "d2v_d2"))
+
+cor_table <- round(cor_table[,c("cor", "p")], 2)
+library(gt)
+
+
+```
+
+
+## Wordfish - Welfare
 
 ```{r env}
-df_env <- read.csv("data/py_outputs/env_scores.csv")
 
-manifesto_env = manifesto_deu[which(manifesto_deu$code %in% c("501","416","410")),]
-grouped_texts <- manifesto_env %>% 
+manifesto_wf = manifesto_deu[which(manifesto_deu$code %in% c("504", "505")),]
+grouped_texts <- manifesto_wf %>% 
     mutate(
         party_election = paste(party, election, sep="_"),
         party = case_when(
@@ -189,20 +234,26 @@ wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson",
 results <- grouped_texts %>% select(-text_new)
 
 results$wf_score <- wf_mod$theta
+results$wf_sd <- wf_mod$sd_theta
 
-df_env <-  df_env %>%
-    rename(election=year) %>%
-    left_join(results, by = c("party", "election"))
+## Merge datasets
 
+d2v_wf  <- d2v_wf %>% separate("party_election", sep="\\_", into = c("party", "election")) %>%
+    mutate(election = as.numeric(election))
+
+df_wf <-  wf_cmp %>%
+    left_join(results, by = c("party", "election")) %>% 
+    left_join(d2v_wf, by = c("party", "election")) %>% 
+    bind_cols(umap_wf_embeds)
 
 ```
-## Figure 2
+## Figure 3
 
 ```{r figure 2}
-plot_wf <- ggplot(data = df_env,
-                  aes(x=election, y=wf_score, color=party,group=party)) +
+plot_wf <- ggplot(data = df_wf,
+                  aes(x=factor(election), y=wf_score, color=party,group=party)) +
     geom_point() +
-    geom_line(alpha=0.5, size = 1) + 
+    geom_line(alpha=0.5, linewidth = 1) + 
     scale_color_manual(name = "Party",  
                        values = c("blue","black", "green","yellow", "purple", "red")) +
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
@@ -210,19 +261,33 @@ plot_wf <- ggplot(data = df_env,
     ylab("Wordfish")
 
 
-
-plot_roberta <- ggplot(data = df_env,
-                  aes(x=election, y=dim1, color=party,group=party)) +
+plot_d2v1 <- ggplot(data = df_wf,
+                  aes(x=factor(election), y= d2v_d1, color=party,group=party)) +
     geom_point() +
     geom_line(alpha=0.5, size = 1) + 
     scale_color_manual(name = "Party",  
                        values = c("blue","black", "green","yellow", "purple", "red")) +
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
     xlab("Election") +
-    ylab("Transformer - UMAP")
+    ylab("Doc2Vec - Dim 1")
 
-plot_cmplog <- ggplot(data = df_env,
-                  aes(x=election, y=lr_log, color=party,group=party)) +
+
+
+plot_tf1 <- ggplot(data = df_wf,
+                  aes(x=factor(election), y=umap_d1, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.5, size = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("TFScale - Dim 1")
+
+
+
+
+plot_cmplog <- ggplot(data = df_wf,
+                  aes(x=factor(election), y=lr_log, color=party,group=party)) +
     geom_point() +
     geom_line(alpha=0.5, size = 1) + 
     scale_color_manual(name = "Party",  
@@ -230,87 +295,168 @@ plot_cmplog <- ggplot(data = df_env,
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
     xlab("Election") +
     ylab("CMP - Log")
-plot_cmpabs <- ggplot(data = df_env,
-                  aes(x=election, y=lr_abs, color=party,group=party)) +
+
+plot_cmpabs <- ggplot(data = df_wf,
+                  aes(x=factor(election), y=lr_abs, color=party,group=party)) +
     geom_point() +
     geom_line(alpha=0.5, size = 1) + 
     scale_color_manual(name = "Party",  
                        values = c("blue","black", "green","yellow", "purple", "red")) +
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
     xlab("Election") +
-    ylab("CMP - Original")
+    ylab("CMP - Org")
 
 
-
-
-
-
-figure_2 <- ggarrange(plot_roberta, plot_wf, plot_cmplog, 
-                      plot_cmpabs, common.legend = TRUE)
-
+legend_2 <- get_legend(plot_tf1)
+figure_2 <- ggarrange(plot_tf1, plot_wf, plot_d2v1, plot_cmplog, plot_cmpabs, as_ggplot(legend_2),
+                      legend="none")
 agg_png(filename = here::here("results","tabs and figs","figure 2.png"), res = 360, width = 4800, height = 3200)
 figure_2
 invisible(dev.off())
-library(quanteda.textstats)
-tstat_freq <- textstat_frequency(dfmat, n = 20, groups = party)
-
-```
-
-## Count
-
-```{r}
-env <- read_csv("data/py_outputs/env.csv")
-count_df <- env %>% 
-    mutate(
-        party_election = paste(party, election, sep="_"),
-        party = case_when(
-            grepl("Linke|Sozialismus", name) ~ "PDS/Die Linke",
-            grepl("Sozialdemokratische", name) ~ "SPD",
-            grepl("Christlich", name) ~ "CDU/CSU",
-            grepl("Freie", name) ~ "FDP",
-            grepl("Grünen", name) ~ "Die Grünen",
-            grepl("Alternative", name) ~ "AfD",
-            TRUE ~ NA_character_
-        )
-    ) %>%
-    filter(!is.na(party)) %>%
-    group_by(party, election, sentiment) %>%
-    summarise(count = n())
-```
-## Correlation - hypothetical tests
-```{r}
-df <- read.csv("data/py_outputs/lr_deu_party.csv")
-
-df_corr <- round(data.frame(cor(df[,c("roberta_dim","d2v_dim","d2v_tfp","tf_d2vp", "roberta_05")])),2)
-cor.test(df$roberta_dim, df$roberta_05)
-
 
 
 ```
-## Figure 3
+
+## Figure 4
+
 ```{r}
-df_socwel <- read.csv("data/py_outputs/socwel.csv")
+lr_log <- df_cmp[,"lr_log"]
+df_scaled <- bind_cols(pca_scaled, umap_s_scaled, umap_us_scaled, ivis_scaled, lda_scaled, ae_scaled)
+cor_table_2 <- df_scaled %>% cor_test(vars = "pca_d1", vars2=c("pca_d1","umap_s_d1", "umap_us_d1", "ivis_d1", "lda_d1", "ae_d1"))
+cor_2 <- abs(cor_table_2["cor"])
+df_embeds <- bind_cols(pca_embeds, umap_s_embeds, umap_us_embeds, ivis_embeds, lda_embeds, ae_embeds, lr_log)
+cor_table_3 <- df_embeds %>% cor_test(vars = "lr_log", vars2=c("pca_d1","umap_s_d1", "umap_us_d1", "ivis_d1", "lda_d1", "ae_d1"))
+cor_3 <- abs(cor_table_3["cor"])
 
-figure_3 <- ggplot(data = df_socwel,
-                  aes(x=year, y=dim1, color=party,group=party)) +
-    geom_point() +
-    geom_line(alpha=0.5, size = 1) + 
-    scale_color_manual(name = "Party",  
-                       values = c("black", "green","yellow", "purple", "red")) +
-    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
-    xlab("Election") +
-    ylab("Position scores")
+df_dr <- bind_cols(dr_valid, cor_2, cor_3)
+colnames(df_dr) <- c("techniques","tw","sil","cor_pca", "cor_cmp")
 
+plot_tw <- ggplot(data = df_dr,
+                  aes(x=techniques, y=tw, fill = techniques)) +
+    geom_bar(stat="identity") +
+    scale_fill_viridis(name = "Techniques",  
+                       labels = c("Autoencoders", "Ivis", "LDA", "PCA",
+                                  "UMAP - Supervised","UMAP - Unsupervised"),
+                      discrete = TRUE) +
+    theme(axis.title.y = element_text(size = 15),legend.title = element_text(size = 15), 
+          legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold"),
+          axis.text.x=element_blank(), axis.ticks.x=element_blank()
+          ) +
+    xlab("Trustworthiness") +
+    ylab("Coefficients")
+
+plot_sil <- ggplot(data = df_dr,
+                  aes(x=techniques, y=sil, fill = techniques)) +
+    geom_bar(stat="identity") +
+    scale_fill_viridis(name = "Techniques",   
+                       labels = c("Autoencoders", "Ivis", "LDA", "PCA",
+                                  "UMAP - Supervised","UMAP - Unsupervised"), discrete=TRUE) +
+    theme(axis.title.y = element_text(size = 15),legend.title = element_text(size = 15), 
+          legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold"),
+          axis.text.x=element_blank(), axis.ticks.x=element_blank()
+          ) +
+    xlab("Silhouette scores") +
+    ylab("Coefficients")
+
+plot_corpca <- ggplot(data = df_dr,
+                  aes(x=techniques, y=cor_pca, fill = techniques)) +
+    geom_bar(stat="identity") +
+    scale_fill_viridis(name = "Techniques",  
+                       labels = c("Autoencoders", "Ivis", "LDA", "PCA",
+                                  "UMAP - Supervised","UMAP - Unsupervised"), discrete=TRUE) +
+    theme(axis.title.y = element_text(size = 15),legend.title = element_text(size = 15), 
+          legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold"),
+          axis.text.x=element_blank(), axis.ticks.x=element_blank()
+          ) +
+    xlab("Absolute Correlation to PCA embeddings") +
+    ylab("Coefficients")
+
+plot_corcmp <- ggplot(data = df_dr,
+                  aes(x=techniques, y=cor_cmp, fill = techniques)) +
+    geom_bar(stat="identity") +
+    scale_fill_viridis(name = "Techniques",  
+                       labels = c("Autoencoders", "Ivis", "LDA", "PCA",
+                                  "UMAP - Supervised","UMAP - Unsupervised"), discrete=TRUE) +
+    theme(axis.title.y = element_text(size = 15),legend.title = element_text(size = 15), 
+          legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold"),
+          axis.text.x=element_blank(), axis.ticks.x=element_blank()
+          ) +
+    xlab("Absolute Correlation to CMP log scores") +
+    ylab("Coefficients")
+
+
+figure_3 <- ggarrange(plot_tw, plot_sil, plot_corpca, plot_corcmp, 
+                      common.legend=TRUE)
 agg_png(filename = here::here("results","tabs and figs","figure 3.png"), res = 360, width = 4800, height = 3200)
 figure_3
 invisible(dev.off())
 
 ```
 
-## ESW
+
+## Correlation - hypothetical tests
 ```{r}
-esw_empl <- read.csv(here::here("data","r_outputs","esw_employment.csv"))
 
 
 ```
+
+
+
+## Figure 5
+```{r}
+ideo <- c("Conservative", "Liberal", "Moderate", "Not sure",
+          "Very conservative", "Very liberal")
+
+trump_embeds_agg <- trump_embeds %>%
+    bind_cols(trump_embeds_30) %>%
+    mutate(ideo5=ideo) %>%
+    filter(ideo5 != "Not sure")
+
+df_trump <- trump_scaled %>%
+    bind_cols(trump_scaled_30) %>%
+    mutate(ideo5=trump_tweets$ideo5) %>%
+    filter(ideo5 != "Not sure")
+
+plot_ideo <- ggplot(data = df_trump,
+                  aes(x=emb_d1, y=emb_d2, 
+                      color = factor(ideo5))) +
+    geom_point(alpha=0.3) +
+    geom_point(data=trump_embeds_agg, size = 6) +
+    scale_color_viridis(name = "Objective Political Ideology", 
+                        discrete = TRUE) +
+    theme(axis.title.y = element_text(size = 15),
+          legend.title = element_text(size = 15), 
+          legend.text = element_text(size = 14), 
+          title =  element_text(size = 18, face = "bold"),
+          axis.title.x = element_text(size = 15)
+          ) +
+    xlab("First dimension") +
+    ylab("Second dimension") +
+    labs(title = "100% known stances")
+plot_ideo_30 <- ggplot(data = df_trump,
+                  aes(x=emb_30_d1, y=emb_30_d2, 
+                      color = factor(ideo5))) +
+    geom_point(alpha=0.3) +
+    geom_point(data=trump_embeds_agg, size = 6) +
+    scale_color_viridis(name = "Objective Political Ideology",
+                        discrete = TRUE) +
+    theme(axis.title.y = element_text(size = 15),
+          legend.title = element_text(size = 15), 
+          legend.text = element_text(size = 14), 
+          title =  element_text(size = 18, face = "bold"),
+          axis.title.x = element_text(size = 15)
+          ) +
+    xlab("First dimension") +
+    ylab("Second dimension") + 
+    labs(title = "30% known stances + CMP transferred")
+
+figure_5 <- ggarrange(plot_ideo, plot_ideo_30, 
+                      common.legend=TRUE)
+agg_png(filename = here::here("results","tabs and figs","figure 5.png"), res = 360, width = 4800, height = 3200)
+figure_5
+invisible(dev.off())
+
+
+```
+
 
