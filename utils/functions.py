@@ -87,8 +87,7 @@ def scale_topic(document_embed, guide_labels, sparse=False, guidance_weight=0.8,
 
     return embeddings
         
-
-def train_ae(dataloader, model, optimizer, device, ae_lossf, cf_lossf):
+def train_ae(dataloader, model, optimizer, device, ae_lossf):
     print("")
     print('Training...')
 
@@ -101,19 +100,14 @@ def train_ae(dataloader, model, optimizer, device, ae_lossf, cf_lossf):
     # For each batch of training data...optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5)
     
     for batch_num, batch in enumerate(dataloader):
-      batch = [i.to(device) for i in batch]
-      inputs, encoded, decoded, logits = model(batch[0])
-      y = batch[1].squeeze(1).long()
-      ae_loss = ae_lossf(decoded,inputs)
-      cf_loss = cf_lossf(logits,y)
-      loss = ae_loss*0.2 + cf_loss*0.8
+      batch = batch.to(device)
+      inputs, _, decoded = model(batch)
+      loss = ae_lossf(decoded, inputs)
       train_loss += loss.item()
       optimizer.zero_grad()
       # Backpropagation
       loss.backward() 
-      torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
       optimizer.step()
-
       # Report
       if batch_num % 100 == 0 and batch_num !=0:
         elapsed = format_time(time.time() - t0)
@@ -126,4 +120,3 @@ def train_ae(dataloader, model, optimizer, device, ae_lossf, cf_lossf):
     
     print("")
     print("  Training epoch took: {:}".format(training_time))
-    return encoded
