@@ -4,7 +4,8 @@ import datetime
 import torch
 from sklearn.decomposition import PCA, TruncatedSVD
 import umap.umap_ as umap
-
+from sklearn.preprocessing import OrdinalEncoder
+import pandas as pd
 def format_time(elapsed):
 
     # Round to the nearest second.
@@ -34,6 +35,7 @@ def cmp_scale(dataframe, group_vars, sent_var):
     logscale = []
     name_ls = []
     for name, group in dataframe.groupby(group_vars):
+        print(name)
         text = group['text'].tolist()
         len_all = len(text)
         left = group[group[sent_var] =='left'][sent_var].tolist()
@@ -44,13 +46,10 @@ def cmp_scale(dataframe, group_vars, sent_var):
         name_ls.append(name)
     return(absscale, relscale, logscale, name_ls)
     
-def encode_embeds(dataframe, group_vars, model):
-    embed_dict = {}
-    for name, group in dataframe.groupby(group_vars):
-        text = group['text'].tolist()
-        embeds = model.encode(text)
-        embed_dict.update({name: embeds})
-    document_embed = np.vstack(list(embed_dict.values()))
+def encode_embeds(dataframe, text_var, model,**kwargs):
+    texts = dataframe[text_var].tolist()
+    document_embed = model.encode(texts,batch_size=512,device='cuda',convert_to_numpy=True,
+                                  normalize_embeddings=True, **kwargs)
     return(document_embed)
 
 def get_prediction(model, texts, tokenizer, device):
@@ -67,25 +66,50 @@ def get_prediction(model, texts, tokenizer, device):
       argmax = logits.argmax(1)
       res.append(argmax)
   return res
-
-def scale_topic(document_embed, guide_labels, sparse=False, guidance_weight=0.8, n_components=1, **kwargs):
-    y = guide_labels
-    if len(document_embed) <= 10000:
-        k_recommended = 250
-    elif 10000 <= len(document_embed) <= 50000:
-        k_recommended = 500
-    elif len(document_embed) >=50000:
-        k_recommended = 1000
-    if sparse:
-        svd = TruncatedSVD(n_components=50)
-        embeddings_reduced = svd.fit_transform(document_embed)
-    else:
+def scale_topic(dataframe, model_transformer, text_var, group_var, guide_var, 
+                max_size=100000,guidance_weight=0.5, **kwargs):
+    enc = OrdinalEncoder()
+    for name, group in dataframe.groupby(group_var):
         pca = PCA(n_components=50)
-        embeddings_reduced = pca.fit_transform(document_embed)
-    embeddings = umap.UMAP(n_components=n_components, n_neighbors=k_recommended, n_epochs=500, metric='euclidean', 
-                            target_weight=guidance_weight, low_memory=True, verbose=True, **kwargs).fit_transform(embeddings_reduced, y=y)
+        group = group.reset_index()
+        col_idx = group.columns.get_loc(guide_var)
+        print(f'Now scaling texts in: {name}')
+        texts = group[text_var].tolist()
+        document_embed = model_transformer.encode(texts, batch_size=512, normalize_embeddings=True, device='cuda')
+        print(f'The shape of this document embeddings is: {document_embed.shape}')
 
-    return embeddings
+    
+    if len(dataframe) <= 10000:
+        k_recommended = 250
+    elif 10000 <= len(dataframe) <= 50000:
+        k_recommended = 500
+    elif len(dataframe) >=50000:
+        k_recommended = 750
+
+
+    if len(dataframe) >= max_size: ## tune max size according to your hardware
+        idx = np.random.randint(document_embed.shape[0], size=max_size)
+        sample_embed = document_embed[idx,:]
+        y = enc.fit_transform(np.reshape(dataframe.iloc[idx,col_idx].tolist(), newshape=(-1,1)))
+        embeddings_reduced_s = pca.fit_transform(sample_embed)
+        embeddings_reduced_f = pca.fit_transform(document_embed)
+        umap_fit = umap.UMAP(n_components=1, n_neighbors=k_recommended, n_epochs=250, metric='cosine', 
+                            target_weight=guidance_weight, low_memory=True, verbose=True, **kwargs).fit(embeddings_reduced_s, y=y)
+        embeddings = umap_fit.transform(embeddings_reduced_f)
+        dataframe['policy_position'] = embeddings[:,0]
+    else:
+        y = enc.fit_transform(np.reshape(group.loc[:,guide_var].tolist(), newshape=(-1,1)))
+        embeddings_reduced = pca.fit_transform(document_embed)
+        embeddings = umap.UMAP(n_components=1, n_neighbors=k_recommended, n_epochs=250, metric='cosine', 
+                            target_weight=guidance_weight, low_memory=True, verbose=True, **kwargs).fit_transform(embeddings_reduced, y=y)
+        group['policy_position'] = embeddings[:,0]
+        frames.append(group)
+        
+    results = pd.concat(frames)
+    results = results.drop(columns=[text_var])
+    return results
+        
+
         
 def train_ae(dataloader, model, optimizer, device, ae_lossf):
     print("")
