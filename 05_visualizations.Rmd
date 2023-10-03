@@ -1,0 +1,573 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+## Setup and load data
+```{r}
+pacman::p_load(quanteda, quanteda.textmodels, tidyverse, readr, ggplot2, rstatix, grid, gridExtra, viridis, ggsci, ggpubr, ragg, scales)
+## For Figure 2, 3, and 4
+
+### d2v
+d2v_gen <- read_csv("data/py_outputs/d2v_gen.csv")
+d2v_td <- read_csv("data/py_outputs/d2v_td.csv")
+d2v_fm <- read_csv("data/py_outputs/d2v_fm.csv")
+d2v_wf <- read_csv("data/py_outputs/d2v_wf.csv")
+d2v_env <- read_csv("data/py_outputs/d2v_env.csv")
+
+## tfscale
+tf_gen <- read_csv("results/arrays/tf_gen.csv")
+tf_td <- read_csv("results/arrays/tf_td.csv")
+tf_fm <- read_csv("results/arrays/tf_fm.csv")
+tf_wf <- read_csv("results/arrays/tf_wf.csv")
+tf_env <- read_csv("results/arrays/tf_env.csv")
+
+## Wordfish
+wf_gen <- read.csv("data/r_outputs/wf_gen.csv")
+wf_td <- read.csv("data/r_outputs/wf_td.csv")
+wf_fm <- read.csv("data/r_outputs/wf_fm.csv")
+wf_wf <- read.csv("data/r_outputs/wf_wf.csv")
+wf_env  <- read.csv("data/r_outputs/wf_env.csv")
+## CHES Germany
+
+ches_deu <- read_csv("data/r_outputs/ches_deu.csv")
+
+## Dimensionality reduction comparison
+
+dr_valid <- read_csv("results/arrays/dr_valid_scores.csv")
+
+## Environment - two topics
+
+tf_env1 <- read_csv("results/arrays/tf_env1.csv")
+tf_env2 <- read_csv("results/arrays/tf_env2.csv")
+
+
+trump_embeds <- read_delim("results/arrays/trump_embeds.csv",col_names=c("emb_d1","emb_d2"), delim=" ")
+trump_scaled <- read_delim("results/arrays/trump_scaled.csv",col_names=c("emb_d1","emb_d2"), delim=" ")
+trump_embeds_30 <- read_delim("results/arrays/trump_embeds_30.csv",col_names=c("emb_30_d1","emb_30_d2"), delim=" ")
+trump_scaled_30 <- read_delim("results/arrays/trump_scaled_30.csv",col_names=c("emb_30_d1","emb_30_d2"), delim=" ")
+
+trump_tweets <- read_csv("data/sins_tweets/MOTN_responses_groundtruth.csv")
+```
+
+
+
+## Merge lr_gen datasets
+
+```{r}
+d2v_gen <- d2v_gen %>% separate("party_election", sep="\\_", into = c("party", "election")) %>%
+    mutate(election = as.numeric(election))
+
+df_gen <-  tf_gen %>%
+    left_join(wf_gen, by = c("party", "election")) %>% 
+    left_join(d2v_gen, by = c("party", "election")) %>%
+    mutate(
+        d2v_d1 = -1*d2v_d1,
+        umap_dim1 = -1*umap_dim1,
+        umap_dim2 = -1*umap_dim2
+    )
+
+```
+
+
+
+
+## Figure 2
+```{r figure 1}
+plot_wf <- ggplot(data = df_gen,
+                  aes(x=factor(election), y=wf_score, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, linewidth = 1) +
+    geom_errorbar(aes(ymin=wf_score-wf_se, ymax=wf_score+wf_se),
+                  width=.2, alpha=0.5,linetype="dashed")+
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("Wordfish")
+
+
+plot_d2v1 <- ggplot(data = df_gen,
+                  aes(x=factor(election), y= d2v_d1, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, size = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("Doc2Vec - Dim 1")
+
+plot_d2v2 <- ggplot(data = df_gen,
+                  aes(x=factor(election), y= d2v_d2, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, size = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("Doc2Vec - Dim 2")
+
+
+plot_tf1 <- ggplot(data = df_gen,
+                  aes(x=factor(election), y=umap_dim1, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, linewidth = 1) + 
+    geom_errorbar(aes(ymin=umap_dim1-se_dim1, ymax=umap_dim1+se_dim1),
+                  width=.2,alpha=0.5,linetype="dashed")+
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("TFScale - Dim 1")
+
+
+plot_tf2 <- ggplot(data = df_gen,
+                  aes(x=factor(election), y=umap_dim2, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, size = 1) + 
+    geom_errorbar(aes(ymin=umap_dim2-se_dim2, ymax=umap_dim2+se_dim2),
+                  width=.2, alpha=0.5,linetype="dashed")+
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("TFScale - Dim 2")
+
+plot_cmplog <- ggplot(data = df_gen,
+                  aes(x=factor(election), y=lr_log, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, size = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("CMP - Log")
+
+
+
+
+library(ragg)
+library(ggpubr)
+figure_2 <- ggarrange(plot_tf1, plot_wf, plot_d2v1, plot_tf2, plot_cmplog, plot_d2v2,
+                      common.legend = TRUE)
+
+agg_png(filename = here::here("results","tabs and figs","figure 2.png"), res = 360, width = 4800, height = 3200)
+figure_2
+invisible(dev.off())
+
+
+
+```
+
+
+## Merge topic datasets with CHES
+
+```{r}
+
+## Traditionalism
+d2v_td <- d2v_td %>% separate("party_election", sep="\\_", into = c("party", "election")) %>%
+    mutate(election = as.numeric(election))
+
+df_td <-  tf_td %>%
+    left_join(wf_td, by = c("party", "election")) %>% 
+    left_join(d2v_td, by = c("party", "election")) %>%
+    rename(
+        tf_td_dim1 = dim1,
+        tf_td_dim2 = dim2,
+        tf_td_se1 = se_dim1, 
+        tf_td_se2 = se_dim2,
+        wf_td = wf_score,
+        wf_td_se = wf_se,
+        d2v_td_d1 = d2v_d1, 
+        d2v_td_d2 = d2v_d2,
+        log_td = lr_log
+    ) %>%
+    select(-X, -lr_prop, -lr_abs)
+
+## Welfare
+
+d2v_wf <- d2v_wf %>% separate("party_election", sep="\\_", into = c("party", "election")) %>%
+    mutate(election = as.numeric(election))
+
+df_wf <-  tf_wf %>%
+    left_join(wf_wf, by = c("party", "election")) %>% 
+    left_join(d2v_wf, by = c("party", "election")) %>%
+    rename(
+        tf_wf_dim1 = dim1,
+        tf_wf_dim2 = dim2,
+        tf_wf_se1 = se_dim1, 
+        tf_wf_se2 = se_dim2,
+        wf_wf = wf_score,
+        wf_wf_se = wf_se,
+        d2v_wf_d1 = d2v_d1, 
+        d2v_wf_d2 = d2v_d2,
+        log_wf = lr_log
+    ) %>%
+    select(-X, -lr_prop, -lr_abs)
+
+## Free market
+
+d2v_fm <- d2v_fm %>% separate("party_election", sep="\\_", into = c("party", "election")) %>%
+    mutate(election = as.numeric(election))
+
+df_fm <-  tf_fm %>%
+    left_join(wf_fm, by = c("party", "election")) %>% 
+    left_join(d2v_fm, by = c("party", "election")) %>%
+    rename(
+        tf_fm_dim1 = dim1,
+        tf_fm_dim2 = dim2,
+        tf_fm_se1 = se_dim1, 
+        tf_fm_se2 = se_dim2,
+        wf_fm = wf_score,
+        wf_fm_se = wf_se,
+        d2v_fm_d1 = d2v_d1, 
+        d2v_fm_d2 = d2v_d2,
+        log_fm = lr_log
+    ) %>%
+    select(-X, -lr_prop, -lr_abs)
+
+## Environment
+
+d2v_env <- d2v_env %>% separate("party_election", sep="\\_", into = c("party", "election")) %>%
+    mutate(election = as.numeric(election))
+
+df_env <-  tf_env %>%
+    left_join(wf_env, by = c("party", "election")) %>% 
+    left_join(d2v_env, by = c("party", "election")) %>%
+    rename(
+        tf_env_dim1 = dim1,
+        tf_env_dim2 = dim2,
+        tf_env_se1 = se_dim1, 
+        tf_env_se2 = se_dim2,
+        wf_env = wf_score,
+        wf_env_se = wf_se,
+        d2v_env_d1 = d2v_d1, 
+        d2v_env_d2 = d2v_d2,
+        log_env = lr_log
+    ) %>% 
+    select(-X, -lr_prop, -lr_abs)
+
+
+
+df_topics <- df_td %>%
+    left_join(df_wf, by = c("party","election")) %>%
+    left_join(df_fm, by = c("party","election")) %>%
+    left_join(df_env, by = c("party","election")) %>%
+    left_join(ches_deu, by=c("party", "election"))
+```
+
+## Correlation tables
+
+```{r}
+cor_table_gen <- df_gen %>% left_join(ches_deu, by = c("party", "election")) %>%
+    cor_test(vars = "ches_lr", vars2 = c("lr_log", "umap_dim1", "wf_score",
+                                          "d2v_d1", "umap_dim2","d2v_d2")) 
+cor_table_gen <- round(cor_table_gen[,c("cor", "p", "conf.low", "conf.high")], 2) %>%
+    mutate(
+        techniques = c("log", "tf1", "wf", "d2v1","tf2","d2v2"),
+        topic = "gen"
+    )
+
+
+cor_table_td <- df_topics %>% cor_test(vars = "lr_social", 
+                                       vars2=c("log_td","tf_td_dim1", "wf_td",
+                                               "d2v_td_d1", "tf_td_dim2", "d2v_td_d2"))
+cor_table_td <- round(cor_table_td[,c("cor", "p", "conf.low", "conf.high")], 2) %>%
+    mutate(
+        techniques = c("log", "tf1", "wf", "d2v1","tf2","d2v2"),
+        topic = "td"
+    )
+
+cor_table_wf <- df_topics %>% cor_test(vars = "ches_wf", 
+                                       vars2=c("log_wf","tf_wf_dim1", "wf_wf",
+                                               "d2v_wf_d1", "tf_wf_dim2", "d2v_wf_d2")) 
+
+cor_table_wf <- round(cor_table_wf[,c("cor", "p", "conf.low", "conf.high")], 2) %>%
+    mutate(
+        techniques = c("log", "tf1", "wf", "d2v1","tf2","d2v2"),
+        topic = "wf"
+    )
+
+cor_table_fm <- df_topics %>% cor_test(vars = "lr_interven", 
+                                       vars2=c("log_fm","tf_fm_dim1", "wf_fm",
+                                               "d2v_fm_d1", "tf_fm_dim2", "d2v_fm_d2"))
+
+cor_table_fm <- round(cor_table_fm[,c("cor", "p", "conf.low", "conf.high")], 2) %>%
+    mutate(
+        techniques = c("log", "tf1", "wf", "d2v1","tf2","d2v2"),
+        topic = "fm"
+    )
+
+cor_table_env <- df_topics %>% cor_test(vars = "lr_env", 
+                                       vars2=c("log_env","tf_env_dim1", "wf_env",
+                                               "d2v_env_d1", "tf_env_dim2", "d2v_env_d2"))
+
+cor_table_env <- round(cor_table_env[,c("cor", "p", "conf.low", "conf.high")], 2) %>%
+    mutate(
+        techniques = c("log", "tf1", "wf", "d2v1","tf2","d2v2"),
+        topic = "env"
+    )
+
+
+```
+
+## Figure 3
+
+```{r}
+
+plot_cor_gen <- ggplot(data = cor_table_gen,
+                  aes(x=techniques, y=abs(cor), fill = techniques)) +
+    geom_bar(stat="identity") +
+    scale_fill_viridis(name = "Techniques",  
+                       labels = c("Doc2Vec - Dim 1", "Doc2Vec - Dim 2", "Log", 
+                                  "TFScale - Dim 1",
+                                  "TFScale - Dim 2","Wordfish"),
+                      discrete = TRUE) +
+    theme(axis.title.y = element_text(size = 15),legend.title = element_text(size = 15), 
+          legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold"),
+          axis.text.x=element_blank(), axis.ticks.x=element_blank()
+          ) +
+    xlab("General") +
+    ylab("Correlation coefficients") 
+
+plot_cor_td <- ggplot(data = cor_table_td,
+                  aes(x=techniques, y=abs(cor), fill = techniques)) +
+    geom_bar(stat="identity") +
+    scale_fill_viridis(name = "Techniques",  
+                       labels = c("Doc2Vec - Dim 1", "Doc2Vec - Dim 2", "Log", 
+                                  "TFScale - Dim 1",
+                                  "TFScale - Dim 2","Wordfish"),
+                      discrete = TRUE) +
+    theme(axis.title.y = element_text(size = 15),legend.title = element_text(size = 15), 
+          legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold"),
+          axis.text.x=element_blank(), axis.ticks.x=element_blank()
+          ) +
+    xlab("Traditionalism") +
+    ylab("Correlation coefficients") 
+
+plot_cor_fm <- ggplot(data = cor_table_fm,
+                  aes(x=techniques, y=abs(cor), fill = techniques)) +
+    geom_bar(stat="identity") +
+    scale_fill_viridis(name = "Techniques",  
+                       labels = c("Doc2Vec - Dim 1", "Doc2Vec - Dim 2", "Log", 
+                                  "TFScale - Dim 1",
+                                  "TFScale - Dim 2","Wordfish"),
+                      discrete = TRUE) +
+    theme(axis.title.y = element_text(size = 15),legend.title = element_text(size = 15), 
+          legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold"),
+          axis.text.x=element_blank(), axis.ticks.x=element_blank()
+          ) +
+    xlab("Free Market") +
+    ylab("Correlation coefficients") 
+
+plot_cor_wf <- ggplot(data = cor_table_wf,
+                  aes(x=techniques, y=abs(cor), fill = techniques)) +
+    geom_bar(stat="identity") +
+    scale_fill_viridis(name = "Techniques",  
+                       labels = c("Doc2Vec - Dim 1", "Doc2Vec - Dim 2", "Log", 
+                                  "TFScale - Dim 1",
+                                  "TFScale - Dim 2","Wordfish"),
+                      discrete = TRUE) +
+    theme(axis.title.y = element_text(size = 15),legend.title = element_text(size = 15), 
+          legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold"),
+          axis.text.x=element_blank(), axis.ticks.x=element_blank()
+          ) +
+    xlab("Welfare State Expansion") +
+    ylab("Correlation coefficients") 
+
+plot_cor_env <- ggplot(data = cor_table_env,
+                  aes(x=techniques, y=abs(cor), fill = techniques)) +
+    geom_bar(stat="identity") +
+    scale_fill_viridis(name = "Techniques",  
+                       labels = c("Doc2Vec - Dim 1", "Doc2Vec - Dim 2", "Log", 
+                                  "TFScale - Dim 1",
+                                  "TFScale - Dim 2","Wordfish"),
+                      discrete = TRUE) +
+    theme(axis.title.y = element_text(size = 15),legend.title = element_text(size = 15), 
+          legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold"),
+          axis.text.x=element_blank(), axis.ticks.x=element_blank()
+          ) +
+    xlab("Environment") +
+    ylab("Correlation coefficients") 
+
+
+common_legend = get_legend(plot_cor_gen)
+
+figure_3 <- ggarrange(plot_cor_gen, plot_cor_td, plot_cor_wf, plot_cor_fm,
+                      plot_cor_env, as_ggplot(common_legend),
+                      legend = "none")
+agg_png(filename = here::here("results","tabs and figs","figure 3.png"), res = 360, width = 4800, height = 3200)
+figure_3
+invisible(dev.off())
+
+
+```
+
+
+## Figure 5
+
+```{r}
+
+
+plot_tw <- ggplot(data = dr_valid,
+                  aes(x=techniques, y=trustworthiness, fill = techniques)) +
+    geom_bar(stat="identity") +
+    scale_fill_viridis(name = "Techniques",  
+                       labels = c("Autoencoders", "Ivis", "LDA", "PCA",
+                                    "T-SNE","UMAP - Supervised","UMAP - Unsupervised"),
+                      discrete = TRUE) +
+    theme(axis.title.y = element_text(size = 15),legend.title = element_text(size = 15), 
+          legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold"),
+          axis.text.x=element_blank(), axis.ticks.x=element_blank()
+          ) +
+    xlab("Trustworthiness") +
+    ylab("Coefficients")
+
+plot_sil <- ggplot(data = dr_valid,
+                  aes(x=techniques, y=silhouette, fill = techniques)) +
+    geom_bar(stat="identity") +
+    scale_fill_viridis(name = "Techniques",   
+                       labels = c("Autoencoders", "Ivis", "LDA", "PCA",
+                                  "UMAP - Supervised","UMAP - Unsupervised"), discrete=TRUE) +
+    theme(axis.title.y = element_text(size = 15),legend.title = element_text(size = 15), 
+          legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold"),
+          axis.text.x=element_blank(), axis.ticks.x=element_blank()
+          ) +
+    xlab("Silhouette scores") +
+    ylab("Coefficients")
+
+
+
+figure_5 <- ggarrange(plot_tw, plot_sil, common.legend=TRUE)
+agg_png(filename = here::here("results","tabs and figs","figure 5.png"), res = 360, width = 4800, height = 3200)
+figure_5
+invisible(dev.off())
+
+```
+
+## Figure 6
+```{r figure 6}
+tf_env1 <- tf_env1 %>%
+    mutate(
+        lr_log = -1*lr_log
+    )
+tf_env2 <- tf_env2 %>%
+    mutate(
+        lr_log = -1*lr_log
+    )
+
+plot_env1.1 <- ggplot(data = tf_env1,
+                  aes(x=factor(election), y=dim1, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, linewidth = 1) + 
+    geom_errorbar(aes(ymin=dim1-se_dim1, ymax=dim1+se_dim1),
+                  width=.2,alpha=0.5,linetype="dashed")+
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("TFScale - Environment 1")
+
+
+
+plot_env1.2 <- ggplot(data = tf_env1,
+                  aes(x=factor(election), y=lr_log, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, linewidth = 1) +
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("CMP Log - Environment 1")
+
+plot_env2.1 <- ggplot(data = tf_env2,
+                  aes(x=factor(election), y=dim2, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, linewidth = 1) + 
+    geom_errorbar(aes(ymin=dim2-se_dim2, ymax=dim2+se_dim2),
+                  width=.2,alpha=0.5,linetype="dashed")+
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("TFScale - Environment 2")
+
+plot_env2.2 <- ggplot(data = tf_env2,
+                  aes(x=factor(election), y=lr_log, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, linewidth = 1) +
+    scale_color_manual(name = "Party",  
+                       values = c("blue","black", "green","yellow", "purple", "red")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("CMP Log - Environment 2")
+
+figure_6 <- ggarrange(plot_env1.1, plot_env1.2, plot_env2.1, plot_env2.2,
+                      common.legend = TRUE)
+
+agg_png(filename = here::here("results","tabs and figs","figure 6.png"), res = 360, width = 4800, height = 3200)
+figure_6
+invisible(dev.off())
+
+
+```
+
+
+
+## Figure 7
+```{r figure 7}
+ideo <- c("Conservative", "Liberal", "Moderate", "Not sure",
+          "Very conservative", "Very liberal")
+
+trump_embeds_agg <- trump_embeds %>%
+    bind_cols(trump_embeds_30) %>%
+    mutate(ideo5=ideo) %>%
+    filter(ideo5 != "Not sure")
+
+df_trump <- trump_scaled %>%
+    bind_cols(trump_scaled_30) %>%
+    mutate(ideo5=trump_tweets$ideo5) %>%
+    filter(ideo5 != "Not sure")
+
+plot_ideo <- ggplot(data = df_trump,
+                  aes(x=emb_d1, y=emb_d2, 
+                      color = factor(ideo5))) +
+    geom_point(alpha=0.3) +
+    geom_point(data=trump_embeds_agg, size = 6) +
+    scale_color_viridis(name = "Objective Political Ideology", 
+                        discrete = TRUE) +
+    theme(axis.title.y = element_text(size = 15),
+          legend.title = element_text(size = 15), 
+          legend.text = element_text(size = 14), 
+          title =  element_text(size = 18, face = "bold"),
+          axis.title.x = element_text(size = 15)
+          ) +
+    xlab("First dimension") +
+    ylab("Second dimension") +
+    labs(title = "100% known stances")
+plot_ideo_30 <- ggplot(data = df_trump,
+                  aes(x=emb_30_d1, y=emb_30_d2, 
+                      color = factor(ideo5))) +
+    geom_point(alpha=0.3) +
+    geom_point(data=trump_embeds_agg, size = 6) +
+    scale_color_viridis(name = "Objective Political Ideology",
+                        discrete = TRUE) +
+    theme(axis.title.y = element_text(size = 15),
+          legend.title = element_text(size = 15), 
+          legend.text = element_text(size = 14), 
+          title =  element_text(size = 18, face = "bold"),
+          axis.title.x = element_text(size = 15)
+          ) +
+    xlab("First dimension") +
+    ylab("Second dimension") + 
+    labs(title = "30% known stances + CMP transferred")
+
+figure_5 <- ggarrange(plot_ideo, plot_ideo_30, 
+                      common.legend=TRUE)
+agg_png(filename = here::here("results","tabs and figs","figure 5.png"), res = 360, width = 4800, height = 3200)
+figure_5
+invisible(dev.off())
+
+
+```
+
+
