@@ -4,59 +4,13 @@
 .Ruserdata
 *.json
 *.pt
-data/fasttext/cc.de.300.vec
 data/py_outputs/manifesto_cleaned.csv
 data/py_outputs/welfare.csv
 data/r_outputs/germaparl.csv
 results/
 data/temps
-results/bert/bert_3class_std/checkpoint-1416/pytorch_model.bin
-results/bert/bert_3class_std/checkpoint-1416/rng_state.pth
-results/bert/bert_3class_std/checkpoint-1416/training_args.bin
-results/bert/bert_3class_std/checkpoint-1416/vocab.txt
-results/bert/bert_3class_std/checkpoint-472/pytorch_model.bin
-results/bert/bert_3class_std/checkpoint-472/rng_state.pth
-results/bert/bert_3class_std/checkpoint-472/training_args.bin
-results/bert/bert_3class_std/checkpoint-472/vocab.txt
-results/bert/bert_3class_std/checkpoint-944/pytorch_model.bin
-results/bert/bert_3class_std/checkpoint-944/rng_state.pth
-results/bert/bert_3class_std/checkpoint-944/training_args.bin
-results/bert/bert_3class_std/checkpoint-944/vocab.txt
-results/bert/bert_3class_std/runs/Dec19_15-26-35_DESKTOP-71SUK0T/events.out.tfevents.1671459995.DESKTOP-71SUK0T.18776.0
-results/bert/bert_3class_std/runs/Dec19_15-26-35_DESKTOP-71SUK0T/events.out.tfevents.1671460197.DESKTOP-71SUK0T.18776.2
-results/bert/bert_3class_std/runs/Dec19_15-26-35_DESKTOP-71SUK0T/1671459995.6681874/events.out.tfevents.1671459995.DESKTOP-71SUK0T.18776.1
-results/bert/bert_3class_std/runs/Dec19_15-51-20_DESKTOP-71SUK0T/events.out.tfevents.1671461480.DESKTOP-71SUK0T.18776.3
-results/bert/bert_3class_std/runs/Dec19_15-51-20_DESKTOP-71SUK0T/events.out.tfevents.1671461672.DESKTOP-71SUK0T.18776.5
-results/bert/bert_3class_std/runs/Dec19_15-51-20_DESKTOP-71SUK0T/1671461480.353015/events.out.tfevents.1671461480.DESKTOP-71SUK0T.18776.4
-results/bert/bert_3class_std/runs/Dec19_15-57-54_DESKTOP-71SUK0T/events.out.tfevents.1671461877.DESKTOP-71SUK0T.18776.6
-results/bert/bert_3class_std/runs/Dec19_15-57-54_DESKTOP-71SUK0T/events.out.tfevents.1671462074.DESKTOP-71SUK0T.18776.8
-results/bert/bert_3class_std/runs/Dec19_15-57-54_DESKTOP-71SUK0T/1671461877.2712376/events.out.tfevents.1671461877.DESKTOP-71SUK0T.18776.7
-results/bert/bert_3class_std/runs/Dec19_16-04-12_DESKTOP-71SUK0T/events.out.tfevents.1671462261.DESKTOP-71SUK0T.18776.9
-results/bert/bert_3class_std/runs/Dec19_16-04-12_DESKTOP-71SUK0T/events.out.tfevents.1671462460.DESKTOP-71SUK0T.18776.11
-results/bert/bert_3class_std/runs/Dec19_16-04-12_DESKTOP-71SUK0T/1671462261.1705797/events.out.tfevents.1671462261.DESKTOP-71SUK0T.18776.10
-results/bert/bert_mlm/checkpoint-1258/pytorch_model.bin
-results/bert/bert_mlm/checkpoint-1258/rng_state.pth
-results/bert/bert_mlm/checkpoint-1258/training_args.bin
-results/bert/bert_mlm/checkpoint-1887/pytorch_model.bin
-results/bert/bert_mlm/checkpoint-1887/rng_state.pth
-results/bert/bert_mlm/checkpoint-1887/training_args.bin
-results/bert/bert_mlm/checkpoint-2516/pytorch_model.bin
-results/bert/bert_mlm/checkpoint-2516/rng_state.pth
-results/bert/bert_mlm/checkpoint-2516/training_args.bin
-results/bert/bert_mlm/checkpoint-629/pytorch_model.bin
-results/bert/bert_mlm/checkpoint-629/rng_state.pth
-results/bert/bert_mlm/checkpoint-629/training_args.bin
-results/tabs and figs/figure1.png
-results/tabs and figs/figure2.png
-results/tabs and figs/figure3.png
-results/tabs and figs/figure4.png
-results/tabs and figs/figure5.png
-results/tabs and figs/figure6.png
-results/tabs and figs/figure7.png
-results/tabs and figs/figure8.png
-results/tabs and figs/figure9.png
-results/tabs and figs/figure10.png
-results/tabs and figs/figure11.png
-results/tsdae/manifesto_deu/pytorch_model.bin
-results/tsdae/manifesto_deu/README.md
-results/tsdae/manifesto_deu/vocab.txt
+data/coalitionagree
+data/CMP
+data/CWEP
+data/r_outputs/pulled_manifestoes.csv
+data/r_outputs/pulled_manifestoes.csv

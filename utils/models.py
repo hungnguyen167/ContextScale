@@ -80,12 +80,19 @@ class Autoencoder(nn.Module):
             nn.Tanh(),
             nn.Linear(hidden_dim, hidden_dim2),
             nn.Tanh(),
-            nn.Linear(hidden_dim2, n_components)
+            nn.Linear(hidden_dim2, hidden_dim2),
+            nn.Tanh(),
+            nn.Linear(hidden_dim2, n_components),
+            nn.Tanh()
+            
         )
+
         self.decoder = nn.Sequential(
             nn.Linear(n_components, hidden_dim2),
             nn.Tanh(),
             nn.Linear(hidden_dim2, hidden_dim),
+            nn.Tanh(),
+            nn.Linear(hidden_dim, hidden_dim),
             nn.Tanh(),
             nn.Linear(hidden_dim, input_dim)
         )
@@ -94,4 +101,21 @@ class Autoencoder(nn.Module):
     def forward(self, x):
         encoded = self.encoder(x)
         decoded = self.decoder(encoded)
-        return x, encoded, decoded
+        return encoded, decoded, x
+    
+class ClassifierSimple(nn.Module):
+    def __init__(self, input_dim, hidden_dim, hidden_dim2, n_labels):
+        super().__init__()
+        self.classifier = nn.Sequential(
+            nn.Linear(input_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, hidden_dim2),
+            nn.ReLU(),
+            nn.Linear(hidden_dim2, hidden_dim2),
+            nn.ReLU(),
+            nn.Linear(hidden_dim2, n_labels),
+        )
+
+    def forward(self, x):
+        logits = self.classifier(x)
+        return logits
