@@ -6,9 +6,10 @@ date: "2023-09-29"
 
 ## Load packages
 ```{r setup, include=FALSE}
+rm(list=ls())
 pacman::p_load(quanteda, quanteda.textmodels, tidyverse, readr, ggplot2, rstatix, grid, gridExtra, viridis, ggsci, ggpubr, ragg, scales)
 
-pulled_manifestoes <- read_csv("data/CMP/pulled_manifestoes.csv")
+pulled_manifestoes <- read_csv("data/r_outputs/pulled_manifestoes.csv")
 ches <- read_csv("data/ches/1999-2019_CHES_dataset_meansv3.csv")
 
 ```
@@ -72,13 +73,16 @@ write.csv(ches_deu, "data/r_outputs/ches_deu.csv")
 ```{r wf_gen}
 
 
-pulled_manifestoes$domain <- stringr::str_extract(string=as.character(pulled_manifestoes$code), pattern="[0-9]")
 
-manifesto_deu <- pulled_manifestoes[which(pulled_manifestoes$country == "Germany"),]
+manifesto_deu <- pulled_manifestoes %>%
+    filter(countryname == "Germany") %>%
+    mutate(
+        code_extract = substr(code, 1,3)
+    ) %>%
+    filter(!code %in% c("H"))
 
 
 grouped_texts <- manifesto_deu %>% 
-    filter(!(code %in% c("H","000"))) %>%
     mutate(
         party_election = paste(party, election, sep="_"),
         party = case_when(
@@ -122,7 +126,7 @@ write.csv(results, "data/r_outputs/wf_gen.csv")
 
 ```{r wf_td}
 
-manifesto_td = manifesto_deu[which(manifesto_deu$code %in% c("601", "602", "603", "604")),]
+manifesto_td = manifesto_deu[which(manifesto_deu$code_extract %in% c("601", "602", "603", "604")),]
 grouped_texts <- manifesto_td %>% 
     mutate(
         party_election = paste(party, election, sep="_"),
@@ -146,7 +150,7 @@ dfmat <- corpus(grouped_texts, text_field = "text_new") %>%
              tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
              tokens_remove(stopwords("de")) %>%
              dfm() %>%
-             dfm_trim(min_termfreq = 50, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
+             dfm_trim(min_termfreq = 10, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
              dfm_subset(ntoken(.) > 0, drop_docid = TRUE)
 
 wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", 
@@ -165,7 +169,7 @@ write.csv(results, "data/r_outputs/wf_td.csv")
 ## Wordfish - Welfare
 ```{r wf_td}
 
-manifesto_wf = manifesto_deu[which(manifesto_deu$code %in% c("504","505")),]
+manifesto_wf = manifesto_deu[which(manifesto_deu$code_extract %in% c("504","505")),]
 grouped_texts <- manifesto_wf %>% 
     mutate(
         party_election = paste(party, election, sep="_"),
@@ -189,7 +193,7 @@ dfmat <- corpus(grouped_texts, text_field = "text_new") %>%
              tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
              tokens_remove(stopwords("de")) %>%
              dfm() %>%
-             dfm_trim(min_termfreq = 50, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
+             dfm_trim(min_termfreq = 10, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
              dfm_subset(ntoken(.) > 0, drop_docid = TRUE)
 
 wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", 
@@ -207,7 +211,7 @@ write.csv(results, "data/r_outputs/wf_wf.csv")
 
 ```{r wf_td}
 
-manifesto_fm = manifesto_deu[which(manifesto_deu$code %in%
+manifesto_fm = manifesto_deu[which(manifesto_deu$code_extract %in%
                                        c("401","402","403","412","413","415")),]
 grouped_texts <- manifesto_fm %>% 
     mutate(
@@ -232,7 +236,7 @@ dfmat <- corpus(grouped_texts, text_field = "text_new") %>%
              tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
              tokens_remove(stopwords("de")) %>%
              dfm() %>%
-             dfm_trim(min_termfreq = 50, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
+             dfm_trim(min_termfreq = 10, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
              dfm_subset(ntoken(.) > 0, drop_docid = TRUE)
 
 wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", 
@@ -251,7 +255,7 @@ write.csv(results, "data/r_outputs/wf_fm.csv")
 
 ```{r wf_env}
 
-manifesto_env = manifesto_deu[which(manifesto_deu$code %in% c("416","501","410")),]
+manifesto_env = manifesto_deu[which(manifesto_deu$code_extract %in% c("416","501","410")),]
 grouped_texts <- manifesto_env %>% 
     mutate(
         party_election = paste(party, election, sep="_"),
@@ -275,7 +279,7 @@ dfmat <- corpus(grouped_texts, text_field = "text_new") %>%
              tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
              tokens_remove(stopwords("de")) %>%
              dfm() %>%
-             dfm_trim(min_termfreq = 50, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
+             dfm_trim(min_termfreq = 10, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
              dfm_subset(ntoken(.) > 0, drop_docid = TRUE)
 
 wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", 
@@ -289,3 +293,135 @@ results$wf_se <- wf_mod$se.theta
 write.csv(results, "data/r_outputs/wf_env.csv")
 
 ```
+
+## Wordfish - Environment Protection
+
+
+```{r wf_env}
+
+manifesto_envp = manifesto_deu[which(manifesto_deu$code_extract == "501"),]
+grouped_texts <- manifesto_envp %>% 
+    mutate(
+        party_election = paste(party, election, sep="_"),
+        party = case_when(
+            grepl("Linke|Sozialismus", name) ~ "PDS/Die Linke",
+            grepl("Sozialdemokratische", name) ~ "SPD",
+            grepl("Christlich", name) ~ "CDU/CSU",
+            grepl("Freie", name) ~ "FDP",
+            grepl("Grünen", name) ~ "Die Grünen",
+            grepl("Alternative", name) ~ "AfD",
+            TRUE ~ NA_character_
+        )
+    ) %>%
+    filter(!is.na(party)) %>%
+    group_by(party, election) %>%
+    summarise(
+        text_new = paste(text, collapse = " "),
+        num_speeches = n()
+    )
+dfmat <- corpus(grouped_texts, text_field = "text_new") %>%
+             tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
+             tokens_remove(stopwords("de")) %>%
+             dfm() %>%
+             dfm_trim(min_termfreq = 10, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
+             dfm_subset(ntoken(.) > 0, drop_docid = TRUE)
+
+wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", 
+                                 sparse = TRUE)
+results <- grouped_texts %>% select(-text_new)
+
+results$wf_score <- wf_mod$theta
+results$wf_se <- wf_mod$se.theta
+
+
+write.csv(results, "data/r_outputs/wf_envp.csv")
+
+```
+
+## Wordfish - Military
+
+
+```{r wf_env}
+
+manifesto_mil = manifesto_deu[which(manifesto_deu$code_extract %in% c("104","105")),]
+grouped_texts <- manifesto_mil %>% 
+    mutate(
+        party_election = paste(party, election, sep="_"),
+        party = case_when(
+            grepl("Linke|Sozialismus", name) ~ "PDS/Die Linke",
+            grepl("Sozialdemokratische", name) ~ "SPD",
+            grepl("Christlich", name) ~ "CDU/CSU",
+            grepl("Freie", name) ~ "FDP",
+            grepl("Grünen", name) ~ "Die Grünen",
+            grepl("Alternative", name) ~ "AfD",
+            TRUE ~ NA_character_
+        )
+    ) %>%
+    filter(!is.na(party)) %>%
+    group_by(party, election) %>%
+    summarise(
+        text_new = paste(text, collapse = " "),
+        num_speeches = n()
+    )
+dfmat <- corpus(grouped_texts, text_field = "text_new") %>%
+             tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
+             tokens_remove(stopwords("de")) %>%
+             dfm() %>%
+             dfm_trim(min_termfreq = 10, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
+             dfm_subset(ntoken(.) > 0, drop_docid = TRUE)
+
+wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", 
+                                 sparse = TRUE)
+results <- grouped_texts %>% select(-text_new)
+
+results$wf_score <- wf_mod$theta
+results$wf_se <- wf_mod$se.theta
+
+
+write.csv(results, "data/r_outputs/wf_mil.csv")
+
+```
+
+
+## Prepping data for COALITIONAGREE
+
+```{r coalitionagree}
+library(readxl)
+library(openxlsx)
+library(countrycode)
+folder = "data/coalitionagree/Coalition Agreements_coded"
+folder_list = list.dirs(path = folder)
+
+all_files <- lapply(folder_list, list.files, pattern=".xlsx")
+coalitionagree <- data.frame()
+
+for (i in seq_along(all_files)){
+    if (length(all_files[[i]]) >1){
+        for (j in seq_along(all_files[[i]])){
+            if (!is.na(all_files[[i]][j])){
+                xlsx <- read.xlsx(paste(folder_list[i], all_files[[i]][j],
+                                    sep="/"))
+                xlsx$country_init <- rep(stringi::stri_split_regex(all_files[[i]][j],
+                                                   pattern="_")[[1]][1],
+                                   nrow(xlsx))
+                xlsx$cabinet_year = rep(stringi::stri_split_regex(all_files[[i]][j],
+                                                   pattern="_")[[1]][2],
+                                   nrow(xlsx))
+                coalitionagree <- bind_rows(coalitionagree, xlsx)
+            }
+            
+        }
+    }
+}
+
+coalitionagree <- coalitionagree %>%
+    mutate(
+        country = countrycode(country_init, origin="iso2c", destination="country.name")
+    ) %>%
+    filter(country %in% pulled_manifestoes$countryname)
+
+write.csv(coalitionagree, "data/r_outputs/coalitionagree_texts.csv")
+```
+
+
+
