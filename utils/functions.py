@@ -109,6 +109,8 @@ def coalition_topic(code_short):
         return('Economy')
     elif code_short in [101,102,103,106,107,109]:
         return('International politics')
+    else:
+        return('Other')
 
 def cmp_scale(dataframe,text_var, group_vars, lr_kws: dict, sent_var):
     relscale = []
@@ -181,9 +183,9 @@ def scale_umap(
                 **kwargs
             )
         embeddings = umap_scaler.fit_transform(document_embed, y=y)
-        df_merged = dataframe
-        df_merged['umap_d1'] = embeddings[:,0]
-        df_merged['umap_d2'] = embeddings[:,1]
+        df_merged = dataframe.copy()
+        for i in range(n_components):
+            df_merged[''.join(['umap_d',str(i+1)])] = embeddings[:,i]
         df_merged['y'] = y.flatten()
         ls_embeds.append(document_embed)
     else:
@@ -224,8 +226,8 @@ def scale_umap(
                     **kwargs
                 )
                 embeddings = umap_scaler.fit_transform(document_embed, y=y)
-                group['umap_d1'] = embeddings[:,0]
-                group['umap_d2'] = embeddings[:,1]
+                for i in range(n_components):
+                    group[''.join(['umap_d',str(i+1)])] = embeddings[:,i]
                 group['y'] = y.flatten()
                 ls_embeds.append({name: document_embed})
                 frames.append(group)
