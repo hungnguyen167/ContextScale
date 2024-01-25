@@ -461,7 +461,9 @@ def train_loop(dataloader, model, optimizer, scheduler, loss_fn_topic, loss_fn_l
 
     print("")
     print("  Training epoch took: {:}".format(training_time))
-def eval_loop(dataloader, model, loss_fn, loss_fn_lr):
+
+
+def eval_loop(dataloader, model, loss_fn_topic, loss_fn_lr, loss_fn_reconstruct,device):
   size = len(dataloader.dataset)
   num_batches = len(dataloader)
   test_loss, correct_topic, correct_sent = 0.0, 0.0, 0.0
@@ -470,21 +472,21 @@ def eval_loop(dataloader, model, loss_fn, loss_fn_lr):
     for batch in dataloader:    
         batch = {k: v.to(device) for k,v in batch.items()}
         y_topic = batch['topic'].long()
-        y_lr = batch['lr'].long()
-        logits_topic, logits_lr = model(input_ids = batch['input_ids'], 
-                                        attention_mask = batch['attention_mask'],
-                                        token_type_ids=batch['token_type_ids'])
-        loss_topic = loss_fn(logits_topic, y_topic)
+        y_lr = batch['lrn'].long()
+        logits_topic, logits_lr, logits_reconstruct, roberta_output = model(input_ids = batch['input_ids'], 
+                                      attention_mask = batch['attention_mask'])
+        loss_topic = loss_fn_topic(logits_topic, y_topic)
         loss_lr = loss_fn_lr(logits_lr, y_lr)
-        loss = loss_topic + loss_lr
+        loss_reconstruct = loss_fn_reconstruct(logits_reconstruct, roberta_output)
+        loss = 0.3*loss_topic + 0.5*loss_lr + 0.2*loss_reconstruct
         test_loss += loss
         correct_topic += (logits_topic.argmax(1) == batch['topic']).type(torch.float).sum().item()
-        correct_sent += (logits_lr.argmax(1) == batch['lr']).type(torch.float).sum().item()
+        correct_sent += (logits_lr.argmax(1) == batch['lrn']).type(torch.float).sum().item()
 
   test_loss /= num_batches
   correct_topic /= size
   correct_sent /= size
   correct = (correct_topic+correct_sent)/2
-  accuracy = correct*100
-  print(f"Test Error: \n Accuracy: {(accuracy):>0.1f}%, Avg loss: {test_loss:>8f} \n")
-  return(accuracy)
+  print(f"Test Error: \n Accuracy: {(correct*100):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+  print(f"Test Error: \n Accuracy - LR: {(correct_sent*100):>0.1f}, Avg loss: {test_loss:>8f} \n")
+  print(f"Test Error: \n Accuracy - Topic: {(correct_topic*100):>0.1f}, Avg loss: {test_loss:>8f} \n")
