@@ -1,4 +1,35 @@
-class UMAPDataset(Dataset):
+import torch
+from torch.utils.data import Dataset, DataLoader
+import numpy as np
+
+def get_graph_elements(graph_, n_epochs):
+
+    graph = graph_.tocoo()
+    # eliminate duplicate entries by summing them together
+    graph.sum_duplicates()
+    # number of vertices in dataset
+    n_vertices = graph.shape[1]
+    # get the number of epochs based on the size of the dataset
+    if n_epochs is None:
+        # For smaller datasets we can use more epochs
+        if graph.shape[0] <= 10000:
+            n_epochs = 500
+        else:
+            n_epochs = 200
+    # remove elements with very low probability
+    graph.data[graph.data < (graph.data.max() / float(n_epochs))] = 0.0
+    graph.eliminate_zeros()
+    # get epochs per sample based upon edge probability
+    epochs_per_sample = n_epochs * graph.data
+
+    head = graph.row
+    tail = graph.col
+    weight = graph.data
+
+    return graph, epochs_per_sample, head, tail, weight, n_vertices
+
+
+class UMAPDataset(torch.utils.data.Dataset):
     def __init__(self, data, graph_, n_epochs=200):
         graph, epochs_per_sample, head, tail, weight, n_vertices = get_graph_elements(graph_, n_epochs)
         

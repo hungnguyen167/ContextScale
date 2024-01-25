@@ -1,6 +1,60 @@
 import torch
 import torch.nn as nn
-from transformers import BertModel, BertForSequenceClassification   
+from transformers import XLMRobertaModel
+from transformers.modeling_utils import PreTrainedModel, PretrainedConfig
+
+## Main model
+
+class TLRRPredict(PreTrainedModel):
+    def __init__(self, config, roberta_model, topic_count, lr_count, hidden_dim, hidden_dim_2, roberta_dim,dropout=0.1):
+        super(TLRRPredict, self).__init__(config)
+        self.roberta = XLMRobertaModel.from_pretrained(roberta_model) ## get information from a pre-trained model
+        self.mlp1 = nn.Sequential(
+            nn.Linear(config.hidden_size, hidden_dim),
+            nn.LayerNorm(hidden_dim),
+            nn.Dropout(dropout), 
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.LayerNorm(hidden_dim),
+            nn.Dropout(dropout),
+            nn.Linear(hidden_dim, topic_count)
+        )
+        self.mlp2 = nn.Sequential(
+            nn.Linear(topic_count, hidden_dim_2),
+            nn.LayerNorm(hidden_dim_2),
+            nn.Dropout(dropout),
+            nn.Linear(hidden_dim_2, hidden_dim_2),
+            nn.LayerNorm(hidden_dim_2),
+            nn.Dropout(dropout),
+            nn.Linear(hidden_dim_2, lr_count)
+        )
+
+        self.decoder = nn.Sequential(
+            nn.Linear(lr_count, hidden_dim_2),
+            nn.LayerNorm(hidden_dim_2),
+            nn.Dropout(dropout),
+            nn.Linear(hidden_dim_2, topic_count),
+            nn.LayerNorm(topic_count),
+            nn.Dropout(dropout),
+            nn.Linear(topic_count, hidden_dim),
+            nn.LayerNorm(hidden_dim),
+            nn.Dropout(dropout),
+            nn.Linear(hidden_dim, roberta_dim)
+        )
+
+    def forward(self, input_ids, attention_mask):
+        roberta_output = self.roberta(input_ids=input_ids, attention_mask=attention_mask)['pooler_output'] 
+        logits_topic = self.mlp1(roberta_output)
+        logits_lr = self.mlp2(logits_topic)
+        logits_reconstruct = self.decoder(logits_lr)
+        return logits_topic, logits_lr, logits_reconstruct, roberta_output
+
+
+
+
+
+
+## Legacy models
+
 
 class MetaBERT(nn.Module):
     def __init__(self, bert_model, labels_count, extra_dim=None, dropout=0.25, unq_year=None, hidden_dim=25, pooler=True, bert_dim=None):
