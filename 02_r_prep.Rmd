@@ -40,28 +40,20 @@ ches_deu <- ches %>%
     group_by(party, election) %>%
     summarise(
         ches_lr = mean(lrgen, na.rm=TRUE),
-        lr_religious = mean(religious_principles, na.rm=TRUE),
-        lr_social = mean(sociallifestyle, na.rm=TRUE),
-        lr_nationalism = mean(nationalism, na.rm=TRUE),
-        lr_interven = mean(econ_interven, na.rm=TRUE),
-        lr_deregulation = mean(deregulation, na.rm=TRUE),
-        lr_redis = mean(redistribution, na.rm = TRUE),
-        lr_galtan = mean(galtan, na.rm=TRUE),
-        lr_env = mean(environment, na.rm=TRUE),
-        lr_sptax = mean(spendvtax, na.rm=TRUE)
+        ches_regions = mean(regions, na.rm=TRUE),
+        ches_econ = mean(lrecon, na.rm=TRUE),
+        ches_env = mean(environment, na.rm=TRUE),
+        ches_eu = mean(eu_position, na.rm=TRUE),
+        ches_immgr = mean(immigrate_policy, na.rm=TRUE),
+        ches_redis = mean(redistribution, na.rm = TRUE),
+        ches_sptax = mean(spendvtax, na.rm=TRUE)
     ) %>%
     ungroup() 
 
 ches_deu <- ches_deu %>%
     mutate(
-        ches_td = rowMeans(select(ches_deu,c(lr_religious,lr_social, lr_nationalism)),
-                           na.rm = TRUE),
-        ches_fm = rowMeans(select(ches_deu,c(lr_interven, lr_deregulation)),
-                           na.rm = TRUE),
-        ches_wf = rowMeans(select(ches_deu,c(lr_redis, lr_sptax)),
-                           na.rm = TRUE),
-        
-        
+        ches_wf = rowMeans(select(ches_deu,c(ches_redis, ches_sptax)),
+                           na.rm = TRUE)
     )
 
 write.csv(ches_deu, "data/r_outputs/ches_deu.csv")
@@ -71,7 +63,6 @@ write.csv(ches_deu, "data/r_outputs/ches_deu.csv")
 
 
 ```{r wf_gen}
-
 
 
 manifesto_deu <- pulled_manifestoes %>%
