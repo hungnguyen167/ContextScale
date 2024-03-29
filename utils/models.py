@@ -6,41 +6,66 @@ from transformers.modeling_utils import PreTrainedModel, PretrainedConfig
 ## Main model
 
 class TLRRPredict(PreTrainedModel):
-    def __init__(self, config, roberta_model, topic_count, lr_count, hidden_dim, hidden_dim_2, roberta_dim,dropout=0.1):
+    def __init__(self, config, roberta_model, topic_count, lr_count, 
+                 dropout=None, hidden_dim=None, hidden_dim_2=None, hidden_dim_3=None):
         super(TLRRPredict, self).__init__(config)
         self.roberta = XLMRobertaModel.from_pretrained(roberta_model) ## get information from a pre-trained model
+        roberta_dim = config.hidden_size
+        if hidden_dim:
+            self.hidden_dim = hidden_dim
+        else:
+            self.hidden_dim = int(roberta_dim//2)
+        
+        if hidden_dim_2:
+            self.hidden_dim_2 = hidden_dim_2
+        else:
+            self.hidden_dim_2 = int(topic_count//2)
+
+
+        if dropout:
+            self.dropout = dropout
+        else:
+            self.dropout = 0.2
+
         self.mlp1 = nn.Sequential(
-            nn.Linear(config.hidden_size, hidden_dim),
-            nn.LayerNorm(hidden_dim),
-            nn.Dropout(dropout), 
-            nn.Linear(hidden_dim, hidden_dim),
-            nn.LayerNorm(hidden_dim),
-            nn.Dropout(dropout),
-            nn.Linear(hidden_dim, topic_count)
+            nn.Linear(roberta_dim, self.hidden_dim),
+            nn.BatchNorm1d(self.hidden_dim), 
+            nn.ReLU(),
+            nn.Dropout(self.dropout),  
+            nn.Linear(self.hidden_dim, self.hidden_dim),
+            nn.BatchNorm1d(self.hidden_dim),  
+            nn.ReLU(),
+            nn.Dropout(self.dropout),  
+            nn.Linear(self.hidden_dim, topic_count)
         )
+        
         self.mlp2 = nn.Sequential(
-            nn.Linear(topic_count, hidden_dim_2),
-            nn.LayerNorm(hidden_dim_2),
-            nn.Dropout(dropout),
-            nn.Linear(hidden_dim_2, hidden_dim_2),
-            nn.LayerNorm(hidden_dim_2),
-            nn.Dropout(dropout),
-            nn.Linear(hidden_dim_2, lr_count)
+            nn.Linear(topic_count, self.hidden_dim_2),
+            nn.BatchNorm1d(self.hidden_dim_2),  
+            nn.ReLU(),
+            nn.Dropout(self.dropout), 
+            nn.Linear(self.hidden_dim_2, self.hidden_dim_2),
+            nn.BatchNorm1d(self.hidden_dim_2), 
+            nn.ReLU(),
+            nn.Dropout(self.dropout), 
+            nn.Linear(self.hidden_dim_2, lr_count)
         )
-
         self.decoder = nn.Sequential(
-            nn.Linear(lr_count, hidden_dim_2),
-            nn.LayerNorm(hidden_dim_2),
-            nn.Dropout(dropout),
-            nn.Linear(hidden_dim_2, topic_count),
-            nn.LayerNorm(topic_count),
-            nn.Dropout(dropout),
-            nn.Linear(topic_count, hidden_dim),
-            nn.LayerNorm(hidden_dim),
-            nn.Dropout(dropout),
-            nn.Linear(hidden_dim, roberta_dim)
+            nn.Linear(lr_count, self.hidden_dim_2),
+            nn.BatchNorm1d(self.hidden_dim_2),  
+            nn.ReLU(),
+            nn.Dropout(self.dropout),  
+            nn.Linear(self.hidden_dim_2, topic_count),
+            nn.BatchNorm1d(topic_count),  
+            nn.ReLU(),
+            nn.Dropout(self.dropout),  
+            nn.Linear(topic_count, self.hidden_dim),
+            nn.BatchNorm1d(self.hidden_dim),  
+            nn.ReLU(),
+            nn.Dropout(self.dropout),  
+            nn.Linear(self.hidden_dim, roberta_dim)
         )
-
+        
     def forward(self, input_ids, attention_mask):
         roberta_output = self.roberta(input_ids=input_ids, attention_mask=attention_mask)['pooler_output'] 
         logits_topic = self.mlp1(roberta_output)
@@ -125,51 +150,81 @@ class BERTLSTM(nn.Module):
         logits = self.lin(dropout_output)
         return logits
 
+class SavedModel(PreTrainedModel):
+    def __init__(self, config, roberta_model, topic_count, lr_count, roberta_dim, per_topic_dim, 
+                 dropout=None, hidden_dim=None, hidden_dim_2=None, hidden_dim_3=None):
+        super(TLRRPredict, self).__init__(config)
+        self.roberta = XLMRobertaModel.from_pretrained(roberta_model) ## get information from a pre-trained model
+        if hidden_dim:
+            self.hidden_dim = hidden_dim
+        else:
+            self.hidden_dim = int(roberta_dim//2)
+        
+        if hidden_dim_2:
+            self.hidden_dim_2 = hidden_dim_2
+        else:
+            self.hidden_dim_2 = int(topic_count//2)
 
-class Autoencoder(nn.Module):
-    def __init__(self, input_dim, hidden_dim, hidden_dim2, n_components):
-        super().__init__()
-        self.encoder = nn.Sequential(
-            nn.Linear(input_dim, hidden_dim),
-            nn.Tanh(),
-            nn.Linear(hidden_dim, hidden_dim2),
-            nn.Tanh(),
-            nn.Linear(hidden_dim2, hidden_dim2),
-            nn.Tanh(),
-            nn.Linear(hidden_dim2, n_components),
-            nn.Tanh()
-            
-        )
+        if hidden_dim_3:
+            self.hidden_dim_3 = hidden_dim_3
+        else:
+            self.hidden_dim_3 = int((lr_count+per_topic_dim)//2)
 
-        self.decoder = nn.Sequential(
-            nn.Linear(n_components, hidden_dim2),
-            nn.Tanh(),
-            nn.Linear(hidden_dim2, hidden_dim),
-            nn.Tanh(),
+        if dropout:
+            self.dropout = dropout
+        else:
+            self.dropout = 0.2
+
+        self.mlp1 = nn.Sequential(
+            nn.Linear(config.hidden_size, hidden_dim),
+            nn.BatchNorm1d(hidden_dim), 
+            nn.ReLU(),
+            nn.Dropout(dropout),  
             nn.Linear(hidden_dim, hidden_dim),
-            nn.Tanh(),
-            nn.Linear(hidden_dim, input_dim)
+            nn.BatchNorm1d(hidden_dim),  
+            nn.ReLU(),
+            nn.Dropout(dropout),  
+            nn.Linear(hidden_dim, topic_count)
         )
-
-
-    def forward(self, x):
-        encoded = self.encoder(x)
-        decoded = self.decoder(encoded)
-        return encoded, decoded, x
-    
-class ClassifierSimple(nn.Module):
-    def __init__(self, input_dim, hidden_dim, hidden_dim2, n_labels):
-        super().__init__()
-        self.classifier = nn.Sequential(
-            nn.Linear(input_dim, hidden_dim),
+        
+        self.mlp2 = nn.Sequential(
+            nn.Linear(topic_count, hidden_dim_2),
+            nn.BatchNorm1d(hidden_dim_2),  
             nn.ReLU(),
-            nn.Linear(hidden_dim, hidden_dim2),
+            nn.Dropout(dropout), 
+            nn.Linear(hidden_dim_2, hidden_dim_2),
+            nn.BatchNorm1d(hidden_dim_2), 
             nn.ReLU(),
-            nn.Linear(hidden_dim2, hidden_dim2),
-            nn.ReLU(),
-            nn.Linear(hidden_dim2, n_labels),
+            nn.Dropout(dropout), 
+            nn.Linear(hidden_dim_2, lr_count)
         )
-
-    def forward(self, x):
-        logits = self.classifier(x)
-        return logits
+        self.dim_redu = nn.Sequential(
+            nn.Linear(lr_count, hidden_dim_3),
+            nn.BatchNorm1d(hidden_dim_3),  
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(hidden_dim_3, per_topic_dim)
+        )
+        self.decoder = nn.Sequential(
+            nn.Linear(per_topic_dim, hidden_dim_3),
+            nn.BatchNorm1d(hidden_dim_3),  
+            nn.ReLU(),
+            nn.Dropout(dropout),  
+            nn.Linear(hidden_dim_3, lr_count),
+            nn.BatchNorm1d(lr_count),  
+            nn.ReLU(),
+            nn.Dropout(dropout),  
+            nn.Linear(lr_count, hidden_dim_2),
+            nn.BatchNorm1d(hidden_dim_2),  
+            nn.ReLU(),
+            nn.Dropout(dropout),  
+            nn.Linear(hidden_dim_2, topic_count),
+            nn.BatchNorm1d(topic_count),  
+            nn.ReLU(),
+            nn.Dropout(dropout),  
+            nn.Linear(topic_count, hidden_dim),
+            nn.BatchNorm1d(hidden_dim),  
+            nn.ReLU(),
+            nn.Dropout(dropout),  
+            nn.Linear(hidden_dim, roberta_dim)
+        )
