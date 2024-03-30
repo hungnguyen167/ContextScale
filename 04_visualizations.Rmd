@@ -47,11 +47,7 @@ wf_socwel <- read.csv("data/r_outputs/wf_socwel.csv")
 
 ches_deu <- read_csv("data/r_outputs/ches_deu.csv")
 
-## Dimensionality reduction comparison
 
-dr_valid <- read_csv("results/arrays/dr_valid_scores.csv") %>%
-    pivot_longer(cols=c("trustworthiness","silhouette"),
-                 names_to = "measures", values_to = "values")
 
 ## Coalition
 
