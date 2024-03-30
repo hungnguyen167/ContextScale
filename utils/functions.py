@@ -326,10 +326,11 @@ def test_loop(dataloader, model, device):
   return res_topic, res_lr
 
 
-def scale_func(dataloader, model, device):
+def scale_func(dataloader, model, device, anchor_prob=[[1.0,0.0,0.0]]):
     model.eval()
     res_topic = []
     res_lr_softmax = []
+    res_lr = []
     print('Start predicting labels...')
     with torch.no_grad():  
         for batch in dataloader:    
@@ -337,16 +338,19 @@ def scale_func(dataloader, model, device):
             logits_topic, logits_lr,_,_= model(input_ids = batch['input_ids'], 
                                             attention_mask = batch['attention_mask'])
             pred_topic = logits_topic.argmax(1)
+            pred_lr = logits_lr.argmax(1)
             lr_softmax = logits_lr.softmax(1)
 
             res_topic.append(pred_topic)
             res_lr_softmax.append(lr_softmax)
-    
+            res_lr.append(pred_lr)
     pred_topics = torch.cat(res_topic, dim=0).cpu().detach().numpy()
+    pred_lrs =  torch.cat(res_lr, dim=0).cpu().detach().numpy()
     lr_softmax = torch.cat(res_lr_softmax, dim=0).cpu().detach().numpy()
-    anchor_prob = np.array([[1.0,0.0,0.0]])
-    position_scores = 1-cosine_similarity(anchor_prob, lr_softmax)
-    return pred_topics, position_scores
+    anchor_vec = np.array(anchor_prob)
+    position_scores = 1-cosine_similarity(anchor_vec, lr_softmax)
+    return pred_topics, position_scores, pred_lrs
+
 
 
 def train_ae(dataloader, model_ae, model_cls,ae_optimizer, cls_optimizer,device, ae_lossf, pred_lossf):
