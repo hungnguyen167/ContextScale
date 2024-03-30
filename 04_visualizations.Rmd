@@ -13,44 +13,35 @@ pacman::p_load(quanteda, quanteda.textmodels, tidyverse, readr, ggplot2, rstatix
 ### d2v
 d2v_gen <- read_csv("data/py_outputs/r&c_gen.csv") %>% 
     separate("party_election", sep="\\_", into = c("party", "election")) %>%
-    mutate(election = as.numeric(election), party = as.numeric(party))
+    mutate(election = as.numeric(election))
 d2v_env <- read_csv("data/py_outputs/r&c_env.csv") %>% 
     separate("party_election", sep="\\_", into = c("party", "election")) %>%
-    mutate(election = as.numeric(election), party = as.numeric(party))
-d2v_envp <- read_csv("data/py_outputs/r&c_envp.csv") %>% 
+    mutate(election = as.numeric(election))
+d2v_econ <- read_csv("data/py_outputs/r&c_econ.csv") %>% 
     separate("party_election", sep="\\_", into = c("party", "election")) %>%
-    mutate(election = as.numeric(election), party = as.numeric(party))
-d2v_wf <- read_csv("data/py_outputs/r&c_wf.csv") %>% 
+    mutate(election = as.numeric(election))
+d2v_eu <- read_csv("data/py_outputs/r&c_eu.csv") %>% 
     separate("party_election", sep="\\_", into = c("party", "election")) %>%
-    mutate(election = as.numeric(election), party = as.numeric(party))
-d2v_td <- read_csv("data/py_outputs/r&c_td.csv") %>% 
+    mutate(election = as.numeric(election))
+d2v_imm <- read_csv("data/py_outputs/r&c_imm.csv") %>% 
     separate("party_election", sep="\\_", into = c("party", "election")) %>%
-    mutate(election = as.numeric(election), party = as.numeric(party))
-d2v_fm <- read_csv("data/py_outputs/r&c_fm.csv") %>% 
+    mutate(election = as.numeric(election))
+d2v_regions <- read_csv("data/py_outputs/r&c_regions.csv") %>% 
     separate("party_election", sep="\\_", into = c("party", "election")) %>%
-    mutate(election = as.numeric(election), party = as.numeric(party))
-d2v_mil <- read_csv("data/py_outputs/r&c_mil.csv") %>% 
+    mutate(election = as.numeric(election))
+d2v_socwel <- read_csv("data/py_outputs/r&c_wf.csv") %>% 
     separate("party_election", sep="\\_", into = c("party", "election")) %>%
-    mutate(election = as.numeric(election), party = as.numeric(party))
-
-## tfscale
-tf_gen <- read_csv("results/arrays/tf_gen.csv")
-tf_env <- read_csv("results/arrays/tf_env.csv")
-tf_envp <- read_csv("data/py_outputs/tf_envp.csv")
-tf_mil <- read_csv("data/py_outputs/tf_mil.csv")
-tf_fm <- read_csv("results/arrays/tf_fm.csv")
-tf_wf <- read_csv("results/arrays/tf_wf.csv")
-tf_td <- read_csv("results/arrays/tf_td.csv")
+    mutate(election = as.numeric(election))
 
 
-## Wordfish
+### Wordfish
 wf_gen <- read.csv("data/r_outputs/wf_gen.csv")
 wf_env <- read.csv("data/r_outputs/wf_env.csv")
-wf_envp <- read.csv("data/r_outputs/wf_envp.csv")
-wf_mil <- read.csv("data/r_outputs/wf_mil.csv")
-wf_fm <- read.csv("data/r_outputs/wf_fm.csv")
-wf_wf <- read.csv("data/r_outputs/wf_wf.csv")
-wf_td <- read.csv("data/r_outputs/wf_td.csv")
+wf_econ <- read.csv("data/r_outputs/wf_econ.csv")
+wf_eu <- read.csv("data/r_outputs/wf_eu.csv")
+wf_imm <- read.csv("data/r_outputs/wf_imm.csv")
+wf_regions <- read.csv("data/r_outputs/wf_regions.csv")
+wf_socwel <- read.csv("data/r_outputs/wf_socwel.csv")
 
 ## CHES Germany
 

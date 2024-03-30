@@ -113,140 +113,11 @@ write.csv(results, "data/r_outputs/wf_gen.csv")
 
 ```
 
-## Wordfish - Traditionalism
-
-```{r wf_td}
-
-manifesto_td = manifesto_deu[which(manifesto_deu$code_extract %in% c("601", "602", "603", "604")),]
-grouped_texts <- manifesto_td %>% 
-    mutate(
-        party_election = paste(party, election, sep="_"),
-        party = case_when(
-            grepl("Linke|Sozialismus", name) ~ "PDS/Die Linke",
-            grepl("Sozialdemokratische", name) ~ "SPD",
-            grepl("Christlich", name) ~ "CDU/CSU",
-            grepl("Freie", name) ~ "FDP",
-            grepl("Grünen", name) ~ "Die Grünen",
-            grepl("Alternative", name) ~ "AfD",
-            TRUE ~ NA_character_
-        )
-    ) %>%
-    filter(!is.na(party)) %>%
-    group_by(party, election) %>%
-    summarise(
-        text_new = paste(text, collapse = " "),
-        num_speeches = n()
-    )
-dfmat <- corpus(grouped_texts, text_field = "text_new") %>%
-             tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
-             tokens_remove(stopwords("de")) %>%
-             dfm() %>%
-             dfm_trim(min_termfreq = 10, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
-             dfm_subset(ntoken(.) > 0, drop_docid = TRUE)
-
-wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", 
-                                 sparse = TRUE)
-results <- grouped_texts %>% select(-text_new)
-
-results$wf_score <- wf_mod$theta
-results$wf_se <- wf_mod$se.theta
-
-write.csv(results, "data/r_outputs/wf_td.csv")
-
-
-```
-
-
-## Wordfish - Welfare
-```{r wf_td}
-
-manifesto_wf = manifesto_deu[which(manifesto_deu$code_extract %in% c("504","505")),]
-grouped_texts <- manifesto_wf %>% 
-    mutate(
-        party_election = paste(party, election, sep="_"),
-        party = case_when(
-            grepl("Linke|Sozialismus", name) ~ "PDS/Die Linke",
-            grepl("Sozialdemokratische", name) ~ "SPD",
-            grepl("Christlich", name) ~ "CDU/CSU",
-            grepl("Freie", name) ~ "FDP",
-            grepl("Grünen", name) ~ "Die Grünen",
-            grepl("Alternative", name) ~ "AfD",
-            TRUE ~ NA_character_
-        )
-    ) %>%
-    filter(!is.na(party)) %>%
-    group_by(party, election) %>%
-    summarise(
-        text_new = paste(text, collapse = " "),
-        num_speeches = n()
-    )
-dfmat <- corpus(grouped_texts, text_field = "text_new") %>%
-             tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
-             tokens_remove(stopwords("de")) %>%
-             dfm() %>%
-             dfm_trim(min_termfreq = 10, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
-             dfm_subset(ntoken(.) > 0, drop_docid = TRUE)
-
-wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", 
-                                 sparse = TRUE)
-results <- grouped_texts %>% select(-text_new)
-
-results$wf_score <- wf_mod$theta
-results$wf_se <- wf_mod$se.theta
-
-write.csv(results, "data/r_outputs/wf_wf.csv")
-
-```
-
-## Wordfish - Free market
-
-```{r wf_td}
-
-manifesto_fm = manifesto_deu[which(manifesto_deu$code_extract %in%
-                                       c("401","402","403","412","413","415")),]
-grouped_texts <- manifesto_fm %>% 
-    mutate(
-        party_election = paste(party, election, sep="_"),
-        party = case_when(
-            grepl("Linke|Sozialismus", name) ~ "PDS/Die Linke",
-            grepl("Sozialdemokratische", name) ~ "SPD",
-            grepl("Christlich", name) ~ "CDU/CSU",
-            grepl("Freie", name) ~ "FDP",
-            grepl("Grünen", name) ~ "Die Grünen",
-            grepl("Alternative", name) ~ "AfD",
-            TRUE ~ NA_character_
-        )
-    ) %>%
-    filter(!is.na(party)) %>%
-    group_by(party, election) %>%
-    summarise(
-        text_new = paste(text, collapse = " "),
-        num_speeches = n()
-    )
-dfmat <- corpus(grouped_texts, text_field = "text_new") %>%
-             tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
-             tokens_remove(stopwords("de")) %>%
-             dfm() %>%
-             dfm_trim(min_termfreq = 10, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
-             dfm_subset(ntoken(.) > 0, drop_docid = TRUE)
-
-wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", 
-                                 sparse = TRUE)
-results <- grouped_texts %>% select(-text_new)
-
-results$wf_score <- wf_mod$theta
-results$wf_se <- wf_mod$se.theta
-
-
-write.csv(results, "data/r_outputs/wf_fm.csv")
-
-```
-
 ## Wordfish - Environment
 
 ```{r wf_env}
 
-manifesto_env = manifesto_deu[which(manifesto_deu$code_extract %in% c("416","501","410")),]
+manifesto_env = manifesto_deu[which(manifesto_deu$code_extract %in% c(410,416,501)),]
 grouped_texts <- manifesto_env %>% 
     mutate(
         party_election = paste(party, election, sep="_"),
@@ -280,18 +151,60 @@ results <- grouped_texts %>% select(-text_new)
 results$wf_score <- wf_mod$theta
 results$wf_se <- wf_mod$se.theta
 
-
 write.csv(results, "data/r_outputs/wf_env.csv")
 
+
 ```
 
-## Wordfish - Environment Protection
 
+## Wordfish - Decentralization      
+```{r wf_regions}
 
-```{r wf_env}
+manifesto_regions = manifesto_deu[which(manifesto_deu$code_extract %in% c(301,302,305)),]
+grouped_texts <- manifesto_regions %>% 
+    mutate(
+        party_election = paste(party, election, sep="_"),
+        party = case_when(
+            grepl("Linke|Sozialismus", name) ~ "PDS/Die Linke",
+            grepl("Sozialdemokratische", name) ~ "SPD",
+            grepl("Christlich", name) ~ "CDU/CSU",
+            grepl("Freie", name) ~ "FDP",
+            grepl("Grünen", name) ~ "Die Grünen",
+            grepl("Alternative", name) ~ "AfD",
+            TRUE ~ NA_character_
+        )
+    ) %>%
+    filter(!is.na(party)) %>%
+    group_by(party, election) %>%
+    summarise(
+        text_new = paste(text, collapse = " "),
+        num_speeches = n()
+    )
+dfmat <- corpus(grouped_texts, text_field = "text_new") %>%
+             tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
+             tokens_remove(stopwords("de")) %>%
+             dfm() %>%
+             dfm_trim(min_termfreq = 10, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
+             dfm_subset(ntoken(.) > 0, drop_docid = TRUE)
 
-manifesto_envp = manifesto_deu[which(manifesto_deu$code_extract == "501"),]
-grouped_texts <- manifesto_envp %>% 
+wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", 
+                                 sparse = TRUE)
+results <- grouped_texts %>% select(-text_new)
+
+results$wf_score <- wf_mod$theta
+results$wf_se <- wf_mod$se.theta
+
+write.csv(results, "data/r_outputs/wf_regions.csv")
+
+```
+
+## Wordfish - Economy
+
+```{r wf_econ}
+
+manifesto_econ = manifesto_deu[which(manifesto_deu$code_extract %in%
+                                       c(401,402,403,404,409,412,413,414)),]
+grouped_texts <- manifesto_econ %>% 
     mutate(
         party_election = paste(party, election, sep="_"),
         party = case_when(
@@ -325,17 +238,16 @@ results$wf_score <- wf_mod$theta
 results$wf_se <- wf_mod$se.theta
 
 
-write.csv(results, "data/r_outputs/wf_envp.csv")
+write.csv(results, "data/r_outputs/wf_econ.csv")
 
 ```
 
-## Wordfish - Military
+## Wordfish - Welfare
 
+```{r wf_socwel}
 
-```{r wf_env}
-
-manifesto_mil = manifesto_deu[which(manifesto_deu$code_extract %in% c("104","105")),]
-grouped_texts <- manifesto_mil %>% 
+manifesto_socwel = manifesto_deu[which(manifesto_deu$code_extract %in% c(503,504,505,701,702)),]
+grouped_texts <- manifesto_socwel %>% 
     mutate(
         party_election = paste(party, election, sep="_"),
         party = case_when(
@@ -369,7 +281,95 @@ results$wf_score <- wf_mod$theta
 results$wf_se <- wf_mod$se.theta
 
 
-write.csv(results, "data/r_outputs/wf_mil.csv")
+write.csv(results, "data/r_outputs/wf_socwel.csv")
+
+```
+
+## Wordfish - EU Integration
+
+
+```{r wf_eu}
+
+manifesto_eu = manifesto_deu[which(manifesto_deu$code_extract %in% c(108,110)),]
+grouped_texts <- manifesto_eu %>% 
+    mutate(
+        party_election = paste(party, election, sep="_"),
+        party = case_when(
+            grepl("Linke|Sozialismus", name) ~ "PDS/Die Linke",
+            grepl("Sozialdemokratische", name) ~ "SPD",
+            grepl("Christlich", name) ~ "CDU/CSU",
+            grepl("Freie", name) ~ "FDP",
+            grepl("Grünen", name) ~ "Die Grünen",
+            grepl("Alternative", name) ~ "AfD",
+            TRUE ~ NA_character_
+        )
+    ) %>%
+    filter(!is.na(party)) %>%
+    group_by(party, election) %>%
+    summarise(
+        text_new = paste(text, collapse = " "),
+        num_speeches = n()
+    )
+dfmat <- corpus(grouped_texts, text_field = "text_new") %>%
+             tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
+             tokens_remove(stopwords("de")) %>%
+             dfm() %>%
+             dfm_trim(min_termfreq = 10, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
+             dfm_subset(ntoken(.) > 0, drop_docid = TRUE)
+
+wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", 
+                                 sparse = TRUE)
+results <- grouped_texts %>% select(-text_new)
+
+results$wf_score <- wf_mod$theta
+results$wf_se <- wf_mod$se.theta
+
+
+write.csv(results, "data/r_outputs/wf_eu.csv")
+
+```
+
+## Wordfish - Immigration
+
+
+```{r wf_imm}
+
+manifesto_imm = manifesto_deu[which(manifesto_deu$code_extract %in% c(601,602,607,608)),]
+grouped_texts <- manifesto_imm %>% 
+    mutate(
+        party_election = paste(party, election, sep="_"),
+        party = case_when(
+            grepl("Linke|Sozialismus", name) ~ "PDS/Die Linke",
+            grepl("Sozialdemokratische", name) ~ "SPD",
+            grepl("Christlich", name) ~ "CDU/CSU",
+            grepl("Freie", name) ~ "FDP",
+            grepl("Grünen", name) ~ "Die Grünen",
+            grepl("Alternative", name) ~ "AfD",
+            TRUE ~ NA_character_
+        )
+    ) %>%
+    filter(!is.na(party)) %>%
+    group_by(party, election) %>%
+    summarise(
+        text_new = paste(text, collapse = " "),
+        num_speeches = n()
+    )
+dfmat <- corpus(grouped_texts, text_field = "text_new") %>%
+             tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
+             tokens_remove(stopwords("de")) %>%
+             dfm() %>%
+             dfm_trim(min_termfreq = 10, verbose = TRUE, min_docfreq = 0.03, docfreq_type = "prop") %>%
+             dfm_subset(ntoken(.) > 0, drop_docid = TRUE)
+
+wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", 
+                                 sparse = TRUE)
+results <- grouped_texts %>% select(-text_new)
+
+results$wf_score <- wf_mod$theta
+results$wf_se <- wf_mod$se.theta
+
+
+write.csv(results, "data/r_outputs/wf_imm.csv")
 
 ```
 
