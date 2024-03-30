@@ -6,7 +6,7 @@ output: html_notebook
 ```{r}
 rm(list=ls())
 pacman::p_load(quanteda, quanteda.textmodels, tidyverse, readr, ggplot2, rstatix, grid, gridExtra, viridis, ggsci, ggpubr, ragg, scales, caret, ggExtra,rempsyc, dplyr,
-               flextable)
+               flextable, magrittr)
 
 ## For Figure 2, 3, and 4
 
@@ -47,158 +47,63 @@ wf_socwel <- read.csv("data/r_outputs/wf_socwel.csv")
 
 ches_deu <- read_csv("data/r_outputs/ches_deu.csv")
 
-
-
-## Coalition
-
-coalition_gt <- read_csv("data/py_outputs/coalition_gt_scaled.csv")
-coalition_preds <- read_csv("data/py_outputs/coalition_preds_scaled.csv")
-coalition_pred_labels <- read_csv("data/py_outputs/coalition_pred.csv")
-## Shannon entropy
-
-imba <- read_csv("results/arrays/imba.csv", col_select = c(2,3))
-
-## Table 1
-lrn_cls <- read_csv("results/tabs and figs/lrn_cls.csv") %>%
-    mutate(architecture="Transformer")
-bow_cls <- read_csv("results/tabs and figs/bow_cls.csv") %>%
-    mutate(architecture="Bags of words")
-d2v_cls <- read_csv("results/tabs and figs/doc2vec_cls.csv") %>%
-    mutate(architecture="Doc2Vec")
-
-## German's manifestoes
-
-manifesto_deu <- read_csv("data/py_outputs/manifesto_deu.csv")
-
-## Other techniques scores
-dr_scaled_scores <- read_csv("results/arrays/dr_scaled_scores.csv")
-
-## Different parameters
-umap_parameters <- read_csv("results/arrays/umap_parameters.csv")
+## Scaled datasets
+manifesto_cs <- read_csv("data/py_outputs/cs_germany.csv")
+coalitionagree_cs <- read_csv("data/py_outputs/cagree_scaled.csv")
+motn_cs <- read_csv("data/py_outputs/motn_trump_scaled.csv")
 ```
 
 
 
-## Some more processing
+## Grouping scores by topics 
 
 ```{r}
-
-df_gen <-  tf_gen %>%
+manifesto_aggr <- manifesto_cs %>%
+    group_by(party, election) %>%
+    summarise(
+        position_scores = mean(lr_score, na.rm=TRUE)
+    )
+manifesto_topic_aggr <- manifesto_cs %>% 
+    group_by(party, election, pred_topic_name) %>%
+    summarise(
+        position_scores = mean(lr_score, na.rm=TRUE)
+    )
+df_gen <- manifesto_aggr %>%
     left_join(d2v_gen, by = c("party", "election")) %>%
-    mutate(
-        party = case_when(
-            party %in% c(41111, 41112,41113) ~ "Die Grünen",
-            party %in% c(41221, 41222,41223) ~ "PDS/Die Linke",
-            party == 41320 ~ "SPD",
-            party == 41420 ~ "FDP",
-            party == 41521 ~ "CDU/CSU",
-            party == 41953 ~ "AfD",
-            TRUE ~ "Other"
-        )
-    ) %>%
-    filter(party != "Other") %>%
     left_join(wf_gen, by = c("party", "election")) %>% 
     left_join(ches_deu, by = c("party", "election"))
 
-df_env <-  tf_env %>%
+df_env <-  manifesto_topic_aggr %>%
+    filter(pred_topic_name == "Environment") %>% 
     left_join(d2v_env, by = c("party", "election")) %>%
-    mutate(
-        party = case_when(
-            party %in% c(41111, 41112,41113) ~ "Die Grünen",
-            party %in% c(41221, 41222,41223) ~ "PDS/Die Linke",
-            party == 41320 ~ "SPD",
-            party == 41420 ~ "FDP",
-            party == 41521 ~ "CDU/CSU",
-            party == 41953 ~ "AfD",
-            TRUE ~ "Other"
-        )
-    ) %>%
-    filter(party != "Other") %>%
     left_join(wf_env, by = c("party", "election")) %>% 
     left_join(ches_deu, by = c("party", "election"))
 
-df_fm <-  tf_fm %>%
-    left_join(d2v_fm, by = c("party", "election")) %>%
-    mutate(
-        party = case_when(
-            party %in% c(41111, 41112,41113) ~ "Die Grünen",
-            party %in% c(41221, 41222,41223) ~ "PDS/Die Linke",
-            party == 41320 ~ "SPD",
-            party == 41420 ~ "FDP",
-            party == 41521 ~ "CDU/CSU",
-            party == 41953 ~ "AfD",
-            TRUE ~ "Other"
-        )
-    ) %>%
-    filter(party != "Other") %>%
-    left_join(wf_fm, by = c("party", "election")) %>% 
+df_eu <-  manifesto_topic_aggr %>%
+    filter(pred_topic_name == "European integration") %>% 
+    left_join(d2v_eu, by = c("party", "election")) %>%
+    left_join(wf_eu, by = c("party", "election")) %>% 
     left_join(ches_deu, by = c("party", "election"))
-
-df_td <-  tf_td %>%
-    left_join(d2v_td, by = c("party", "election")) %>%
-    mutate(
-        party = case_when(
-            party %in% c(41111, 41112,41113) ~ "Die Grünen",
-            party %in% c(41221, 41222,41223) ~ "PDS/Die Linke",
-            party == 41320 ~ "SPD",
-            party == 41420 ~ "FDP",
-            party == 41521 ~ "CDU/CSU",
-            party == 41953 ~ "AfD",
-            TRUE ~ "Other"
-        )
-    ) %>%
-    filter(party != "Other") %>%
-    left_join(wf_td, by = c("party", "election")) %>% 
+df_imm <-  manifesto_topic_aggr %>%
+    filter(pred_topic_name == "Immigration") %>% 
+    left_join(d2v_imm, by = c("party", "election")) %>%
+    left_join(wf_imm, by = c("party", "election")) %>% 
     left_join(ches_deu, by = c("party", "election"))
-
-df_wf <-  tf_wf %>%
-    left_join(d2v_wf, by = c("party", "election")) %>%
-    mutate(
-        party = case_when(
-            party %in% c(41111, 41112,41113) ~ "Die Grünen",
-            party %in% c(41221, 41222,41223) ~ "PDS/Die Linke",
-            party == 41320 ~ "SPD",
-            party == 41420 ~ "FDP",
-            party == 41521 ~ "CDU/CSU",
-            party == 41953 ~ "AfD",
-            TRUE ~ "Other"
-        )
-    ) %>%
-    filter(party != "Other") %>%
-    left_join(wf_wf, by = c("party", "election")) %>% 
+df_regions <-  manifesto_topic_aggr %>%
+    filter(pred_topic_name == "Decentralization") %>% 
+    left_join(d2v_regions, by = c("party", "election")) %>%
+    left_join(wf_regions, by = c("party", "election")) %>% 
     left_join(ches_deu, by = c("party", "election"))
-
-df_envp <-  tf_envp %>%
-    left_join(d2v_envp, by = c("party", "election")) %>%
-    mutate(
-        party = case_when(
-            party %in% c(41111, 41112,41113) ~ "Die Grünen",
-            party %in% c(41221, 41222,41223) ~ "PDS/Die Linke",
-            party == 41320 ~ "SPD",
-            party == 41420 ~ "FDP",
-            party == 41521 ~ "CDU/CSU",
-            party == 41953 ~ "AfD",
-            TRUE ~ "Other"
-        )
-    ) %>%
-    filter(party != "Other") %>%
-    left_join(wf_envp, by = c("party", "election"))
-
-df_mil <-  tf_mil %>%
-    left_join(d2v_mil, by = c("party", "election")) %>%
-    mutate(
-        party = case_when(
-            party %in% c(41111, 41112,41113) ~ "Die Grünen",
-            party %in% c(41221, 41222,41223) ~ "PDS/Die Linke",
-            party == 41320 ~ "SPD",
-            party == 41420 ~ "FDP",
-            party == 41521 ~ "CDU/CSU",
-            party == 41953 ~ "AfD",
-            TRUE ~ "Other"
-        )
-    ) %>%
-    filter(party != "Other") %>%
-    left_join(wf_mil, by = c("party", "election")) 
+df_socwel <-  manifesto_topic_aggr %>%
+    filter(pred_topic_name == "Social Welfare") %>% 
+    left_join(d2v_socwel, by = c("party", "election")) %>%
+    left_join(wf_socwel, by = c("party", "election")) %>% 
+    left_join(ches_deu, by = c("party", "election"))
+df_econ <-  manifesto_topic_aggr %>%
+    filter(pred_topic_name == "Economy") %>% 
+    left_join(d2v_econ, by = c("party", "election")) %>%
+    left_join(wf_econ, by = c("party", "election")) %>% 
+    left_join(ches_deu, by = c("party", "election"))
 
 ```
 
