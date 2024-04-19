@@ -3,7 +3,9 @@ title: "R Notebook"
 output: html_notebook
 ---
 ## Setup and load data
-```{r}
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
 rm(list=ls())
 pacman::p_load(quanteda, quanteda.textmodels, tidyverse, readr, ggplot2, rstatix, grid, gridExtra, viridis, ggsci, ggpubr, ragg, scales, caret, ggExtra,rempsyc, dplyr,
                flextable, magrittr)
@@ -12,27 +14,37 @@ pacman::p_load(quanteda, quanteda.textmodels, tidyverse, readr, ggplot2, rstatix
 
 ### d2v
 d2v_gen <- read_csv("data/py_outputs/r&c_gen.csv") %>% 
-    separate("party_election", sep="\\_", into = c("party", "election")) %>%
-    mutate(election = as.numeric(election))
+    mutate(election = as.numeric(election)) %>%
+    select(-c(party, party_election)) %>%
+    rename(party=party_name)
 d2v_env <- read_csv("data/py_outputs/r&c_env.csv") %>% 
-    separate("party_election", sep="\\_", into = c("party", "election")) %>%
-    mutate(election = as.numeric(election))
+    mutate(election = as.numeric(election)) %>%
+    select(-c(party, party_election)) %>%
+    rename(party=party_name)
 d2v_econ <- read_csv("data/py_outputs/r&c_econ.csv") %>% 
-    separate("party_election", sep="\\_", into = c("party", "election")) %>%
-    mutate(election = as.numeric(election))
+    mutate(election = as.numeric(election)) %>%
+    select(-c(party, party_election)) %>%
+    rename(party=party_name)
 d2v_eu <- read_csv("data/py_outputs/r&c_eu.csv") %>% 
-    separate("party_election", sep="\\_", into = c("party", "election")) %>%
-    mutate(election = as.numeric(election))
+    mutate(election = as.numeric(election)) %>% 
+    select(-c(party, party_election)) %>%
+    rename(party=party_name)
 d2v_imm <- read_csv("data/py_outputs/r&c_imm.csv") %>% 
-    separate("party_election", sep="\\_", into = c("party", "election")) %>%
-    mutate(election = as.numeric(election))
-d2v_regions <- read_csv("data/py_outputs/r&c_regions.csv") %>% 
-    separate("party_election", sep="\\_", into = c("party", "election")) %>%
-    mutate(election = as.numeric(election))
+    mutate(election = as.numeric(election)) %>% 
+    select(-c(party, party_election)) %>%
+    rename(party=party_name)
 d2v_socwel <- read_csv("data/py_outputs/r&c_wf.csv") %>% 
-    separate("party_election", sep="\\_", into = c("party", "election")) %>%
-    mutate(election = as.numeric(election))
-
+    mutate(election = as.numeric(election)) %>% 
+    select(-c(party, party_election)) %>%
+    rename(party=party_name)
+d2v_ep <- read_csv("data/py_outputs/r&c_ep.csv") %>% 
+    mutate(election = as.numeric(election)) %>% 
+    select(-c(party, party_election)) %>%
+    rename(party=party_name)
+d2v_growth <- read_csv("data/py_outputs/r&c_growth.csv") %>% 
+    mutate(election = as.numeric(election)) %>% 
+    select(-c(party, party_election)) %>%
+    rename(party=party_name)
 
 ### Wordfish
 wf_gen <- read.csv("data/r_outputs/wf_gen.csv")
@@ -40,70 +52,208 @@ wf_env <- read.csv("data/r_outputs/wf_env.csv")
 wf_econ <- read.csv("data/r_outputs/wf_econ.csv")
 wf_eu <- read.csv("data/r_outputs/wf_eu.csv")
 wf_imm <- read.csv("data/r_outputs/wf_imm.csv")
-wf_regions <- read.csv("data/r_outputs/wf_regions.csv")
 wf_socwel <- read.csv("data/r_outputs/wf_socwel.csv")
+wf_ep <- read.csv("data/r_outputs/wf_ep.csv")
+wf_growth <- read.csv("data/r_outputs/wf_growth.csv")
+
 
 ## CHES Germany
 
 ches_deu <- read_csv("data/r_outputs/ches_deu.csv")
 
 ## Scaled datasets
-manifesto_cs <- read_csv("data/py_outputs/cs_germany.csv")
+manifesto_cs_gen <- read_csv("data/py_outputs/cs_gen.csv")
+manifesto_cs_topic <- read_csv("data/py_outputs/cs_topic.csv")
 coalitionagree_cs <- read_csv("data/py_outputs/cagree_scaled.csv")
 motn_cs <- read_csv("data/py_outputs/motn_trump_scaled.csv")
+manifesto_deu <- read_csv("data/temps/manifesto.csv") %>% 
+    filter(countryname=="Germany")
 ```
 
 
 
 ## Grouping scores by topics 
 
-```{r}
-manifesto_aggr <- manifesto_cs %>%
-    group_by(party, election) %>%
+```{r message=FALSE, warning=FALSE}
+manifesto_aggr <- manifesto_cs_gen %>%
+    select(-party) %>%
+    rename(party=party_name, cs_mean = mean_score, cs_se = se_score) 
+manifesto_topic_aggr <- manifesto_cs_topic %>% 
+    select(-party) %>%
+    rename(party=party_name) %>%
+    group_by(party, election, topic) %>%
     summarise(
-        position_scores = mean(lr_score, na.rm=TRUE)
+        cs_mean = mean(lr_score_cs, na.rm=TRUE), 
+        cs_se = sd(lr_score_cs, na.rm=TRUE)/sqrt(n())
     )
-manifesto_topic_aggr <- manifesto_cs %>% 
-    group_by(party, election, pred_topic_name) %>%
+
+manifesto_spec_topic <- manifesto_cs_topic %>% 
+    select(-party) %>%
+    rename(party=party_name) %>%
+    mutate(
+        spec_topic = case_when(
+            code_extract == 501 ~ "Environment Protection",
+            code_extract %in% c(410,416) ~ "Growth",
+            TRUE ~ "Other"
+        )
+    ) %>%
+    filter(spec_topic != "Other") %>%
+    group_by(party, election, spec_topic) %>%
     summarise(
-        position_scores = mean(lr_score, na.rm=TRUE)
+        cs_mean = mean(lr_score_cs, na.rm=TRUE), 
+        cs_se = sd(lr_score_cs, na.rm=TRUE)/sqrt(n())
     )
+
+manifesto_deu %>%
+    mutate(
+        party_name = case_when(
+          party %in% c(41111,41112,41113) ~ "Alliance 90/Greens",
+          party %in% c(41220, 41221, 41222, 41223) ~ "The Left",
+          party == 41320 ~ "SPD",
+          party == 41420 ~ "FDP",
+          party == 41521 ~ "CDU/CSU",
+          party == 41953 ~ "AfD",
+          TRUE ~ "Other"  
+        )
+    ) %>%
+    select(-party) %>%  
+    rename(party=party_name) %>%
+    filter(party!="Other") %>%
+    filter(topic %in% c("Decentralization", "Environment")) %>%
+    group_by(party, topic, lrn) %>% 
+    summarise(count=n())
+
+logscale <- manifesto_deu %>%
+    mutate(
+        party_name = case_when(
+          party %in% c(41111,41112,41113) ~ "Alliance 90/Greens",
+          party %in% c(41220, 41221, 41222, 41223) ~ "The Left",
+          party == 41320 ~ "SPD",
+          party == 41420 ~ "FDP",
+          party == 41521 ~ "CDU/CSU",
+          party == 41953 ~ "AfD",
+          TRUE ~ "Other"  
+        )
+    ) %>%
+    select(-party) %>%  
+    rename(party=party_name) %>%
+    filter(party!="Other") %>%
+    group_by(party, election, topic, lrn) %>%
+    summarise(n = n(), .groups = "keep") %>%
+    ungroup() %>%
+    group_by(party, election, topic) %>%
+    summarise(
+        total_n = sum(n),
+        n_right = sum(n[lrn=="right"], na.rm=TRUE),
+        n_left = sum(n[lrn=="left"], na.rm=TRUE),
+        lr_log = round(
+            log(n_right+0.5) - log(n_left+0.5),
+            2
+        )
+    ) 
+    
+logscale_spec <- manifesto_deu %>%
+    mutate(
+        party_name = case_when(
+          party %in% c(41111,41112,41113) ~ "Alliance 90/Greens",
+          party %in% c(41220, 41221, 41222, 41223) ~ "The Left",
+          party == 41320 ~ "SPD",
+          party == 41420 ~ "FDP",
+          party == 41521 ~ "CDU/CSU",
+          party == 41953 ~ "AfD",
+          TRUE ~ "Other"  
+        )
+    ) %>%
+    select(-party) %>%  
+    rename(party=party_name) %>%
+    filter(party!="Other") %>%
+    mutate(
+        spec_topic = case_when(
+            code_extract == 501 ~ "Environment Protection",
+            code_extract %in% c(410,416) ~ "Growth",
+            TRUE ~ "Other"
+        )
+    ) %>%
+    filter(spec_topic != "Other") %>%
+    group_by(party, election, spec_topic, lrn) %>%
+    summarise(n = n(), .groups = "keep") %>%
+    ungroup() %>%
+    group_by(party, election, spec_topic) %>%
+    summarise(
+        total_n = sum(n),
+        n_right = sum(n[lrn=="right"], na.rm=TRUE),
+        n_left = sum(n[lrn=="left"], na.rm=TRUE),
+        lr_log = round(
+            log(n_right+0.5) - log(n_left+0.5),
+            2
+        ),
+        saliency = n/length(manifesto_deu),
+        .groups="keep"
+    ) 
+
 df_gen <- manifesto_aggr %>%
     left_join(d2v_gen, by = c("party", "election")) %>%
     left_join(wf_gen, by = c("party", "election")) %>% 
-    left_join(ches_deu, by = c("party", "election"))
+    left_join(ches_deu, by = c("party", "election")) %>%
+    mutate(
+        saliency = 1.00
+    ) %>%
+    ungroup() 
 
 df_env <-  manifesto_topic_aggr %>%
-    filter(pred_topic_name == "Environment") %>% 
+    filter(topic == "Environment") %>% 
     left_join(d2v_env, by = c("party", "election")) %>%
     left_join(wf_env, by = c("party", "election")) %>% 
-    left_join(ches_deu, by = c("party", "election"))
+    left_join(ches_deu, by = c("party", "election")) %>%
+    left_join(logscale, by = c("party","election", "topic")) %>%
+    ungroup()
 
 df_eu <-  manifesto_topic_aggr %>%
-    filter(pred_topic_name == "European integration") %>% 
+    filter(topic == "European integration") %>% 
     left_join(d2v_eu, by = c("party", "election")) %>%
     left_join(wf_eu, by = c("party", "election")) %>% 
-    left_join(ches_deu, by = c("party", "election"))
+    left_join(ches_deu, by = c("party", "election")) %>%
+    left_join(logscale, by = c("party","election", "topic")) %>%
+    ungroup()
 df_imm <-  manifesto_topic_aggr %>%
-    filter(pred_topic_name == "Immigration") %>% 
+    filter(topic == "Immigration") %>% 
     left_join(d2v_imm, by = c("party", "election")) %>%
     left_join(wf_imm, by = c("party", "election")) %>% 
-    left_join(ches_deu, by = c("party", "election"))
-df_regions <-  manifesto_topic_aggr %>%
-    filter(pred_topic_name == "Decentralization") %>% 
-    left_join(d2v_regions, by = c("party", "election")) %>%
-    left_join(wf_regions, by = c("party", "election")) %>% 
-    left_join(ches_deu, by = c("party", "election"))
+    left_join(ches_deu, by = c("party", "election")) %>%
+    left_join(logscale, by = c("party","election", "topic")) %>%
+    ungroup()
 df_socwel <-  manifesto_topic_aggr %>%
-    filter(pred_topic_name == "Social Welfare") %>% 
+    filter(topic == "Social Welfare") %>% 
     left_join(d2v_socwel, by = c("party", "election")) %>%
     left_join(wf_socwel, by = c("party", "election")) %>% 
-    left_join(ches_deu, by = c("party", "election"))
+    left_join(ches_deu, by = c("party", "election")) %>%
+    left_join(logscale, by = c("party","election", "topic")) %>%
+    ungroup()
 df_econ <-  manifesto_topic_aggr %>%
-    filter(pred_topic_name == "Economy") %>% 
+    filter(topic == "Economy") %>% 
     left_join(d2v_econ, by = c("party", "election")) %>%
     left_join(wf_econ, by = c("party", "election")) %>% 
-    left_join(ches_deu, by = c("party", "election"))
+    left_join(ches_deu, by = c("party", "election")) %>%
+    left_join(logscale, by = c("party","election", "topic")) %>%
+    ungroup()
+
+df_ep <-  manifesto_spec_topic %>%
+    filter(spec_topic == "Environment Protection") %>% 
+    left_join(d2v_ep, by = c("party", "election")) %>%
+    left_join(wf_ep, by = c("party", "election")) %>% 
+    left_join(ches_deu, by = c("party", "election")) %>%
+    left_join(logscale_spec, by = c("party","election", "spec_topic")) %>%
+    ungroup()
+
+df_growth <-  manifesto_spec_topic %>%
+    filter(spec_topic == "Growth") %>% 
+    left_join(d2v_growth, by = c("party", "election")) %>%
+    left_join(wf_growth, by = c("party", "election")) %>% 
+    left_join(ches_deu, by = c("party", "election")) %>%
+    left_join(logscale_spec, by = c("party","election", "spec_topic")) %>%
+    ungroup()
+
+
 
 ```
 
@@ -112,58 +262,55 @@ df_econ <-  manifesto_topic_aggr %>%
 
 ## Figure 1
 ```{r figure_1}
+plot_cs <- ggplot(data = df_gen,
+                  aes(x=factor(election), y=cs_mean, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, linewidth = 1) + 
+    geom_errorbar(aes(ymin=cs_mean-cs_se, ymax=cs_mean+cs_se),
+                  width=.2,alpha=0.5,linetype="dashed")+
+    scale_color_manual(name = "Party",  
+                       values = c("blue","green", "black","yellow", "red", "purple")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("ContextScale - General")
+
 plot_wf <- ggplot(data = df_gen,
                   aes(x=factor(election), y=wf_score, color=party,group=party)) +
     geom_point() +
-    geom_line(alpha=0.8, linewidth = 1) +
-    geom_errorbar(aes(ymin=wf_score-wf_se, ymax=wf_score+wf_se),
-                  width=.2, alpha=0.5,linetype="dashed")+
-    scale_color_manual(name = "Party",  
-                       values = c("blue","black", "green","yellow", "purple", "red")) +
-    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
-    xlab("Election") +
-    ylab("Wordfish")
-
-
-plot_d2v1 <- ggplot(data = df_gen,
-                  aes(x=factor(election), y= -1*d2v_d1, color=party,group=party)) +
-    geom_point() +
-    geom_line(alpha=0.8, size = 1) + 
-    scale_color_manual(name = "Party",  
-                       values = c("blue","black", "green","yellow", "purple", "red")) +
-    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
-    xlab("Election") +
-    ylab("R&C - Dim 1")
-
-
-plot_tf1 <- ggplot(data = df_gen,
-                  aes(x=factor(election), y=cs_mean_d1, color=party,group=party)) +
-    geom_point() +
     geom_line(alpha=0.8, linewidth = 1) + 
-    geom_errorbar(aes(ymin=cs_mean_d1-cs_se_d1, ymax=cs_mean_d1+cs_se_d1),
+    geom_errorbar(aes(ymin=wf_score-wf_se, ymax=wf_score+wf_se),
                   width=.2,alpha=0.5,linetype="dashed")+
     scale_color_manual(name = "Party",  
-                       values = c("blue","black", "green","yellow", "purple", "red")) +
+                       values = c("blue","green", "black","yellow", "red", "purple")) +
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
     xlab("Election") +
-    ylab("ContextScale - Dim 1")
+    ylab("Wordfish - General")
 
+plot_d2v <- ggplot(data = df_gen,
+                  aes(x=factor(election), y=-1*d2v_d1, color=party,group=party)) + ## flip to match the rest
+    geom_point() +
+    geom_line(alpha=0.8, linewidth = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","green", "black","yellow", "red", "purple")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("R&C - First Latent Dimension")
 
-plot_cmplog <- ggplot(data = df_gen,
+plot_cmp <- ggplot(data = df_growth,
                   aes(x=factor(election), y=lr_log, color=party,group=party)) +
     geom_point() +
-    geom_line(alpha=0.8, size = 1) + 
+    geom_line(alpha=0.8, linewidth = 1) + 
     scale_color_manual(name = "Party",  
-                       values = c("blue","black", "green","yellow", "purple", "red")) +
+                       values = c("blue","green", "black","yellow", "red", "purple")) +
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
     xlab("Election") +
-    ylab("CMP - Log")
+    ylab("CMP - Log scores")
 
 
 
 
 
-figure_1 <- ggarrange(plot_tf1, plot_wf, plot_d2v1,plot_cmplog,
+figure_1 <- ggarrange(plot_cs, plot_wf, plot_d2v,plot_cmp,
                       common.legend = TRUE)
 
 agg_png(filename = here::here("results","tabs and figs","figure 1.png"), res = 360, width = 4800, height = 3200)
@@ -174,60 +321,71 @@ invisible(dev.off())
 
 ```
 
-## Correlation tables
+## Correlation tables for figure 2
 
 ```{r}
 cor_table_gen <- df_gen %>% 
-    cor_test(vars = "ches_lr", vars2 = c("lr_log", "cs_mean_d1", "wf_score",
-                                          "d2v_d1")) 
+    cor_test(vars = "ches_lr", vars2 = c("lr_log","cs_mean", "wf_score",
+                                          "d2v_d1"), use="complete.obs") 
 cor_table_gen <- round(cor_table_gen[,c("cor", "p", "conf.low", "conf.high")], 2) %>%
     mutate(
-        techniques = c("log", "tf1", "wf", "d2v1"),
-        topic = "general"
+        techniques = c("cmp","cs", "wf", "d2v1"),
+        topic = "General"
     )
 
 
-cor_table_fm <- df_fm %>% cor_test(vars = "ches_fm", 
-                                       vars2=c("lr_log","cs_mean_d1", "wf_score",
+cor_table_econ <- df_econ %>% 
+    cor_test(vars = "ches_econ", vars2 = c("lr_log","cs_mean","wf_score", 
                                                "d2v_d1"))
-cor_table_fm <- round(cor_table_fm[,c("cor", "p", "conf.low", "conf.high")], 2) %>%
+
+cor_table_econ <- round(cor_table_econ[,c("cor", "p", "conf.low", "conf.high")], 2) %>%
     mutate(
-        techniques = c("log", "tf1", "wf", "d2v1"),
-        topic = "freemarket"
+        techniques = c("cmp","cs", "wf", "d2v1"),
+        topic = "Economy"
     )
 
-cor_table_env <- df_env %>% cor_test(vars = "lr_env", 
-                                       vars2=c("lr_log","cs_mean_d1", "wf_score",
+cor_table_env <- df_env %>% cor_test(vars = "ches_env", 
+                                       vars2=c("lr_log","cs_mean", "wf_score",
                                                "d2v_d1")) 
 
 cor_table_env <- round(cor_table_env[,c("cor", "p", "conf.low", "conf.high")], 2) %>%
     mutate(
-        techniques = c("log", "tf1", "wf", "d2v1"),
-        topic = "environment"
+        techniques = c("cmp","cs", "wf", "d2v1"),
+        topic = "Environment"
     )
 
-cor_table_wf <- df_wf %>% cor_test(vars = "ches_wf", 
-                                       vars2=c("lr_log","cs_mean_d1", "wf_score",
+cor_table_socwel <- df_socwel %>% cor_test(vars = "ches_wf", 
+                                       vars2=c("lr_log","cs_mean", "wf_score",
                                                "d2v_d1"))
 
-cor_table_wf <- round(cor_table_wf[,c("cor", "p", "conf.low", "conf.high")], 2) %>%
+cor_table_socwel <- round(cor_table_socwel[,c("cor", "p", "conf.low", "conf.high")], 2) %>%
     mutate(
-        techniques = c("log", "tf1", "wf", "d2v1"),
-        topic = "welfare"
+        techniques = c("cmp","cs", "wf", "d2v1"),
+        topic = "Social Welfare"
     )
 
-cor_table_td <- df_td %>% cor_test(vars = "ches_td", 
-                                       vars2=c("lr_log","cs_mean_d1", "wf_score",
+cor_table_eu <- df_eu %>% cor_test(vars = "ches_eu", 
+                                       vars2=c("lr_log","cs_mean", "wf_score",
                                                "d2v_d1"))
 
-cor_table_td <- round(cor_table_fm[,c("cor", "p", "conf.low", "conf.high")], 2) %>%
+cor_table_eu <- round(cor_table_eu[,c("cor", "p", "conf.low", "conf.high")], 2) %>%
     mutate(
-        techniques = c("log", "tf1", "wf", "d2v1"),
-        topic = "traditionalism"
+        techniques = c("cmp","cs", "wf", "d2v1"),
+        topic = "European integration"
+    )
+cor_table_imm <- df_imm %>% cor_test(vars = "ches_immgr", 
+                                       vars2=c("lr_log","cs_mean", "wf_score",
+                                               "d2v_d1"))
+
+cor_table_imm <- round(cor_table_imm[,c("cor", "p", "conf.low", "conf.high")], 2) %>%
+    mutate(
+        techniques = c("cmp","cs", "wf", "d2v1"),
+        topic = "Immigration"
     )
 
-cor_table_all <- bind_rows(cor_table_gen, cor_table_env, cor_table_fm, cor_table_td, cor_table_wf) %>%
-    left_join(imba, by = "topic")
+
+cor_table_all <- bind_rows(cor_table_gen, cor_table_env, cor_table_econ, cor_table_eu, cor_table_socwel,
+                           cor_table_imm) 
 ```
 
 ## Figure 2
@@ -235,147 +393,75 @@ cor_table_all <- bind_rows(cor_table_gen, cor_table_env, cor_table_fm, cor_table
 ```{r figure_2}
 cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73","#0072B2", "#F0E442", "#D55E00", "#CC79A7")
 
-plot_cor_bal <-ggplot(data = cor_table_all,
-                  aes(x=factor(imbalancedness), y=abs(cor), color=factor(topic))) +
+plot_cor_ches <-ggplot(data = cor_table_all,
+                  aes(x=factor(topic), y=abs(cor))) +
     geom_point(aes(shape=factor(techniques)),size=5) + 
     scale_shape_manual(name = "Techniques",  
-                       labels = c("R&C - Dim 1", "CMP - Log", 
-                                  "ContextScale - Dim 1",
+                       labels = c("CMP - Log","ContextScale","R&C - Dim 1", 
                                   "Wordfish"),
-                       values=c(0,1,2,5,8)) +
-    scale_color_manual(name = "Topic",  
-                       labels = c("Environment", "Free Market", "General",
-                                  "Traditionalism", "Welfare Redistribution"),
-                       values=cbbPalette) +
-    xlab("Degree of balancedness") +
+                       values=c(0,1,2,5)) +
+    xlab("Topic") +
     ylab("Correlation to CHES surveys") +
     theme_bw(base_size=18)
 
-figure_2 <- plot_cor_bal
-agg_png(filename = here::here("results","tabs and figs","figure 2.png"), res = 360, width = 4800, height = 3200)
+figure_2 <- plot_cor_ches
+agg_png(filename = here::here("results","tabs and figs","figure 2.png"), res = 360, width = 5200, height = 3200)
 figure_2
 invisible(dev.off())
 
 
 ```
 
+## Correlation tables for figure 3
+
+```{r}
+cor_table_ep <- df_ep %>% 
+    cor_test(vars = "lr_log", vars2 = c("cs_mean", "wf_score",
+                                          "d2v_d1"), use="complete.obs") 
+cor_table_ep <- round(cor_table_ep[,c("cor", "p", "conf.low", "conf.high")], 2) %>%
+    mutate(
+        techniques = c("cs", "wf", "d2v1"),
+        topic = "Environment Protection"
+    )
+
+cor_table_growth <- df_growth %>% 
+    cor_test(vars = "lr_log", vars2 = c("cs_mean","wf_score", 
+                                               "d2v_d1"))
+
+cor_table_growth <- round(cor_table_growth[,c("cor", "p", "conf.low", "conf.high")], 2) %>%
+    mutate(
+        techniques = c("cs", "wf", "d2v1"),
+        topic = "Growth vs. Anti-Growth"
+    )
+
+
+
+
+cor_table_all <- bind_rows(cor_table_ep, cor_table_growth) 
+```
+
 ## Figure 3
 ```{r figure_3}
 
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73","#0072B2", "#F0E442", "#D55E00", "#CC79A7")
 
+plot_cor_cmp <-ggplot(data = cor_table_all,
+                  aes(x=factor(topic), y=abs(cor))) +
+    geom_point(aes(shape=factor(techniques)),size=5) + 
+    scale_shape_manual(name = "Techniques",  
+                       labels = c("ContextScale","R&C - Dim 1", 
+                                  "Wordfish"),
+                       values=c(1,2,5)) +
+    xlab("Topic") +
+    ylab("Correlation to CMP - Log") +
+    theme_bw(base_size=18)
 
-plot_envp_cs <- ggplot(data = df_envp,
-                  aes(x=factor(election), y=cs_mean_d1, color=party,group=party)) +
-    geom_point() +
-    geom_line(alpha=0.8, linewidth = 1) + 
-    geom_errorbar(aes(ymin=cs_mean_d1-cs_se_d1, ymax=cs_mean_d1+cs_se_d1),
-                  width=.2,alpha=0.5,linetype="dashed")+
-    scale_color_manual(name = "Party",  
-                       values = c("blue","black", "green","yellow", "purple", "red")) +
-    theme(axis.title = element_text(size = 15),
-          legend.title = element_text(size = 15), 
-          legend.text = element_text(size = 14), 
-          title =  element_text(size = 18, face = "bold")) +
-    xlab("Election") +
-    ylab("ContextScale - EP")
-
-
-
-plot_envp_log <- ggplot(data = df_envp,
-                  aes(x=factor(election), y=lr_log, color=party,group=party)) +
-    geom_point() +
-    geom_line(alpha=0.8, linewidth = 1) +
-    scale_color_manual(name = "Party",  
-                       values = c("blue","black", "green","yellow", "purple", "red")) +
-    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
-    xlab("Election") +
-    ylab("CMP Log - EP")
-
-plot_envp_d2v <- ggplot(data = df_envp,
-                  aes(x=factor(election), y=d2v_d1, color=party,group=party)) +
-    geom_point() +
-    geom_line(alpha=0.8, linewidth = 1) +
-    scale_color_manual(name = "Party",  
-                       values = c("blue","black", "green","yellow", "purple", "red")) +
-    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
-    xlab("Election") +
-    ylab("R&C - EP")
-
-
-
-plot_envp_wf <- ggplot(data = df_envp,
-                  aes(x=factor(election), y=wf_score, color=party,group=party)) +
-    geom_point() +
-    geom_line(alpha=0.8, linewidth = 1) +
-    geom_errorbar(aes(ymin=wf_score-wf_se, ymax=wf_score+wf_se),
-                  width=.2,alpha=0.5,linetype="dashed")+
-    scale_color_manual(name = "Party",  
-                       values = c("blue","black", "green","yellow", "purple", "red")) +
-    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
-    xlab("Election") +
-    ylab("Wordfish - EP")
-
-
-plot_mil_cs <- ggplot(data = df_mil,
-                  aes(x=factor(election), y=-1*cs_mean_d1, color=party,group=party)) +
-    geom_point() +
-    geom_line(alpha=0.8, linewidth = 1) + 
-    geom_errorbar(aes(ymin=-1*cs_mean_d1-cs_se_d1, ymax=-1*cs_mean_d1+cs_se_d1),
-                  width=.2,alpha=0.5,linetype="dashed")+
-    scale_color_manual(name = "Party",  
-                       values = c("blue","black", "green","yellow", "purple", "red")) +
-    theme(axis.title = element_text(size = 15),
-          legend.title = element_text(size = 15),
-          legend.text = element_text(size = 14), 
-          title =  element_text(size = 18, face = "bold")) +
-    xlab("Election") +
-    ylab("ContextScale - Military")
-
-
-
-plot_mil_log <- ggplot(data = df_mil,
-                  aes(x=factor(election), y=lr_log, color=party,group=party)) +
-    geom_point() +
-    geom_line(alpha=0.8, linewidth = 1) +
-    scale_color_manual(name = "Party",  
-                       values = c("blue","black", "green","yellow", "purple", "red")) +
-    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
-    xlab("Election") +
-    ylab("CMP Log - Military")
-
-plot_mil_d2v <- ggplot(data = df_mil,
-                  aes(x=factor(election), y=-1*d2v_d1, color=party,group=party)) +
-    geom_point() +
-    geom_line(alpha=0.8, linewidth = 1) +
-    scale_color_manual(name = "Party",  
-                       values = c("blue","black", "green","yellow", "purple", "red")) +
-    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
-    xlab("Election") +
-    ylab("R&C - Military")
-
-
-
-plot_mil_wf <- ggplot(data = df_mil,
-                  aes(x=factor(election), y=-1*wf_score, color=party,group=party)) +
-    geom_point() +
-    geom_line(alpha=0.8, linewidth = 1) +
-    geom_errorbar(aes(ymin=-1*wf_score-wf_se, ymax=-1*wf_score+wf_se),
-                  width=.2,alpha=0.5,linetype="dashed")+
-    scale_color_manual(name = "Party",  
-                       values = c("blue","black", "green","yellow", "purple", "red")) +
-    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
-    xlab("Election") +
-    ylab("Wordfish - Military")
-
-
-
-figure_3 <- ggarrange(plot_envp_cs, plot_envp_d2v, plot_envp_wf,plot_envp_log,
-                      plot_mil_cs, plot_mil_d2v, plot_mil_wf,plot_mil_log,
-                      common.legend = TRUE, ncol=4, nrow=2) 
-
-agg_png(filename = here::here("results","tabs and figs","figure 3.png"), res = 360, width = 4800, height = 2400)
+figure_3 <- plot_cor_cmp
+agg_png(filename = here::here("results","tabs and figs","figure 3.png"), res = 360, width = 5200, height = 3200)
 figure_3
 invisible(dev.off())
+
+
 
 
 ```
@@ -384,36 +470,104 @@ invisible(dev.off())
 ## Figure 4
 
 ```{r figure_4}
-measures_names <- c(
-    `trustworthiness` = "Trustworthiness",
-    `silhouette` = "Silhouette scores"
-)
+plot_cs_ep <- ggplot(data = df_ep,
+                  aes(x=factor(election), y=cs_mean, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, linewidth = 1) + 
+    geom_errorbar(aes(ymin=cs_mean-cs_se, ymax=cs_mean+cs_se),
+                  width=.2,alpha=0.5,linetype="dashed")+
+    scale_color_manual(name = "Party",  
+                       values = c("blue","green", "black","yellow", "red", "purple")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("ContextScale - EP")
 
-plot_measures <- ggplot(data = dr_valid,
-                  aes(x=reorder(techniques,values), y=values, fill = techniques)) +
-    geom_bar(stat="identity") +
-    scale_fill_viridis(name = "Techniques",  
-                       labels = c("Autoencoders", "LDA", "PCA",
-                                    "T-SNE","UMAP"),
-                      discrete = TRUE) +
-    facet_wrap(measures ~ ., 
-               labeller = as_labeller(measures_names)) +
-    theme(axis.ticks.y = element_blank(),
-          legend.title = element_text(size = 18), 
-          legend.text = element_text(size = 12), 
-          title =  element_text(size = 18, face = "bold"),
-          axis.title.y =  element_blank(),
-          axis.text.y = element_blank(),
-          strip.text.x = element_text(size=14)
-          ) +
-    ylab("Coefficients") +
-    coord_flip() 
+plot_wf_ep <- ggplot(data = df_ep,
+                  aes(x=factor(election), y=wf_score, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, linewidth = 1) + 
+    geom_errorbar(aes(ymin=wf_score-wf_se, ymax=wf_score+wf_se),
+                  width=.2,alpha=0.5,linetype="dashed")+
+    scale_color_manual(name = "Party",  
+                       values = c("blue","green", "black","yellow", "red", "purple")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("Wordfish - EP")
+
+plot_d2v_ep <- ggplot(data = df_ep,
+                  aes(x=factor(election), y=d2v_d1, color=party,group=party)) + ## flip to match the rest
+    geom_point() +
+    geom_line(alpha=0.8, linewidth = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","green", "black","yellow", "red", "purple")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("R&C - EP")
+
+plot_cmp_ep <- ggplot(data = df_ep,
+                  aes(x=factor(election), y=lr_log, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, linewidth = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","green", "black","yellow", "red", "purple")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("CMP Log - EP")
+
+plot_cs_growth <- ggplot(data = df_growth,
+                  aes(x=factor(election), y=cs_mean, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, linewidth = 1) + 
+    geom_errorbar(aes(ymin=cs_mean-cs_se, ymax=cs_mean+cs_se),
+                  width=.2,alpha=0.5,linetype="dashed")+
+    scale_color_manual(name = "Party",  
+                       values = c("blue","green", "black","yellow", "red", "purple")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("ContextScale - Growth")
+
+plot_wf_growth <- ggplot(data = df_growth,
+                  aes(x=factor(election), y=wf_score, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, linewidth = 1) + 
+    geom_errorbar(aes(ymin=wf_score-wf_se, ymax=wf_score+wf_se),
+                  width=.2,alpha=0.5,linetype="dashed")+
+    scale_color_manual(name = "Party",  
+                       values = c("blue","green", "black","yellow", "red", "purple")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("Wordfish - Growth")
+
+plot_d2v_growth <- ggplot(data = df_growth,
+                  aes(x=factor(election), y=-1*d2v_d1, color=party,group=party)) + ## flip to match the rest
+    geom_point() +
+    geom_line(alpha=0.8, linewidth = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","green", "black","yellow", "red", "purple")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("R&C - Growth")
+
+plot_cmp_growth <- ggplot(data = df_growth,
+                  aes(x=factor(election), y=lr_log, color=party,group=party)) +
+    geom_point() +
+    geom_line(alpha=0.8, linewidth = 1) + 
+    scale_color_manual(name = "Party",  
+                       values = c("blue","green", "black","yellow", "red", "purple")) +
+    theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
+    xlab("Election") +
+    ylab("CMP Log - Growth")
 
 
-figure_4 <- plot_measures
-agg_png(filename = here::here("results","tabs and figs","figure 4.png"), res = 360, width = 4800, height = 3200)
+
+figure_4 <- ggarrange(plot_cs_ep, plot_cs_growth, plot_wf_ep, plot_wf_growth, 
+                      plot_d2v_ep, plot_d2v_growth, plot_cmp_ep, plot_cmp_growth,
+                      common.legend = TRUE)
+
+agg_png(filename = here::here("results","tabs and figs","figure 4.png"), res = 360, width = 4800, height = 3600)
 figure_4
 invisible(dev.off())
+
 
 ```
 

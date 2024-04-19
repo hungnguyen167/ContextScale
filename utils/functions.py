@@ -244,17 +244,19 @@ def train_loop(dataloader, model, optimizer, scheduler, loss_fn_topic, loss_fn_l
       optimizer.zero_grad()
       if train_topic is True:
         y_topic = batch[topic_var].long()
+
       y_lr = batch[lr_var].long()
       logits_topic, logits_lr, logits_reconstruct, roberta_output = model(input_ids = batch['input_ids'], 
                                       attention_mask = batch['attention_mask'])
       
       loss_lr = loss_fn_lr(logits_lr, y_lr)
       loss_reconstruct = loss_fn_reconstruct(logits_reconstruct, roberta_output)
-      if train_topic is True:
+      if train_topic:
         loss_topic = loss_fn_topic(logits_topic, y_topic)
-        loss = 0.4*loss_topic + 0.4*loss_lr + 0.2*loss_reconstruct
+        loss = 0.4*loss_topic  + 0.4*loss_lr + 0.1*loss_reconstruct
+        
       else:
-        loss = 0.7*loss_lr + 0.3*loss_reconstruct
+        loss = 0.8*loss_lr + 0.2*loss_reconstruct
       # Backpropagation
       loss.backward()
       torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
@@ -280,36 +282,40 @@ def train_loop(dataloader, model, optimizer, scheduler, loss_fn_topic, loss_fn_l
 def eval_loop(dataloader, model, loss_fn_topic, loss_fn_lr, loss_fn_reconstruct, device, topic_var, lr_var, train_topic=True):
   size = len(dataloader.dataset)
   num_batches = len(dataloader)
-  test_loss, correct_topic, correct_sent = 0.0, 0.0, 0.0
+  test_loss, correct_topic, correct_lr = 0.0, 0.0, 0.0
   model.eval()
   with torch.no_grad():  
     for batch in dataloader:    
         batch = {k: v.to(device) for k,v in batch.items()}
         if train_topic is True:
             y_topic = batch[topic_var].long()
+
         y_lr = batch[lr_var].long()
         logits_topic, logits_lr, logits_reconstruct, roberta_output = model(input_ids = batch['input_ids'], 
                                       attention_mask = batch['attention_mask'])
         loss_lr = loss_fn_lr(logits_lr, y_lr)
         loss_reconstruct = loss_fn_reconstruct(logits_reconstruct, roberta_output)
-        if train_topic is True:
+        if train_topic:
             loss_topic = loss_fn_topic(logits_topic, y_topic)
-            loss = 0.4*loss_topic + 0.4*loss_lr + 0.2*loss_reconstruct
+            loss = 0.4*loss_topic  + 0.4*loss_lr + 0.1*loss_reconstruct
             correct_topic += (logits_topic.argmax(1) == batch[topic_var]).type(torch.float).sum().item()
         else:
-            loss = 0.7*loss_lr + 0.3*loss_reconstruct
+            loss = 0.8*loss_lr + 0.2*loss_reconstruct
+
         test_loss += loss
         
-        correct_sent += (logits_lr.argmax(1) == batch[lr_var]).type(torch.float).sum().item()
+        correct_lr += (logits_lr.argmax(1) == batch[lr_var]).type(torch.float).sum().item()
 
   test_loss /= num_batches
   correct_topic /= size
-  correct_sent /= size
-  correct = (correct_topic+correct_sent)/2
+  correct_lr /= size
+  correct = (correct_topic+correct_lr)/2
   print(f"Test Error: \n Accuracy: {(correct*100):>0.1f}%, Avg loss: {test_loss:>8f} \n")
-  print(f"Test Error: \n Accuracy - LR: {(correct_sent*100):>0.1f}, Avg loss: {test_loss:>8f} \n")
+  print(f"Test Error: \n Accuracy - LRN: {(correct_lr*100):>0.1f}, Avg loss: {test_loss:>8f} \n")
   print(f"Test Error: \n Accuracy - Topic: {(correct_topic*100):>0.1f}, Avg loss: {test_loss:>8f} \n")
 
+
+  
 def test_loop(dataloader, model, device):
   model.eval()
   res_topic = []
@@ -326,7 +332,7 @@ def test_loop(dataloader, model, device):
   return res_topic, res_lr
 
 
-def scale_func(dataloader, model, device, anchor_prob=[[1.0,0.0,0.0]]):
+def scale_func(dataloader, model, device, n_anchors=10):
     model.eval()
     res_topic = []
     res_lr_softmax = []
@@ -347,9 +353,30 @@ def scale_func(dataloader, model, device, anchor_prob=[[1.0,0.0,0.0]]):
     pred_topics = torch.cat(res_topic, dim=0).cpu().detach().numpy()
     pred_lrs =  torch.cat(res_lr, dim=0).cpu().detach().numpy()
     lr_softmax = torch.cat(res_lr_softmax, dim=0).cpu().detach().numpy()
-    anchor_vec = np.array(anchor_prob)
-    position_scores = 1-cosine_similarity(anchor_vec, lr_softmax)
-    return pred_topics, position_scores, pred_lrs
+
+    print('Start computing position scores')
+    # Store original indices
+    original_indices = np.arange(len(pred_topics))
+
+    # Compute anchor position scores
+    position_scores = np.zeros(len(pred_topics))
+    for topic_id in np.unique(pred_topics):
+        topic_mask = pred_topics == topic_id
+        topic_indices = original_indices[topic_mask]
+        left_probabilities = lr_softmax[topic_mask][:, 0]  
+        sorted_indices = np.argsort(left_probabilities, kind='mergesort')[::-1]
+        top_n_indices = sorted_indices[:n_anchors]
+        weights = left_probabilities[top_n_indices]
+        weighted_probs = lr_softmax[topic_mask][top_n_indices] * weights[:, None]
+        anchor = np.sum(weighted_probs, axis=0) / np.sum(weights)
+        position_score = 1 - cosine_similarity(anchor.reshape(1, -1), lr_softmax[topic_mask])[0]
+        
+        # Sort position scores back to original order
+
+        position_scores[topic_indices] = position_score
+    
+    return position_scores, pred_topics, pred_lrs
+
 
 
 
@@ -439,3 +466,42 @@ def coalition_lr(code_long, code_short):
 
 def tokenize_function(dataset, tokenizer, text_var, max_length):
     return tokenizer(dataset[text_var], truncation=True, max_length=max_length)
+
+
+def check_weights_similar(source_model, target_model, patterns):
+    all_parameters_copied = True  # Flag to track if all parameters are copied successfully
+
+    for name, source_param in source_model.named_parameters():
+        if not name.startswith(patterns):  # Skip the layers you don't want to copy
+            # Extract the corresponding parameter from the target model
+            target_param = target_model
+            for attr in name.split('.'):
+                target_param = getattr(target_param, attr)
+            
+            # Check if the source and target parameters are identical
+            if not torch.equal(source_param.data, target_param.data):
+                print(f"Parameter {name} not copied correctly.")
+                all_parameters_copied = False
+                break  # Optional: stop checking after the first mismatch
+
+    if all_parameters_copied:
+        print("All parameters copied successfully.")
+    else:
+        print("Some parameters were not copied successfully.")
+
+def copy_weights(source_model, target_model, patterns):
+    # Directly copy weights for layers that are identical in both models
+    initial_state_dict = source_model.state_dict()
+    scaled_state_dict = target_model.state_dict()
+    
+
+    
+    for name, param in initial_state_dict.items():
+        if name in scaled_state_dict and not name.startswith(patterns):
+            # Ensure the dimensions match; this check is redundant if layers_to_skip is accurately defined
+            if param.size() == scaled_state_dict[name].size():
+                scaled_state_dict[name].copy_(param)
+            else:
+                print(f"Dimension mismatch for layer {name}, skipping.")
+        else:
+            print(f"Skipping {name} as it is not present or should be skipped in the scaling model.")
