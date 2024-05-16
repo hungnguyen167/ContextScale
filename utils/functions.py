@@ -256,7 +256,7 @@ def train_loop(dataloader, model, optimizer, scheduler, loss_fn_topic, loss_fn_l
         loss = 0.4*loss_topic  + 0.4*loss_lr + 0.1*loss_reconstruct
         
       else:
-        loss = 0.8*loss_lr + 0.2*loss_reconstruct
+        loss = 0.75*loss_lr + 0.25*loss_reconstruct
       # Backpropagation
       loss.backward()
       torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
@@ -300,7 +300,7 @@ def eval_loop(dataloader, model, loss_fn_topic, loss_fn_lr, loss_fn_reconstruct,
             loss = 0.4*loss_topic  + 0.4*loss_lr + 0.1*loss_reconstruct
             correct_topic += (logits_topic.argmax(1) == batch[topic_var]).type(torch.float).sum().item()
         else:
-            loss = 0.8*loss_lr + 0.2*loss_reconstruct
+            loss = 0.75*loss_lr + 0.25*loss_reconstruct
 
         test_loss += loss
         
@@ -332,7 +332,7 @@ def test_loop(dataloader, model, device):
   return res_topic, res_lr
 
 
-def scale_func(dataloader, model, device, n_anchors=10):
+def scale_func(dataloader, model, device, n_anchors=10, by_topic=True):
     model.eval()
     res_topic = []
     res_lr_softmax = []
@@ -360,21 +360,31 @@ def scale_func(dataloader, model, device, n_anchors=10):
 
     # Compute anchor position scores
     position_scores = np.zeros(len(pred_topics))
-    for topic_id in np.unique(pred_topics):
-        topic_mask = pred_topics == topic_id
-        topic_indices = original_indices[topic_mask]
-        left_probabilities = lr_softmax[topic_mask][:, 0]  
+    if by_topic:
+
+        for topic_id in np.unique(pred_topics):
+            topic_mask = pred_topics == topic_id
+            topic_indices = original_indices[topic_mask]
+            left_probabilities = lr_softmax[topic_mask][:, 0]  
+            sorted_indices = np.argsort(left_probabilities, kind='mergesort')[::-1]
+            top_n_indices = sorted_indices[:n_anchors]
+            weights = left_probabilities[top_n_indices]
+            weighted_probs = lr_softmax[topic_mask][top_n_indices] * weights[:, None]
+            anchor = np.sum(weighted_probs, axis=0) / np.sum(weights)
+            position_score = 1 - cosine_similarity(anchor.reshape(1, -1), lr_softmax[topic_mask])[0]
+            
+            # Sort position scores back to original order
+
+            position_scores[topic_indices] = position_score
+    else:
+        left_probabilities = lr_softmax[:, 0]  
         sorted_indices = np.argsort(left_probabilities, kind='mergesort')[::-1]
         top_n_indices = sorted_indices[:n_anchors]
         weights = left_probabilities[top_n_indices]
-        weighted_probs = lr_softmax[topic_mask][top_n_indices] * weights[:, None]
+        weighted_probs = lr_softmax[top_n_indices] * weights[:, None]
         anchor = np.sum(weighted_probs, axis=0) / np.sum(weights)
-        position_score = 1 - cosine_similarity(anchor.reshape(1, -1), lr_softmax[topic_mask])[0]
-        
-        # Sort position scores back to original order
+        position_scores = 1 - cosine_similarity(anchor.reshape(1, -1), lr_softmax)[0]
 
-        position_scores[topic_indices] = position_score
-    
     return position_scores, pred_topics, pred_lrs
 
 
