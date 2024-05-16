@@ -64,10 +64,21 @@ ches_deu <- read_csv("data/r_outputs/ches_deu.csv")
 ## Scaled datasets
 manifesto_cs_gen <- read_csv("data/py_outputs/cs_gen.csv")
 manifesto_cs_topic <- read_csv("data/py_outputs/cs_topic.csv")
-coalitionagree_cs <- read_csv("data/py_outputs/cagree_scaled.csv")
-motn_cs <- read_csv("data/py_outputs/motn_trump_scaled.csv")
-manifesto_deu <- read_csv("data/temps/manifesto.csv") %>% 
+cagree_25 <- read_csv("data/py_outputs/cagree_scaled_25.csv")
+cagree_full <- read_csv("data/py_outputs/cagree_scaled_full.csv")
+manifesto_deu <- read_csv("data/temps/manifesto.csv") %>%
     filter(countryname=="Germany")
+
+## Prediction results
+
+manifesto_testset <- read_csv("results/classification results/manifesto_test_pred.csv")
+manifesto_diflang <- read_csv("results/classification results/manifesto_lang_pred.csv")
+cagree_nosup <- read_csv("results/classification results/cagree_nosup_pred.csv")
+cagree_25sup <- read_csv("results/classification results/cagree_25sup_pred.csv")
+motn_25sup <- read_csv("results/classification results/motn_25sup_pred.csv")
+
+
+
 ```
 
 
@@ -104,7 +115,7 @@ manifesto_spec_topic <- manifesto_cs_topic %>%
         cs_se = sd(lr_score_cs, na.rm=TRUE)/sqrt(n())
     )
 
-manifesto_deu %>%
+manifesto_deu <- manifesto_deu %>%
     mutate(
         party_name = case_when(
           party %in% c(41111,41112,41113) ~ "Alliance 90/Greens",
@@ -118,10 +129,7 @@ manifesto_deu %>%
     ) %>%
     select(-party) %>%  
     rename(party=party_name) %>%
-    filter(party!="Other") %>%
-    filter(topic %in% c("Decentralization", "Environment")) %>%
-    group_by(party, topic, lrn) %>% 
-    summarise(count=n())
+    filter(party!="Other") 
 
 logscale <- manifesto_deu %>%
     mutate(
@@ -574,67 +582,89 @@ invisible(dev.off())
 ## Figure 5
 
 ```{r figure_5}
-coalition_df <- coalition_gt %>%
-    rename(
-        gt_d1 = cs_mean_d1,
-        gt_d2 = cs_mean_d2,
-        gt_se_d1 = cs_se_d1,
-        gt_se_d2 = cs_se_d2
-    ) %>%
-    left_join(coalition_preds, by=c("country","year"))
-country_agg <- coalition_df %>%
+cagree_unified <- cagree_full %>%
+    select(position_scores_full) %>%
+    bind_cols(cagree_25) 
+
+cagree_mean_topic <- cagree_unified %>%
+    group_by(country, year, topic) %>%
+    summarise(
+        mean_25 = mean(position_scores_25, na.rm=TRUE),
+        mean_full = mean(position_scores_full, na.rm=TRUE)
+    ) 
+
+
+country_agg <- cagree_unified %>%
     group_by(country) %>%
     summarise(
-        gt_d1 = mean(gt_d1),
-        cs_mean_d1 = mean(cs_mean_d1),
+        mean_full = mean(position_scores_full),
+        mean_25 = mean(position_scores_25),
     )
 
 ## Mean correlation across countries
-mean_cor <- coalition_df %>%
+mean_cor <- cagree_unified %>%
     group_by(country) %>%
     summarise(
-        cor_d1 = cor(gt_d1, cs_mean_d1)
+        cor_scores = cor(position_scores_full, position_scores_25)
     ) 
 
 ## F1 scores
-coalition_pred_labels <- coalition_pred_labels %>%
+coalition_pred_quality <- cagree_25 %>%
     mutate(
-        gt_labels = factor(case_when(
-            coalition_lr == "left" ~ 0,
-            coalition_lr == "neutral" ~ 1,
-            coalition_lr == "right" ~ 2
+        true_lrn = case_when(
+            lrn == "left" ~ 0,
+            lrn == "neutral" ~ 1,
+            lrn == "right" ~ 2
+        ),
+        true_topic = case_when(
+            topic == 'Agriculture' ~ 0,
+            topic == 'Civil Rights' ~ 1,
+            topic == 'Decentralization' ~ 2,
+            topic == 'Defense' ~ 3,
+            topic == 'Economy' ~ 4,
+            topic == 'Education' ~ 5,
+            topic == 'Environment' ~ 6,
+            topic == 'European integration' ~ 7,
+            topic == 'Immigration' ~ 8,
+            topic == 'International politics' ~ 9,
+            topic == 'Other' ~ 10,
+            topic == 'Social Welfare' ~ 11
         )
-    ))
-cm <- confusionMatrix(factor(coalition_pred_labels$preds), 
-                      factor(coalition_pred_labels$gt_labels),
+    )
+cm_lrn <- confusionMatrix(factor(coalition_pred_quality$true_lrn), 
+                      factor(coalition_pred_quality$pred_lr_25),
+                      mode = "everything")
+cm_topic <- confusionMatrix(factor(coalition_pred_quality$true_topic), 
+                      factor(coalition_pred_quality$pred_topics_25),
                       mode = "everything")
 
-mean_f1 <- mean(cm[["byClass"]][,"F1"])
+mean_f1_lrn <- mean(cm_lrn[["byClass"]][,"F1"])
 
+mean_f1_topic <- mean(cm_topic[["byClass"]][,"F1"])
 
-plot_d1 <- ggplot(data = coalition_df,
-                  aes(x=gt_d1, y=cs_mean_d1, 
-                      color = factor(country))) +
-    geom_point(alpha=0.3) +
+plot_corr <- ggplot(data = cagree_mean_topic,
+                  aes(x=mean_full, y=mean_25, color=factor(country))) +
+    geom_point(alpha=0.2) +
     geom_point(data=country_agg, size = 6) +
-    geom_smooth(method=lm , color="#E69F00", se=TRUE)+
+    geom_smooth(method=lm , color="#E69F00", se=TRUE) +
     scale_color_viridis(name = "Country", 
                         discrete = TRUE) +
-    annotate(geom = "text", x=0,y=12, label=paste("Mean correlation across countries:",
-                                                    round(mean(abs(mean_cor$cor_d1)),2))) +
-    annotate(geom = "text", x=0,y=11.5, 
-             label=paste("Mean F1 scores at labels prediction:",
-                                                    round(mean_f1,2)))+
+    annotate(geom = "text", x=0.2, y=0.85, 
+             label=paste("Mean correlation across countries:",
+                          round(mean(abs(mean_cor$cor_scores)),2))) +
     theme(axis.title = element_text(size = 15),
           legend.title = element_text(size = 15), 
           legend.text = element_text(size = 14), 
           title =  element_text(size = 18, face = "bold")) +
-    xlab("Position scores; ground truth-based") +
-    ylab("Position scores; prediction-based")
+    xlab("Position scores; all labels provided") +
+    ylab("Position scores; 25% labels provided")
 
 
 
-plot_coalition_hist <- ggMarginal(plot_d1, type="histogram")
+
+
+
+plot_coalition_hist <- ggMarginal(plot_corr, type="histogram")
 
 
 figure_5 <- plot_coalition_hist
@@ -643,58 +673,135 @@ agg_png(filename = here::here("results","tabs and figs","figure 5.png"), res = 3
 figure_5
 invisible(dev.off())
 
+
 ```
 
 
 
 ## Table 1
 ```{r table_1}
-cls_res <- bind_rows(lrn_cls, d2v_cls, bow_cls) %>%
-    group_by(architecture) %>% summarise(
-        f1 = round(mean(f1),2),
-        precision = round(mean(precision),2),
-        recall = round(mean(recall),2),
-        accuracy = round(mean(accuracy),2)
-    ) 
-names(cls_res) <- c("Architecture", "F1", 
-                    "Precision", "Recall", "Accuracy")
-table_1 <- nice_table(cls_res, highlight = TRUE)%>%
-    bold(i=3, j=c(2:5))
-print(table_1, preview = "docx")
+cm_mtest_topic <- round(confusionMatrix(factor(manifesto_testset$pred_topic), 
+                      factor(manifesto_testset$topic),
+                      mode = "everything")[["byClass"]],3)
+cm_mtest_lrn <- round(confusionMatrix(factor(manifesto_testset$pred_lrn), 
+                      factor(manifesto_testset$lrn),
+                      mode = "everything")[["byClass"]],3)
+
+
+cm_mlang_topic <- round(confusionMatrix(factor(manifesto_diflang$pred_topic), 
+                      factor(manifesto_diflang$topic),
+                      mode = "everything")[["byClass"]],3)
+cm_mlang_lrn <- round(confusionMatrix(factor(manifesto_diflang$pred_lrn), 
+                      factor(manifesto_diflang$lrn),
+                      mode = "everything")[["byClass"]],3)
+
+cm_cagree25_topic <- round(confusionMatrix(factor(cagree_25sup$pred_topic), 
+                      factor(cagree_25sup$topic),
+                      mode = "everything")[["byClass"]],3)
+cm_cagree25_lrn <- round(confusionMatrix(factor(cagree_25sup$pred_lrn), 
+                      factor(cagree_25sup$lrn),
+                      mode = "everything")[["byClass"]],3)
+cm_cagreenosup_topic <- round(confusionMatrix(factor(cagree_nosup$pred_topic), 
+                      factor(cagree_nosup$topic),
+                      mode = "everything")[["byClass"]],3)
+cm_cagreenosup_lrn <- round(confusionMatrix(factor(cagree_nosup$pred_lrn), 
+                      factor(cagree_nosup$lrn),
+                      mode = "everything")[["byClass"]],3)
+
+cm_motn25_lrn <- list(class0=round(confusionMatrix(factor(motn_25sup$pred_stances), 
+                      factor(motn_25sup$trump_stance_auto),
+                      mode = "everything", positive = "0")[["byClass"]],3),
+                      class1=round(confusionMatrix(factor(motn_25sup$pred_stances), 
+                      factor(motn_25sup$trump_stance_auto),
+                      mode = "everything", positive = "1")[["byClass"]],3))
+
+
+
+cls_res <- tibble(
+    Metric = c("F1", "Precision", "Recall", "Accuracy"),
+    `Model 1_Topic` = c(
+        round(mean(cm_mtest_topic[,"F1"]),2),
+        round(mean(cm_mtest_topic[,"Precision"]),2),
+        round(mean(cm_mtest_topic[,"Recall"]),2),
+        round(mean(cm_mtest_topic[,"Balanced Accuracy"]),2)
+    ),
+    `Model 1_Ideology` = c(
+        round(mean(cm_mtest_lrn[,"F1"]),2),
+        round(mean(cm_mtest_lrn[,"Precision"]),2),
+        round(mean(cm_mtest_lrn[,"Recall"]),2),
+        round(mean(cm_mtest_lrn[,"Balanced Accuracy"]),2)
+    ),
+    `Model 2_Topic` = c(
+        round(mean(cm_mlang_topic[,"F1"]),2),
+        round(mean(cm_mlang_topic[,"Precision"]),2),
+        round(mean(cm_mlang_topic[,"Recall"]),2),
+        round(mean(cm_mlang_topic[,"Balanced Accuracy"]),2)
+    ),
+    `Model 2_Ideology` = c(
+        round(mean(cm_mlang_lrn[,"F1"]),2),
+        round(mean(cm_mlang_lrn[,"Precision"]),2),
+        round(mean(cm_mlang_lrn[,"Recall"]),2),
+        round(mean(cm_mlang_lrn[,"Balanced Accuracy"]),2)
+    ),
+    `Model 3_Topic` = c(
+        round(mean(cm_cagreenosup_topic[,"F1"]),2),
+        round(mean(cm_cagreenosup_topic[,"Precision"]),2),
+        round(mean(cm_cagreenosup_topic[,"Recall"]),2),
+        round(mean(cm_cagreenosup_topic[,"Balanced Accuracy"]),2)
+    ),
+    `Model 3_Ideology` = c(
+        round(mean(cm_cagreenosup_lrn[,"F1"]),2),
+        round(mean(cm_cagreenosup_lrn[,"Precision"]),2),
+        round(mean(cm_cagreenosup_lrn[,"Recall"]),2),
+        round(mean(cm_cagreenosup_lrn[,"Balanced Accuracy"]),2)
+    ),
+    `Model 4_Topic` = c(
+        round(mean(cm_cagree25_topic[,"F1"]),2),
+        round(mean(cm_cagree25_topic[,"Precision"]),2),
+        round(mean(cm_cagree25_topic[,"Recall"]),2),
+        round(mean(cm_cagree25_topic[,"Balanced Accuracy"]),2)
+    ),
+    `Model 4_Ideology` = c(
+        round(mean(cm_cagree25_lrn[,"F1"]),2),
+        round(mean(cm_cagree25_lrn[,"Precision"]),2),
+        round(mean(cm_cagree25_lrn[,"Recall"]),2),
+        round(mean(cm_cagree25_lrn[,"Balanced Accuracy"]),2)
+    ),
+    `Model 5_Ideology` = c(
+        round(mean(c(cm_motn25_lrn$class0["F1"],cm_motn25_lrn$class1["F1"])),2),
+        round(mean(c(cm_motn25_lrn$class0["Precision"],cm_motn25_lrn$class1["Precision"])),2),
+        round(mean(c(cm_motn25_lrn$class0["Recall"],cm_motn25_lrn$class1["Recall"])),2),
+        round(mean(c(cm_motn25_lrn$class0["Balanced Accuracy"],cm_motn25_lrn$class1["Balanced Accuracy"])),2)
+    )
+        
+        
+        
+)
+
+table_1 <- gt(cls_res) %>%
+    tab_spanner_delim(delim="_")
+
+gtsave(table_1, file = "results/classification results/table 1.docx")
+
+
+
+
 ```
+
+
 ## Table A1
+
+
 ```{r table_a1}
 agg_sent <- manifesto_deu %>%
-    mutate(
-        party = case_when(
-            party %in% c(41111, 41112,41113) ~ "Die Grünen",
-            party %in% c(41221, 41222,41223) ~ "PDS/Die Linke",
-            party == 41320 ~ "SPD",
-            party == 41420 ~ "FDP",
-            party == 41521 ~ "CDU/CSU",
-            party == 41953 ~ "AfD",
-            TRUE ~ "Other"
-        )
-    ) %>%
-    filter(party != "Other" & coalition_lr != "neutral" & coalition_topic != "Other") %>%
+    filter(lrn != "neutral" & topic != "Other") %>%
     group_by(party) %>%
     summarise(count_topic = n())
 md_sum <- manifesto_deu %>%
-    mutate(
-        party = case_when(
-            party %in% c(41111, 41112,41113) ~ "Die Grünen",
-            party %in% c(41221, 41222,41223) ~ "PDS/Die Linke",
-            party == 41320 ~ "SPD",
-            party == 41420 ~ "FDP",
-            party == 41521 ~ "CDU/CSU",
-            party == 41953 ~ "AfD",
-            TRUE ~ "Other"
-        )
-    ) %>%
-    filter(party != "Other" & coalition_lr != "neutral" & coalition_topic != "Other") %>%
-    group_by(party, coalition_topic) %>%
-    count(coalition_lr) %>%
-    pivot_wider(names_from = coalition_lr, values_from = n, values_fill=0) %>%
+    filter(lrn != "neutral" & topic != "Other") %>%
+    group_by(party, topic) %>%
+    count(lrn) %>%
+    pivot_wider(names_from = lrn, values_from = n, values_fill=0) %>%
     left_join(agg_sent, by = "party") %>%
     mutate(
         perc_overall = round(sum(left, right)/count_topic,2)
@@ -704,7 +811,7 @@ md_sum <- manifesto_deu %>%
 
 
 table_a1 <- md_sum %>% flextable() %>%
-    merge_v(j=c("party","coalition_topic"), combine=FALSE) %>%
+    merge_v(j=c("party","topic"), combine=FALSE) %>%
     set_header_labels(
         "party" = "Party",
         "coalition_topic" = "Topic",
