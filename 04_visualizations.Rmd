@@ -8,7 +8,7 @@ output: html_notebook
 
 rm(list=ls())
 pacman::p_load(quanteda, quanteda.textmodels, tidyverse, readr, ggplot2, rstatix, grid, gridExtra, viridis, ggsci, ggpubr, ragg, scales, caret, ggExtra,rempsyc, dplyr,
-               flextable, magrittr)
+               flextable, magrittr, gt)
 
 ## For Figure 2, 3, and 4
 
@@ -132,19 +132,6 @@ manifesto_deu <- manifesto_deu %>%
     filter(party!="Other") 
 
 logscale <- manifesto_deu %>%
-    mutate(
-        party_name = case_when(
-          party %in% c(41111,41112,41113) ~ "Alliance 90/Greens",
-          party %in% c(41220, 41221, 41222, 41223) ~ "The Left",
-          party == 41320 ~ "SPD",
-          party == 41420 ~ "FDP",
-          party == 41521 ~ "CDU/CSU",
-          party == 41953 ~ "AfD",
-          TRUE ~ "Other"  
-        )
-    ) %>%
-    select(-party) %>%  
-    rename(party=party_name) %>%
     filter(party!="Other") %>%
     group_by(party, election, topic, lrn) %>%
     summarise(n = n(), .groups = "keep") %>%
@@ -161,19 +148,6 @@ logscale <- manifesto_deu %>%
     ) 
     
 logscale_spec <- manifesto_deu %>%
-    mutate(
-        party_name = case_when(
-          party %in% c(41111,41112,41113) ~ "Alliance 90/Greens",
-          party %in% c(41220, 41221, 41222, 41223) ~ "The Left",
-          party == 41320 ~ "SPD",
-          party == 41420 ~ "FDP",
-          party == 41521 ~ "CDU/CSU",
-          party == 41953 ~ "AfD",
-          TRUE ~ "Other"  
-        )
-    ) %>%
-    select(-party) %>%  
-    rename(party=party_name) %>%
     filter(party!="Other") %>%
     mutate(
         spec_topic = case_when(
@@ -304,7 +278,7 @@ plot_d2v <- ggplot(data = df_gen,
     xlab("Election") +
     ylab("R&C - First Latent Dimension")
 
-plot_cmp <- ggplot(data = df_growth,
+plot_cmp <- ggplot(data = df_gen,
                   aes(x=factor(election), y=lr_log, color=party,group=party)) +
     geom_point() +
     geom_line(alpha=0.8, linewidth = 1) + 

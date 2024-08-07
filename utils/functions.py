@@ -2,12 +2,13 @@ import numpy as np
 import time
 import datetime
 import torch
-from sklearn.decomposition import PCA, TruncatedSVD
 import umap.umap_ as umap
-from sklearn.preprocessing import OrdinalEncoder
 import pandas as pd
 from gensim.parsing.preprocessing import remove_stopwords, preprocess_string, strip_tags, strip_punctuation, strip_numeric, strip_multiple_whitespaces
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.preprocessing import MinMaxScaler
+from torch.cuda.amp import GradScaler, autocast
+import random
 
 
 def format_time(elapsed):
@@ -227,13 +228,14 @@ def encode_embeds(dataframe, text_var, model, batch_size,**kwargs):
     )
     return document_embed
 
-def train_loop(dataloader, model, optimizer, scheduler, loss_fn_topic, loss_fn_lr, loss_fn_reconstruct, device, topic_var, lr_var, train_topic=True):
+def train_loop(dataloader, model, optimizer, scheduler, criterion_lr, criterion_topic,device, lr_var, 
+               accumulation_steps=4,sparse_fraction=0.5,alpha=0.1,topic_var=None):
     print("")
     print('Training...')
 
     # Measure how long the training epoch takes.
     t0 = time.time()
-
+    scaler = GradScaler()
     # Put the model into training mode. 
     size = len(dataloader.dataset)
     model.train()
@@ -242,34 +244,56 @@ def train_loop(dataloader, model, optimizer, scheduler, loss_fn_topic, loss_fn_l
     for batch_num, batch in enumerate(dataloader):
       batch = {k: v.to(device) for k,v in batch.items()}
       optimizer.zero_grad()
-      if train_topic is True:
-        y_topic = batch[topic_var].long()
+      with autocast():
+        logits_topic, logits_lr = model(input_ids = batch['input_ids'], 
+                                        attention_mask = batch['attention_mask'])
+        y_lr = batch[lr_var].long()
+        loss_lr = criterion_lr(logits_lr, y_lr)
+        if topic_var is not None:
+            y_topic = batch[topic_var].long()
+            loss_topic = criterion_topic(logits_topic, y_topic)
+            loss = 0.5*loss_topic  + 0.5*loss_lr 
+            train_loss += loss.item()
 
-      y_lr = batch[lr_var].long()
-      logits_topic, logits_lr, logits_reconstruct, roberta_output = model(input_ids = batch['input_ids'], 
-                                      attention_mask = batch['attention_mask'])
+        else:
+            loss = loss_lr
+            train_loss += loss.item()
+        ## Calculate a topic-aware variance loss
+        if ((batch_num+1) % accumulation_steps == 0 or (batch_num+1) == len(dataloader)) and topic_var is not None:
+            unique_topics, topic_counts = y_topic.unique(return_counts=True)
+            variance_loss = 0.0 
+            selected_topics = random.sample(list(unique_topics), int(sparse_fraction * len(unique_topics)))
+            for topic in selected_topics:
+                count = topic_counts[unique_topics == topic]
+                if count > 1:
+                    topic_indices = (y_topic == topic).nonzero(as_tuple=True)[0]
+                    topic_ideology_logits = logits_lr[topic_indices]
+                    variance_loss += torch.var(topic_ideology_logits, dim=0).mean()
+
+            # Add the regularization term to the loss
+            total_loss_with_reg = loss + alpha * variance_loss
+            scaler.scale(total_loss_with_reg).backward()
+        else:
+            scaler.scale(loss).backward()
       
-      loss_lr = loss_fn_lr(logits_lr, y_lr)
-      loss_reconstruct = loss_fn_reconstruct(logits_reconstruct, roberta_output)
-      if train_topic:
-        loss_topic = loss_fn_topic(logits_topic, y_topic)
-        loss = 0.4*loss_topic  + 0.4*loss_lr + 0.1*loss_reconstruct
-        
-      else:
-        loss = 0.75*loss_lr + 0.25*loss_reconstruct
-      # Backpropagation
-      loss.backward()
-      torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-      optimizer.step()
+      torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)  
+      scaler.step(optimizer)
+      scaler.update()
+      #loss.backward()
+      #torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+      #optimizer.step()
       scheduler.step()
-      train_loss += loss.item()
+     
       # Report
-      if batch_num % 1000 == 0 and batch_num != 0:
-        elapsed = format_time(time.time() - t0)
+      if batch_num % 100 == 0 and batch_num != 0:
+        elapsed = time.time() - t0
+        avg_batch_time = elapsed / batch_num
+        estimated_total_time = avg_batch_time * len(dataloader)
+        estimated_remaining_time = estimated_total_time - elapsed
         current_loss = train_loss/batch_num
         current = batch_num * len(batch['input_ids'])
-        print(f"loss: {current_loss:>7f}  [{current:>5d}/{size:>5d}]. Took {elapsed}")
-    
+        print(f"loss: {current_loss:>7f}  [{current:>5d}/{size:>5d}].")
+        print(f"Elapsed time: {format_time(elapsed)}, Estimated remaining time: {format_time(estimated_remaining_time)}")
 
   
     # Measure how long this epoch took.
@@ -279,28 +303,26 @@ def train_loop(dataloader, model, optimizer, scheduler, loss_fn_topic, loss_fn_l
     print("  Training epoch took: {:}".format(training_time))
 
 
-def eval_loop(dataloader, model, loss_fn_topic, loss_fn_lr, loss_fn_reconstruct, device, topic_var, lr_var, train_topic=True):
+
+def eval_loop(dataloader, model,  criterion_lr, criterion_topic, device, lr_var,topic_var=None):
   size = len(dataloader.dataset)
   num_batches = len(dataloader)
   test_loss, correct_topic, correct_lr = 0.0, 0.0, 0.0
   model.eval()
   with torch.no_grad():  
     for batch in dataloader:    
-        batch = {k: v.to(device) for k,v in batch.items()}
-        if train_topic is True:
-            y_topic = batch[topic_var].long()
-
+        batch = {k: v.to(device) for k,v in batch.items()}            
         y_lr = batch[lr_var].long()
-        logits_topic, logits_lr, logits_reconstruct, roberta_output = model(input_ids = batch['input_ids'], 
+        logits_topic, logits_lr = model(input_ids = batch['input_ids'], 
                                       attention_mask = batch['attention_mask'])
-        loss_lr = loss_fn_lr(logits_lr, y_lr)
-        loss_reconstruct = loss_fn_reconstruct(logits_reconstruct, roberta_output)
-        if train_topic:
-            loss_topic = loss_fn_topic(logits_topic, y_topic)
-            loss = 0.4*loss_topic  + 0.4*loss_lr + 0.1*loss_reconstruct
+        loss_lr = criterion_lr(logits_lr, y_lr)
+        if topic_var is not None:
+            y_topic = batch[topic_var].long()
+            loss_topic = criterion_topic(logits_topic, y_topic)
+            loss = 0.5*loss_topic  + 0.5*loss_lr 
             correct_topic += (logits_topic.argmax(1) == batch[topic_var]).type(torch.float).sum().item()
         else:
-            loss = 0.75*loss_lr + 0.25*loss_reconstruct
+            loss = loss_lr
 
         test_loss += loss
         
@@ -315,6 +337,7 @@ def eval_loop(dataloader, model, loss_fn_topic, loss_fn_lr, loss_fn_reconstruct,
   print(f"Test Error: \n Accuracy - Topic: {(correct_topic*100):>0.1f}, Avg loss: {test_loss:>8f} \n")
 
 
+
   
 def test_loop(dataloader, model, device):
   model.eval()
@@ -323,7 +346,7 @@ def test_loop(dataloader, model, device):
   with torch.no_grad():  
     for batch in dataloader:    
         batch = {k: v.to(device) for k,v in batch.items()}
-        logits_topic, logits_lr,_,_= model(input_ids = batch['input_ids'], 
+        logits_topic, logits_lr= model(input_ids = batch['input_ids'], 
                                         attention_mask = batch['attention_mask'])
         pred_topic = logits_topic.argmax(1)
         pred_lr = logits_lr.argmax(1)
@@ -332,60 +355,72 @@ def test_loop(dataloader, model, device):
   return res_topic, res_lr
 
 
-def scale_func(dataloader, model, device, n_anchors=10, by_topic=True):
+def scale_func(dataloader, model, device,  
+               reg_value = 0.05, by_topic=True, topic_label=None):
     model.eval()
     res_topic = []
     res_lr_softmax = []
     res_lr = []
+    t0 = time.time()
     print('Start predicting labels...')
     with torch.no_grad():  
-        for batch in dataloader:    
+        for batch_num, batch in enumerate(dataloader):   
+            if topic_label in batch and batch_num==0:
+                print(f'Labels for topic are provided. They will be used for position scaling!')
+            elif topic_label not in batch and batch_num==0:
+                print('Labels for topic are not provided. Using predicted topic labels for position scaling instead!') 
             batch = {k: v.to(device) for k,v in batch.items()}
-            logits_topic, logits_lr,_,_= model(input_ids = batch['input_ids'], 
+            logits_topic, logits_lr = model(input_ids = batch['input_ids'], 
                                             attention_mask = batch['attention_mask'])
             pred_topic = logits_topic.argmax(1)
             pred_lr = logits_lr.argmax(1)
             lr_softmax = logits_lr.softmax(1)
+            if topic_label in batch:
+                res_topic.append(batch[topic_label])
+            else:
+                res_topic.append(pred_topic)
 
-            res_topic.append(pred_topic)
             res_lr_softmax.append(lr_softmax)
             res_lr.append(pred_lr)
+            if (batch_num+1) % 1000 == 0:
+                elapsed = time.time() - t0
+                avg_batch_time = elapsed / batch_num
+                estimated_total_time = avg_batch_time * len(dataloader)
+                estimated_remaining_time = estimated_total_time - elapsed
+                print(f"Elapsed time: {format_time(elapsed)}, Estimated remaining time: {format_time(estimated_remaining_time)}")
+
+            
+
     pred_topics = torch.cat(res_topic, dim=0).cpu().detach().numpy()
     pred_lrs =  torch.cat(res_lr, dim=0).cpu().detach().numpy()
     lr_softmax = torch.cat(res_lr_softmax, dim=0).cpu().detach().numpy()
 
     print('Start computing position scores')
     # Store original indices
+
     original_indices = np.arange(len(pred_topics))
 
     # Compute anchor position scores
-    position_scores = np.zeros(len(pred_topics))
+    
     if by_topic:
-
+        position_scores = np.zeros(len(pred_topics))
         for topic_id in np.unique(pred_topics):
             topic_mask = pred_topics == topic_id
             topic_indices = original_indices[topic_mask]
             left_probabilities = lr_softmax[topic_mask][:, 0]  
-            sorted_indices = np.argsort(left_probabilities, kind='mergesort')[::-1]
-            top_n_indices = sorted_indices[:n_anchors]
-            weights = left_probabilities[top_n_indices]
-            weighted_probs = lr_softmax[topic_mask][top_n_indices] * weights[:, None]
-            anchor = np.sum(weighted_probs, axis=0) / np.sum(weights)
-            position_score = 1 - cosine_similarity(anchor.reshape(1, -1), lr_softmax[topic_mask])[0]
-            
-            # Sort position scores back to original order
-
+            right_probabilities = lr_softmax[topic_mask][:,2]
+            neutral_probabilities = lr_softmax[topic_mask][:,1]
+            reg_sign = np.where(left_probabilities > right_probabilities, reg_value, -reg_value)
+            position_score = -1*left_probabilities  + 1*right_probabilities + reg_sign*neutral_probabilities
             position_scores[topic_indices] = position_score
     else:
         left_probabilities = lr_softmax[:, 0]  
-        sorted_indices = np.argsort(left_probabilities, kind='mergesort')[::-1]
-        top_n_indices = sorted_indices[:n_anchors]
-        weights = left_probabilities[top_n_indices]
-        weighted_probs = lr_softmax[top_n_indices] * weights[:, None]
-        anchor = np.sum(weighted_probs, axis=0) / np.sum(weights)
-        position_scores = 1 - cosine_similarity(anchor.reshape(1, -1), lr_softmax)[0]
-
+        right_probabilities = lr_softmax[:,2]
+        reg_sign = np.where(left_probabilities > right_probabilities, reg_value, -reg_value)
+        position_scores = -1*left_probabilities + 1*right_probabilities + reg_sign
     return position_scores, pred_topics, pred_lrs
+
+
 
 
 
@@ -515,3 +550,30 @@ def copy_weights(source_model, target_model, patterns):
                 print(f"Dimension mismatch for layer {name}, skipping.")
         else:
             print(f"Skipping {name} as it is not present or should be skipped in the scaling model.")
+
+def get_architecture_details(model):
+    architecture = []
+    for name, module in model.named_modules():
+        if not isinstance(module, nn.Sequential) and name != "":
+            module_details = {
+                'name': name,
+                'type': type(module).__name__,
+                'params': sum(p.numel() for p in module.parameters())
+            }
+            architecture.append(module_details)
+    return architecture
+
+def compare_architectures(arch1, arch2):
+    if len(arch1) != len(arch2):
+        print("The models have different number of layers/modules.")
+        return False
+    
+    for layer1, layer2 in zip(arch1, arch2):
+        if layer1 != layer2:
+            print(f"Difference found in layer {layer1['name']}:")
+            print(f"Model 1: {layer1}")
+            print(f"Model 2: {layer2}")
+            return False
+    
+    print("The architectures of the models are identical.")
+    return True
