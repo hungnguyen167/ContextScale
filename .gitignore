@@ -15,3 +15,4 @@ manifesto_lang_pred.csv
 /outputs
 /runs
 /cache
+data/r_outputs/pulled_manifestoes.csv
