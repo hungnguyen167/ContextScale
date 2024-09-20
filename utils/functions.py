@@ -229,7 +229,7 @@ def encode_embeds(dataframe, text_var, model, batch_size,**kwargs):
     return document_embed
 
 def train_loop(dataloader, model, optimizer, scheduler, criterion_lr, criterion_topic,device, lr_var, 
-               accumulation_steps=4,sparse_fraction=0.5,alpha=0.1,topic_var=None):
+               topic_var=None, party_group=None):
     print("")
     print('Training...')
 
@@ -239,49 +239,41 @@ def train_loop(dataloader, model, optimizer, scheduler, criterion_lr, criterion_
     # Put the model into training mode. 
     size = len(dataloader.dataset)
     model.train()
-    train_loss = 0
+    train_loss = 0.0, 0.0
     # For each batch of training data...optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5)
     for batch_num, batch in enumerate(dataloader):
       batch = {k: v.to(device) for k,v in batch.items()}
-      optimizer.zero_grad()
+      topic_labels = batch.get(topic_var, None)
+      party_group_labels = batch.get(party_group, None)
       with autocast():
-        logits_topic, logits_lr = model(input_ids = batch['input_ids'], 
-                                        attention_mask = batch['attention_mask'])
-        y_lr = batch[lr_var].long()
-        loss_lr = criterion_lr(logits_lr, y_lr)
-        if topic_var is not None:
-            y_topic = batch[topic_var].long()
-            loss_topic = criterion_topic(logits_topic, y_topic)
-            loss = 0.5*loss_topic  + 0.5*loss_lr 
-            train_loss += loss.item()
+        logits_topic, logits_ideology = model(
+                input_ids=batch['input_ids'], 
+                attention_mask=batch['attention_mask'],
+                topic_labels=topic_labels, 
+                party_group_labels=party_group_labels
+            )
 
+        y_lr = batch[lr_var].long()
+        loss_lr = criterion_lr(logits_ideology, y_lr)
+
+        if topic_var is not None and topic_labels is not None:
+            y_topic = topic_labels.long()
+            loss_topic = criterion_topic(logits_topic, y_topic)
+            loss = 0.5 * loss_topic + 0.5 * loss_lr
         else:
             loss = loss_lr
-            train_loss += loss.item()
-        ## Calculate a topic-aware variance loss
-        if ((batch_num+1) % accumulation_steps == 0 or (batch_num+1) == len(dataloader)) and topic_var is not None:
-            unique_topics, topic_counts = y_topic.unique(return_counts=True)
-            variance_loss = 0.0 
-            selected_topics = random.sample(list(unique_topics), int(sparse_fraction * len(unique_topics)))
-            for topic in selected_topics:
-                count = topic_counts[unique_topics == topic]
-                if count > 1:
-                    topic_indices = (y_topic == topic).nonzero(as_tuple=True)[0]
-                    topic_ideology_logits = logits_lr[topic_indices]
-                    variance_loss += torch.var(topic_ideology_logits, dim=0).mean()
+            
+        train_loss += loss.item()
+        scaler.scale(loss).backward()
 
-            # Add the regularization term to the loss
-            total_loss_with_reg = loss + alpha * variance_loss
-            scaler.scale(total_loss_with_reg).backward()
-        else:
-            scaler.scale(loss).backward()
-      
+      scaler.unscale_(optimizer)
       torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)  
       scaler.step(optimizer)
       scaler.update()
       #loss.backward()
       #torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
       #optimizer.step()
+      optimizer.zero_grad()
       scheduler.step()
      
       # Report
@@ -301,6 +293,7 @@ def train_loop(dataloader, model, optimizer, scheduler, criterion_lr, criterion_
 
     print("")
     print("  Training epoch took: {:}".format(training_time))
+
 
 
 
@@ -354,6 +347,13 @@ def test_loop(dataloader, model, device):
         res_lr.append(pred_lr)
   return res_topic, res_lr
 
+def party_group_func(dataset, lrn_label, group_vars, threshold=None):
+    count_dataset = dataset.groupby(group_vars)[lrn_label].value_counts().unstack(fill_value=0)
+    count_dataset['simple_score'] = (count_dataset['left']*-1 + count_dataset['right']*1)/(count_dataset['left'] +  count_dataset['right'] + 1e-5)
+    count_dataset['party_group'] = ['Left' if x < -threshold  else 'Right' if x > threshold else 'Neutral' for x in count_dataset['simple_score']]
+    count_dataset = count_dataset.reset_index()
+    party_group_dict = count_dataset.set_index(group_vars)['party_group'].to_dict()
+    return party_group_dict
 
 def scale_func(dataloader, model, device,  
                reg_value = 0.05, by_topic=True, topic_label=None):
@@ -416,8 +416,9 @@ def scale_func(dataloader, model, device,
     else:
         left_probabilities = lr_softmax[:, 0]  
         right_probabilities = lr_softmax[:,2]
+        neutral_probabilities = lr_softmax[topic_mask][:,1]
         reg_sign = np.where(left_probabilities > right_probabilities, reg_value, -reg_value)
-        position_scores = -1*left_probabilities + 1*right_probabilities + reg_sign
+        position_scores = -1*left_probabilities + 1*right_probabilities + reg_sign*neutral_probabilities
     return position_scores, pred_topics, pred_lrs
 
 
