@@ -12,103 +12,70 @@ pacman::p_load(tidyverse, manifestoR)
 Train countries
 ```{r pull}
 rm(list=ls())
-cmp_parties <- read.csv(here::here("data","CMP","parties_MPDataset_MPDS2023a.csv"))
+cmp_parties <- read.csv(here::here("data","CMP","parties_MPDataset_MPDS2024a.csv"))
+mp_dataset <- read_csv("data/CMP/MPDataset_MPDS2024a.csv")
+
 mp_setapikey("manifesto_apikey.txt")
 country_list <- c("Austria","Belgium","Denmark","Finland","Germany","Greece", 
                   "Iceland", "Ireland", "France", "United Kingdom", "Italy",
                   "Spain","Sweden","Norway","Portugal","Netherlands",
                   "Switzerland")
-corpora <-  mp_corpus(countryname %in% country_list)
+corpora <-  mp_corpus_df_bilingual(countryname %in% country_list, tibble_metadata = "all")
 
-
-parties <- cmp_parties %>%
+mp_dataset <- mp_dataset %>%
     filter(countryname %in% country_list) %>%
-    select(country, countryname, party, name, name_english) 
+    select(country, countryname, party, date, edate,parfam)
 
-ls_corpus <- names(corpora)
+party_info <- cmp_parties %>%
+    filter(countryname %in% country_list) %>%
+    select(country, countryname, party, abbrev, name)
 
-pull_manifestoes <- function(corpora, ls_corpus){
-    ls_dfs <- vector(mode="list", length = length(ls_corpus))
-    for (i in seq_along(ls_corpus)){
-        corpus_name <- ls_corpus[i]
-        current_corpus <- corpora[[corpus_name]]$content
-        if(!is.null(current_corpus)){
-            df <- current_corpus %>%
-                mutate(
-                    pos = row_number(),
-                    election = ifelse(nchar(corpus_name)==13, substr(corpus_name,8,11), substr(corpus_name,7,10)),
-                    party_code = rep(corpus_name, n())
-                ) %>%
-                rename(code = cmp_code) %>%
-                select(text, election, code, pos, party_code)
-            ls_dfs[[i]] <- df
-            names(ls_dfs)[i] <- corpus_name
-            
-        }
-    }
-    return(ls_dfs)
-}
-pulled_res <- pull_manifestoes(corpora, ls_corpus)
-pulled_df <- bind_rows(pulled_res)
 
-pulled_df <- pulled_df %>%
-    filter(!is.na(code)) %>%
+pulled_manifesto <- corpora %>%
+    filter(!is.na(cmp_code) & annotations==TRUE & !is.na(text)) %>%
     mutate(
-        country = as.numeric(ifelse(nchar(party_code)==13, substr(party_code,1,3), substr(party_code,1,2))),
-        party = as.numeric(ifelse(nchar(party_code)==13, substr(party_code,1,6), substr(party_code,1,5)))
+        country = as.numeric(ifelse(nchar(party)==13, substr(party,1,3), substr(party,1,2))),
+        party_code = as.numeric(ifelse(nchar(party)==13, substr(party,1,6), substr(party,1,5)))
     ) %>%
-    left_join(parties, by = c("country","party"))
+    left_join(party_info, by = c("country","party_code"="party")) %>%
+    left_join(mp_dataset, by = c("country","party","date"))
 
-write.csv(pulled_df,here::here("data", "r_outputs", "pulled_manifestoes.csv"), row.names=FALSE)
+write_csv(pulled_manifesto,here::here("data", "r_outputs", "pulled_manifestoes.csv"))
 ```
 
 Test countries
+
+
+
 ```{r}
 rm(list=ls())
-cmp_parties <- read.csv(here::here("data","CMP","parties_MPDataset_MPDS2023a.csv"))
+cmp_parties <- read.csv(here::here("data","CMP","parties_MPDataset_MPDS2024a.csv"))
+mp_dataset <- read_csv("data/CMP/MPDataset_MPDS2024a.csv")
 mp_setapikey("manifesto_apikey.txt")
+
+
 country_list <- c("Czech Republic", "Japan", "Turkey","Russia","South Korea")
-corpora <-  mp_corpus(countryname %in% country_list)
 
+corpora <-  mp_corpus(countryname %in% country_list, as_tibble =TRUE)
 
-parties <- cmp_parties %>%
+mp_dataset <- mp_dataset %>%
     filter(countryname %in% country_list) %>%
-    select(country, countryname, party, name, name_english) 
+    select(country, countryname, party, date, edate,parfam)
 
-ls_corpus <- names(corpora)
+party_info <- cmp_parties %>%
+    filter(countryname %in% country_list) %>%
+    select(country, countryname, party, abbrev, name)
 
-pull_manifestoes <- function(corpora, ls_corpus){
-    ls_dfs <- vector(mode="list", length = length(ls_corpus))
-    for (i in seq_along(ls_corpus)){
-        corpus_name <- ls_corpus[i]
-        current_corpus <- corpora[[corpus_name]]$content
-        if(!is.null(current_corpus)){
-            df <- current_corpus %>%
-                mutate(
-                    pos = row_number(),
-                    election = ifelse(nchar(corpus_name)==13, substr(corpus_name,8,11), substr(corpus_name,7,10)),
-                    party_code = rep(corpus_name, n())
-                ) %>%
-                rename(code = cmp_code) %>%
-                select(text, election, code, pos, party_code)
-            ls_dfs[[i]] <- df
-            names(ls_dfs)[i] <- corpus_name
-            
-        }
-    }
-    return(ls_dfs)
-}
-pulled_res <- pull_manifestoes(corpora, ls_corpus)
-pulled_df <- bind_rows(pulled_res)
 
-pulled_df <- pulled_df %>%
-    filter(!is.na(code)) %>%
+pulled_manifesto <- corpora %>%
+    filter(!is.na(cmp_code) & annotations==TRUE & !is.na(text)) %>%
     mutate(
-        country = as.numeric(ifelse(nchar(party_code)==13, substr(party_code,1,3), substr(party_code,1,2))),
-        party = as.numeric(ifelse(nchar(party_code)==13, substr(party_code,1,6), substr(party_code,1,5)))
+        country = as.numeric(ifelse(nchar(party)==13, substr(party,1,3), substr(party,1,2))),
+        party_code = as.numeric(ifelse(nchar(party)==13, substr(party,1,6), substr(party,1,5)))
     ) %>%
-    left_join(parties, by = c("country","party"))
+    left_join(party_info, by = c("country","party_code"="party")) %>%
+    left_join(mp_dataset, by = c("country","countryname","party","date"))
 
-write.csv(pulled_df,here::here("data", "r_outputs", "pulled_manifestoes_test.csv"), row.names=FALSE, fileEncoding="UTF-8")
+write_csv(pulled_manifesto,here::here("data", "r_outputs", "pulled_manifestoes_test.csv"))
 ```
 
