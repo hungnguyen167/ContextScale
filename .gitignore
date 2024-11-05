@@ -16,3 +16,5 @@ manifesto_lang_pred.csv
 /runs
 /cache
 data/r_outputs/pulled_manifestoes.csv
+/utils/legacy.py
+data/py_outputs/cs_topic.csv

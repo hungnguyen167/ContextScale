@@ -1,118 +1,95 @@
-import torch
 import torch.nn as nn
 from transformers import XLMRobertaModel
-from transformers.modeling_utils import PreTrainedModel
 from peft import LoraConfig, get_peft_model
+import torch.nn.functional as F
+from gensim.models import Doc2Vec
+from gensim.models.phrases import Phrases, Phraser
+from gensim.models.doc2vec import TaggedDocument
 
 ## Main model
 
-class TIPredictWithAttention(PreTrainedModel):
-    def __init__(self, config, roberta_model, num_lrs, num_topics=None, 
-                 num_party_groups=None, lora=False, dropout=0.1, hidden_dim=None, emb_dim=None):
-        super(TIPredictWithAttention, self).__init__(config)
+
+
+class TIPredictWithDualAttention(nn.Module):
+    def __init__(self, 
+                 roberta_model, 
+                 num_sentiments, 
+                 num_topics, 
+                 lora=False, 
+                 dropout=0.1):
+        super(TIPredictWithDualAttention, self).__init__()
         self.roberta = XLMRobertaModel.from_pretrained(roberta_model)
+        roberta_dim = self.roberta.config.hidden_size
         
-        # Optional: LoRA adapter
         if lora:
             lora_config = LoraConfig(r=8, lora_alpha=32, lora_dropout=0.1, use_rslora=True)
             self.roberta = get_peft_model(self.roberta, lora_config)
 
-        roberta_dim = config.hidden_size
-
         self.num_topics = num_topics
-        self.num_lrs = num_lrs
-        self.num_party_groups = num_party_groups
-        if hidden_dim is None:
-            hidden_dim = (roberta_dim + num_topics + num_lrs) // 2
-
+        self.num_sentiments = num_sentiments
+        hidden_dim = int((roberta_dim + num_topics + num_sentiments) // 2)
         self.dropout = nn.Dropout(dropout)
 
-        # Group Embeddings
-        if num_topics:
-            self.topic_embedding = nn.Embedding(num_topics, emb_dim)
-        if num_party_groups:
-            self.party_group_embedding = nn.Embedding(num_party_groups, emb_dim)
-
-        # Multi-Headed Attention
-        self.multihead_attn = nn.MultiheadAttention(embed_dim=emb_dim, num_heads=8, dropout=0.1)
-        self.attn_dropout = nn.Dropout(0.1)
-        self.attn_layer_norm = nn.LayerNorm(roberta_dim)
-
+        # Self-attention for topic and sentiment pathways
+        self.self_attn_topic = nn.MultiheadAttention(embed_dim=roberta_dim, num_heads=8, dropout=0.1)
+        self.self_attn_sentiment = nn.MultiheadAttention(embed_dim=roberta_dim, num_heads=8, dropout=0.1)
+        
+        # Cross-attention to allow indirect information flow
+        self.cross_attn_topic = nn.MultiheadAttention(embed_dim=roberta_dim, num_heads=8, dropout=0.1)
+        self.cross_attn_sentiment = nn.MultiheadAttention(embed_dim=roberta_dim, num_heads=8, dropout=0.1)
+        
+        # Layer normalization and dropout
+        self.layer_norm_topic = nn.LayerNorm(roberta_dim)
+        self.layer_norm_sentiment = nn.LayerNorm(roberta_dim)
+        
         # Classification Heads
         # Topic Classification Head
         self.mlp_topic = nn.Sequential(
-            nn.Linear(roberta_dim + emb_dim if num_party_groups else roberta_dim, hidden_dim),  # pooled_output + party_group_emb concatenated
+            nn.Linear(roberta_dim, hidden_dim), 
             nn.LayerNorm(hidden_dim), 
-            nn.ReLU(),
-            self.dropout,  
-            nn.Linear(hidden_dim, hidden_dim),
-            nn.LayerNorm(hidden_dim),  
             nn.ReLU(),
             self.dropout,  
             nn.Linear(hidden_dim, num_topics)
         )
         
-        # Ideology Classification Head
-        self.mlp_ideology = nn.Sequential(
-            nn.Linear(roberta_dim + emb_dim if num_topics else roberta_dim, hidden_dim),  # pooled_output + attn_output concatenated
-            nn.LayerNorm(hidden_dim),  
-            nn.ReLU(),
-            self.dropout, 
-            nn.Linear(hidden_dim, hidden_dim),
+        # Sentiment Classification Head
+        self.mlp_sentiment = nn.Sequential(
+            nn.Linear(roberta_dim, hidden_dim), 
             nn.LayerNorm(hidden_dim), 
             nn.ReLU(),
-            self.dropout, 
-            nn.Linear(hidden_dim, num_lrs)
+            self.dropout,  
+            nn.Linear(hidden_dim, num_sentiments)
         )
 
-    def forward(self, input_ids, attention_mask, topic_labels=None, party_group_labels=None):
+    def forward(self, input_ids, attention_mask):
         # RoBERTa Encoding
         roberta_outputs = self.roberta(input_ids=input_ids, attention_mask=attention_mask)
         pooled_output = roberta_outputs.pooler_output  # (batch_size, hidden_size)
 
+        ### 1. Topic Pathway ###
+        # Self-attention in the topic pathway
+        self_attn_topic_output, _ = self.self_attn_topic(pooled_output.unsqueeze(0), pooled_output.unsqueeze(0), pooled_output.unsqueeze(0))
+        self_attn_topic_output = self.layer_norm_topic(self_attn_topic_output.squeeze(0) + pooled_output)  # Residual connection
 
+        # Cross-attention in the topic pathway (attending to sentiment pathway’s self-attention output)
+        cross_attn_topic_output, _ = self.cross_attn_topic(self_attn_topic_output.unsqueeze(0), self_attn_topic_output.unsqueeze(0), self_attn_topic_output.unsqueeze(0))
+        cross_attn_topic_output = self.layer_norm_topic(cross_attn_topic_output.squeeze(0) + self_attn_topic_output)
 
-        ### 1. Topic Prediction Pathway ###
-            # Combine pooled_output with party_group_emb (if available) for topic prediction
-        if self.num_party_groups and party_group_labels is not None:
-            party_group_emb = self.party_group_embedding(party_group_labels)  # (batch_size, emb_size)
-            topic_input = torch.cat([pooled_output, party_group_emb], dim=-1)  # (batch_size, hidden_size + emb_size)
-        else:
-            # If no party_group, just use pooled_output for topic prediction
-            topic_input = pooled_output  # (batch_size, hidden_size)
-        logits_topic = self.mlp_topic(topic_input)  # (batch_size, num_topics)
+        ### 2. Sentiment Pathway ###
+        # Self-attention in the sentiment pathway
+        self_attn_sentiment_output, _ = self.self_attn_sentiment(pooled_output.unsqueeze(0), pooled_output.unsqueeze(0), pooled_output.unsqueeze(0))
+        self_attn_sentiment_output = self.layer_norm_sentiment(self_attn_sentiment_output.squeeze(0) + pooled_output)  # Residual connection
+        
+        # Cross-attention in the sentiment pathway (attending to topic pathway’s self-attention output)
+        cross_attn_sentiment_output, _ = self.cross_attn_sentiment(self_attn_sentiment_output.unsqueeze(0), cross_attn_topic_output.unsqueeze(0), cross_attn_topic_output.unsqueeze(0))
+        cross_attn_sentiment_output = self.layer_norm_sentiment(cross_attn_sentiment_output.squeeze(0) + self_attn_sentiment_output)
 
-        ### 2. Ideology Prediction Pathway ###
-        # Case 1: Both topic and party-group are available
-        if self.num_topics and topic_labels is not None and self.num_party_groups and party_group_labels is not None:
-            topic_emb = self.topic_embedding(topic_labels)  # (batch_size, emb_size)
-            party_group_emb = self.party_group_embedding(party_group_labels)  # (batch_size, emb_size)
-            combined_emb = topic_emb * party_group_emb  # (batch_size, emb_size)
+        ### Classification Heads ###
+        logits_topic = self.mlp_topic(cross_attn_topic_output)
+        logits_sentiment = self.mlp_sentiment(cross_attn_sentiment_output)
 
-            # Reshape for MultiheadAttention: (seq_len=1, batch_size, emb_size)
-            combined_emb = combined_emb.unsqueeze(0)  # (1, batch_size, emb_size)
+        return logits_topic, logits_sentiment
 
-            # Apply Multi-Headed Self-Attention
-            attn_output, _ = self.multihead_attn(combined_emb, combined_emb, combined_emb)
-            attn_output = self.attn_dropout(attn_output)  # (1, batch_size, emb_size)
-            attn_output = self.attn_layer_norm(attn_output + combined_emb)  # Residual connection
-            attn_output = attn_output.squeeze(0)  # (batch_size, emb_size)
-
-            # Combine pooled_output with attention output for ideology prediction
-            ideology_input = torch.cat([pooled_output, attn_output], dim=-1)  # (batch_size, hidden_size + emb_size)
-
-        # Case 2: Only topic is available (use topic embedding for ideology prediction)
-        elif self.num_topics and topic_labels is not None:
-            topic_emb = self.topic_embedding(topic_labels)  # (batch_size, emb_size)
-            ideology_input = torch.cat([pooled_output, topic_emb], dim=-1)  # (batch_size, hidden_size + emb_size)
-
-        # Case 3: No topic or party-group (only use pooled_output for ideology prediction)
-        else:
-            ideology_input = pooled_output  # replicate pooled_output for concatenation
-
-        logits_ideology = self.mlp_ideology(ideology_input) # (batch_size, num_lrs)
-
-        return logits_topic, logits_ideology
 
     def get_trainable_params(self, return_count=False):
         if return_count:
@@ -123,3 +100,42 @@ class TIPredictWithAttention(PreTrainedModel):
             for name, param in self.named_parameters():
                 if param.requires_grad:
                     print(name)
+
+
+
+
+class corpusIterator(object):
+    def __init__(self, df, bigram=None, trigram=None,text=None,labels=None):
+        if bigram: 
+            self.bigram = bigram
+        else:
+            self.bigram = None
+        if trigram:
+            self.trigram = trigram
+        else:
+            self.trigram = None
+        self.df = df
+        self.text = text
+        self.labels = labels
+    def __iter__(self):
+        print('Starting new epoch')
+        for  index, row in self.df.iterrows():
+            text = row[self.text]
+            labels = row[self.labels]
+            tokens = text.split()
+            if self.bigram and self.trigram:
+                self.words = self.trigram[self.bigram[tokens]]
+            elif self.bigram and not self.trigram:
+                self.words = self.bigram[tokens]
+            else:
+                self.words = tokens
+            yield TaggedDocument(self.words, [labels])
+            
+class phraseIterator(object):
+    def __init__(self, df, text):
+        self.df = df
+        self.text = text
+    def __iter__(self):
+        for index, row in self.df.iterrows():
+            text = row[self.text]
+            yield text.split()
