@@ -9,7 +9,7 @@ date: "2023-09-29"
 rm(list=ls())
 pacman::p_load(quanteda, quanteda.textmodels, tidyverse, readr, ggplot2, rstatix, grid, gridExtra, viridis, ggsci, ggpubr, ragg, scales, openxlsx, countrycode)
 
-pulled_manifestoes <- read_csv("data/r_outputs/pulled_manifestoes.csv")
+manifesto <- read_csv("data/temps/manifesto.csv")
 ches <- read_csv("data/ches/1999-2019_CHES_dataset_meansv3.csv")
 
 ```
@@ -59,17 +59,13 @@ write.csv(ches_deu, "data/r_outputs/ches_deu.csv", row.names=FALSE)
 ```{r wf_gen}
 
 
-manifesto_deu <- pulled_manifestoes %>%
-    filter(countryname == "Germany") %>%
-    mutate(
-        code_extract = substr(code, 1,3)
-    ) %>%
-    filter(!code %in% c("H"))
+manifesto_deu <- manifesto %>%
+    filter(countryname == "Germany") 
 
 
 grouped_texts <- manifesto_deu %>% 
+    select(-party) %>%
     mutate(
-        party_election = paste(party, election, sep="_"),
         party = case_when(
             grepl("Linke|Sozialismus", name) ~ "The Left",
             grepl("Sozialdemokratische", name) ~ "SPD",
@@ -111,10 +107,10 @@ write.csv(results, "data/r_outputs/wf_gen.csv", row.names=FALSE)
 
 ```{r wf_env}
 
-manifesto_env = manifesto_deu[which(manifesto_deu$code_extract %in% c(410,416,501)),]
+manifesto_env = manifesto_deu[which(manifesto_deu$cmp_code %in% c('410','416','501',"416.1","416.2")),]
 grouped_texts <- manifesto_env %>% 
+    select(-party) %>%
     mutate(
-        party_election = paste(party, election, sep="_"),
         party = case_when(
             grepl("Linke|Sozialismus", name) ~ "The Left",
             grepl("Sozialdemokratische", name) ~ "SPD",
@@ -152,15 +148,15 @@ write.csv(results, "data/r_outputs/wf_env.csv", row.names = FALSE)
 
 
 
-## Wordfish - Economy
+## Wordfish - Economics
 
 ```{r wf_econ}
 
-manifesto_econ = manifesto_deu[which(manifesto_deu$code_extract %in%
-                                       c(401,402,403,404,409,412,413,414)),]
+manifesto_econ = manifesto_deu[which(manifesto_deu$cmp_code %in%
+                                       c('401','402','403','404','409','412','413','414')),]
 grouped_texts <- manifesto_econ %>% 
+    select(-party) %>%
     mutate(
-        party_election = paste(party, election, sep="_"),
         party = case_when(
             grepl("Linke|Sozialismus", name) ~ "The Left",
             grepl("Sozialdemokratische", name) ~ "SPD",
@@ -196,14 +192,14 @@ write.csv(results, "data/r_outputs/wf_econ.csv", row.names=FALSE)
 
 ```
 
-## Wordfish - Welfare
+## Wordfish - Labour and Social Welfare
 
 ```{r wf_socwel}
 
-manifesto_socwel = manifesto_deu[which(manifesto_deu$code_extract %in% c(503,504,505,701,702)),]
+manifesto_socwel = manifesto_deu[which(manifesto_deu$cmp_code %in% c('503','504','505','701','702')),]
 grouped_texts <- manifesto_socwel %>% 
+    select(-party) %>%
     mutate(
-        party_election = paste(party, election, sep="_"),
         party = case_when(
             grepl("Linke|Sozialismus", name) ~ "The Left",
             grepl("Sozialdemokratische", name) ~ "SPD",
@@ -244,10 +240,10 @@ write.csv(results, "data/r_outputs/wf_socwel.csv", row.names=FALSE)
 
 ```{r wf_eu}
 
-manifesto_eu = manifesto_deu[which(manifesto_deu$code_extract %in% c(108,110)),]
+manifesto_eu = manifesto_deu[which(manifesto_deu$cmp_code %in% c('108','110')),]
 grouped_texts <- manifesto_eu %>% 
+    select(-party) %>%
     mutate(
-        party_election = paste(party, election, sep="_"),
         party = case_when(
             grepl("Linke|Sozialismus", name) ~ "The Left",
             grepl("Sozialdemokratische", name) ~ "SPD",
@@ -288,10 +284,10 @@ write.csv(results, "data/r_outputs/wf_eu.csv", row.names = FALSE)
 
 ```{r wf_imm}
 
-manifesto_imm = manifesto_deu[which(manifesto_deu$code_extract %in% c(601,602,607,608)),]
+manifesto_imm = manifesto_deu[which(manifesto_deu$cmp_code %in% c('601','602','607','608','601.1','601.2','602.1','602.2','607.1','607.2','607.3','608.1','608.2','608.3')),]
 grouped_texts <- manifesto_imm %>% 
+    select(-party) %>%
     mutate(
-        party_election = paste(party, election, sep="_"),
         party = case_when(
             grepl("Linke|Sozialismus", name) ~ "The Left",
             grepl("Sozialdemokratische", name) ~ "SPD",
@@ -332,10 +328,10 @@ write.csv(results, "data/r_outputs/wf_imm.csv", row.names = FALSE)
 
 ```{r wf_ep}
 
-manifesto_ep = manifesto_deu[which(manifesto_deu$code_extract ==501),]
+manifesto_ep = manifesto_deu[which(manifesto_deu$cmp_code =='501'),]
 grouped_texts <- manifesto_ep %>% 
+    select(-party) %>%
     mutate(
-        party_election = paste(party, election, sep="_"),
         party = case_when(
             grepl("Linke|Sozialismus", name) ~ "The Left",
             grepl("Sozialdemokratische", name) ~ "SPD",
@@ -375,10 +371,10 @@ write.csv(results, "data/r_outputs/wf_ep.csv", row.names = FALSE)
 
 ```{r wf_growth}
 
-manifesto_growth = manifesto_deu[which(manifesto_deu$code_extract %in% c(410,416)),]
+manifesto_growth = manifesto_deu[which(manifesto_deu$cmp_code %in% c('410','416', "416.1", "416.2")),]
 grouped_texts <- manifesto_growth %>% 
+    select(-party) %>%
     mutate(
-        party_election = paste(party, election, sep="_"),
         party = case_when(
             grepl("Linke|Sozialismus", name) ~ "The Left",
             grepl("Sozialdemokratische", name) ~ "SPD",
