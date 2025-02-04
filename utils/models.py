@@ -8,98 +8,121 @@ from gensim.models.doc2vec import TaggedDocument
 
 ## Main model
 
+import torch
+import torch.nn as nn
+from transformers import XLMRobertaModel
 
-
-class TIPredictWithDualAttention(nn.Module):
+class ContextScalePrediction(nn.Module):
     def __init__(self, 
                  roberta_model, 
                  num_sentiments, 
                  num_topics, 
                  lora=False, 
-                 dropout=0.1):
-        super(TIPredictWithDualAttention, self).__init__()
+                 dropout=0.1, 
+                 use_shared_attention=False, 
+                 use_dynamic_gating=False, 
+                 use_co_attention=False, 
+                 use_simple_flow=False, 
+                 use_hierarchical_interaction=False):
+        super(ContextScalePrediction, self).__init__()
         self.roberta = XLMRobertaModel.from_pretrained(roberta_model)
         roberta_dim = self.roberta.config.hidden_size
-        
+
         if lora:
             lora_config = LoraConfig(r=8, lora_alpha=32, lora_dropout=0.1, use_rslora=True)
             self.roberta = get_peft_model(self.roberta, lora_config)
 
         self.num_topics = num_topics
         self.num_sentiments = num_sentiments
-        hidden_dim = int((roberta_dim + num_topics + num_sentiments) // 2)
+        hidden_dim = int(roberta_dim // 2)
         self.dropout = nn.Dropout(dropout)
 
-        # Self-attention for topic and sentiment pathways
-        self.self_attn_topic = nn.MultiheadAttention(embed_dim=roberta_dim, num_heads=8, dropout=0.1)
-        self.self_attn_sentiment = nn.MultiheadAttention(embed_dim=roberta_dim, num_heads=8, dropout=0.1)
+        # Toggleable components
+        self.use_shared_attention = use_shared_attention
+        self.use_dynamic_gating = use_dynamic_gating
+        self.use_co_attention = use_co_attention
+        self.use_simple_flow = use_simple_flow
+        self.use_hierarchical_interaction = use_hierarchical_interaction
+
+        # Shared intermediate state
+        self.intermediate = nn.Sequential(
+            nn.Linear(roberta_dim, hidden_dim), 
+            nn.LayerNorm(hidden_dim), 
+            nn.ReLU(),
+            self.dropout
+        )
+
+        # Task-specific intermediate layers
+        self.intermediate_topic = nn.Sequential(
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.LayerNorm(hidden_dim), 
+            nn.ReLU(),
+            self.dropout
+        )
         
-        # Cross-attention to allow indirect information flow
-        self.cross_attn_topic = nn.MultiheadAttention(embed_dim=roberta_dim, num_heads=8, dropout=0.1)
-        self.cross_attn_sentiment = nn.MultiheadAttention(embed_dim=roberta_dim, num_heads=8, dropout=0.1)
+        self.intermediate_sentiment = nn.Sequential(
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.LayerNorm(hidden_dim), 
+            nn.ReLU(),
+            self.dropout
+        )
+
+        # Shared Attention Mechanism
+        if self.use_shared_attention:
+            self.shared_attention = nn.MultiheadAttention(embed_dim=hidden_dim, num_heads=4)
         
-        # Layer normalization and dropout
-        self.layer_norm_topic = nn.LayerNorm(roberta_dim)
-        self.layer_norm_sentiment = nn.LayerNorm(roberta_dim)
-        
+        # Dynamic Gating
+        if self.use_dynamic_gating:
+            self.topic_gate = nn.Linear(hidden_dim, hidden_dim)
+            self.sentiment_gate = nn.Linear(hidden_dim, hidden_dim)
+
+    
         # Classification Heads
-        # Topic Classification Head
-        self.mlp_topic = nn.Sequential(
-            nn.Linear(roberta_dim, hidden_dim), 
-            nn.LayerNorm(hidden_dim), 
-            nn.ReLU(),
-            self.dropout,  
-            nn.Linear(hidden_dim, num_topics)
-        )
-        
-        # Sentiment Classification Head
-        self.mlp_sentiment = nn.Sequential(
-            nn.Linear(roberta_dim, hidden_dim), 
-            nn.LayerNorm(hidden_dim), 
-            nn.ReLU(),
-            self.dropout,  
-            nn.Linear(hidden_dim, num_sentiments)
-        )
+        self.topic = nn.Linear(hidden_dim, num_topics)
+        self.sentiment = nn.Linear(hidden_dim, num_sentiments)
+
+        # Regularization after attention
+        self.attention_regularizer = nn.LayerNorm(hidden_dim)
 
     def forward(self, input_ids, attention_mask):
-        # RoBERTa Encoding
         roberta_outputs = self.roberta(input_ids=input_ids, attention_mask=attention_mask)
-        pooled_output = roberta_outputs.pooler_output  # (batch_size, hidden_size)
+        mean_outputs = roberta_outputs.last_hidden_state.mean(dim=1)
+        shared_output = self.intermediate(mean_outputs)
 
-        ### 1. Topic Pathway ###
-        # Self-attention in the topic pathway
-        self_attn_topic_output, _ = self.self_attn_topic(pooled_output.unsqueeze(0), pooled_output.unsqueeze(0), pooled_output.unsqueeze(0))
-        self_attn_topic_output = self.layer_norm_topic(self_attn_topic_output.squeeze(0) + pooled_output)  # Residual connection
+        topic_intermediate = self.intermediate_topic(shared_output)
+        sentiment_intermediate = self.intermediate_sentiment(shared_output)
 
-        # Cross-attention in the topic pathway (attending to sentiment pathway’s self-attention output)
-        cross_attn_topic_output, _ = self.cross_attn_topic(self_attn_topic_output.unsqueeze(0), self_attn_topic_output.unsqueeze(0), self_attn_topic_output.unsqueeze(0))
-        cross_attn_topic_output = self.layer_norm_topic(cross_attn_topic_output.squeeze(0) + self_attn_topic_output)
+        # Apply shared attention
+        if self.use_shared_attention:
+            combined_representation = torch.stack([topic_intermediate, sentiment_intermediate], dim=1).transpose(0,1)
+            combined_representation, _ = self.shared_attention(combined_representation, combined_representation, combined_representation)
+            combined_representation = combined_representation.transpose(0, 1)
+            topic_intermediate = combined_representation[:, 0]
+            sentiment_intermediate = combined_representation[:, 1]
+            topic_intermediate = self.attention_regularizer(topic_intermediate)
+            sentiment_intermediate = self.attention_regularizer(sentiment_intermediate)
 
-        ### 2. Sentiment Pathway ###
-        # Self-attention in the sentiment pathway
-        self_attn_sentiment_output, _ = self.self_attn_sentiment(pooled_output.unsqueeze(0), pooled_output.unsqueeze(0), pooled_output.unsqueeze(0))
-        self_attn_sentiment_output = self.layer_norm_sentiment(self_attn_sentiment_output.squeeze(0) + pooled_output)  # Residual connection
-        
-        # Cross-attention in the sentiment pathway (attending to topic pathway’s self-attention output)
-        cross_attn_sentiment_output, _ = self.cross_attn_sentiment(self_attn_sentiment_output.unsqueeze(0), cross_attn_topic_output.unsqueeze(0), cross_attn_topic_output.unsqueeze(0))
-        cross_attn_sentiment_output = self.layer_norm_sentiment(cross_attn_sentiment_output.squeeze(0) + self_attn_sentiment_output)
+        # Apply dynamic gating
+        if self.use_dynamic_gating:
+            topic_gate_weights = torch.sigmoid(self.topic_gate(topic_intermediate))
+            sentiment_gate_weights = torch.sigmoid(self.sentiment_gate(sentiment_intermediate))
+            topic_intermediate = topic_intermediate + topic_gate_weights * sentiment_intermediate
+            sentiment_intermediate = sentiment_intermediate + sentiment_gate_weights * topic_intermediate
 
-        ### Classification Heads ###
-        logits_topic = self.mlp_topic(cross_attn_topic_output)
-        logits_sentiment = self.mlp_sentiment(cross_attn_sentiment_output)
+        # Use simple flow of information
 
-        return logits_topic, logits_sentiment
+        if self.use_simple_flow:
+            topic_intermediate += 0.1*sentiment_intermediate.detach()
+            sentiment_intermediate += 0.1*topic_intermediate.detach()
 
+        logits_topic = self.topic(topic_intermediate)
+        logits_sentiment = self.sentiment(sentiment_intermediate)
 
-    def get_trainable_params(self, return_count=False):
-        if return_count:
-            total_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
-            return total_params
-        else:
-            print("Trainable Parameters:")
-            for name, param in self.named_parameters():
-                if param.requires_grad:
-                    print(name)
+        return {
+            'logits_topic': logits_topic,
+            'logits_sentiment': logits_sentiment
+        }
+
 
 
 
@@ -119,7 +142,7 @@ class corpusIterator(object):
         self.labels = labels
     def __iter__(self):
         print('Starting new epoch')
-        for  index, row in self.df.iterrows():
+        for  _, row in self.df.iterrows():
             text = row[self.text]
             labels = row[self.labels]
             tokens = text.split()
@@ -136,6 +159,6 @@ class phraseIterator(object):
         self.df = df
         self.text = text
     def __iter__(self):
-        for index, row in self.df.iterrows():
+        for _, row in self.df.iterrows():
             text = row[self.text]
             yield text.split()
