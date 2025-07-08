@@ -723,7 +723,7 @@ def scale_func(dataloader,
         topic_for_scaling = pred_topics
     position_scores = np.zeros(len(topic_for_scaling))
     original_indices = np.arange(len(topic_for_scaling))
-
+    min_adjustment = 0.3
     for topic_id in np.unique(topic_for_scaling):
         topic_mask = topic_for_scaling == topic_id
         topic_indices = original_indices[topic_mask]
@@ -734,10 +734,12 @@ def scale_func(dataloader,
 
             neutral_range = np.max(neutral_values) - np.min(neutral_values)
             if neutral_range > 0:
-                adjustment = 1 - (neutral_values - np.min(neutral_values)) / neutral_range
+                raw_adjustment = 1 - (neutral_values - np.min(neutral_values)) / neutral_range
 
             else:
-                adjustment = 1 - neutral_values  
+                raw_adjustment = 1 - neutral_values  
+            adjustment = min_adjustment + (1 - min_adjustment) * raw_adjustment
+
             position_scores[topic_indices] = (right_values - left_values) * adjustment
             
         elif sentiment_sigmoid.shape[1] == 2:

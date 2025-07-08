@@ -11,7 +11,8 @@ pacman::p_load(quanteda, quanteda.textmodels, tidyverse, readr, ggplot2, rstatix
 
 manifesto <- read_csv("data/temps/manifesto.csv")
 ches <- read_csv("data/ches/1999-2019_CHES_dataset_meansv3.csv")
-
+manifesto_text_en <- manifesto %>% filter(!countryname %in% c("Iceland", "Spain"))
+countries <- unique(manifesto_text_en$countryname)
 ```
 ## CHES - Process data
 
@@ -74,12 +75,11 @@ write.csv(ches_cleaned, "data/r_outputs/ches_cleaned.csv", row.names=FALSE)
 
 
 ```{r wf_gen}
-manifesto_text_en <- manifesto %>% filter(!countryname %in% c("Iceland", "Spain"))
+
 
 all_results <- list()
 
 # Get unique countries in the dataset
-countries <- unique(manifesto_text_en$countryname)
 
 # Loop through each country and process it
 for (country_name in countries) {
@@ -259,17 +259,17 @@ all_results_combined <- bind_rows(all_results)
 write_csv(all_results_combined, "data/r_outputs/wf_ep.csv")
 
 ```
-## Wordfish - Growth vs. Anti Growth
+## Wordfish - Welfare Expansion/Retrenchment
 
 
 ```{r wf_growth}
 
-manifesto_growth = manifesto_text_en %>% filter(cmp_code %in% c("410","416","416.1"))
+manifesto_welfare = manifesto_text_en %>% filter(cmp_code %in% c("504","505"))
 
 all_results <- list()
 # Loop through each country and process it
 for (country_name in countries) {
-      manifesto_country <- manifesto_growth %>%
+      manifesto_country <- manifesto_welfare %>%
         filter(countryname == country_name)
       print(country_name)
       grouped_texts <- manifesto_country %>%
@@ -312,7 +312,7 @@ for (country_name in countries) {
 all_results_combined <- bind_rows(all_results)
 
 
-write.csv(all_results_combined, "data/r_outputs/wf_growth.csv", row.names = FALSE)
+write.csv(all_results_combined, "data/r_outputs/wf_welfare.csv", row.names = FALSE)
 
 ```
 
