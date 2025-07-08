@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 from transformers import XLMRobertaModel
 from peft import LoraConfig, get_peft_model
@@ -8,9 +9,6 @@ from gensim.models.doc2vec import TaggedDocument
 
 ## Main model
 
-import torch
-import torch.nn as nn
-from transformers import XLMRobertaModel
 
 class ContextScalePrediction(nn.Module):
     def __init__(self, 
