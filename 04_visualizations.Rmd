@@ -7,7 +7,7 @@ output: html_notebook
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
 rm(list=ls())
-pacman::p_load(quanteda, quanteda.textmodels, tidyverse, readr, ggplot2, rstatix, grid, gridExtra, viridis, ggsci, ggpubr, ragg, scales, caret, ggExtra,rempsyc, dplyr, flextable, magrittr, gt)
+pacman::p_load(quanteda, quanteda.textmodels, tidyverse, readr, ggplot2, rstatix, grid, gridExtra, viridis, ggsci, ggpubr, ragg, scales, caret, ggExtra,rempsyc, dplyr, flextable, magrittr, gt, scico)
 
 
 
@@ -20,14 +20,14 @@ d2v_topic <- read_csv("data/py_outputs/r&c_party_election_topic.csv") %>%
     mutate(election = as.numeric(election)) 
 d2v_ep <- read_csv("data/py_outputs/r&c_ep_party_election.csv") %>% 
     mutate(election = as.numeric(election)) 
-d2v_growth <- read_csv("data/py_outputs/r&c_growth_party_election.csv") %>% 
+d2v_welfare <- read_csv("data/py_outputs/r&c_welfare_party_election.csv") %>% 
     mutate(election = as.numeric(election)) 
 
 ## Wordfish
 wf_gen <- read.csv("data/r_outputs/wf_gen_all_countries.csv")
 wf_topic <- read_csv("data/r_outputs/wf_topic_all_countries.csv")
 wf_ep <- read.csv("data/r_outputs/wf_ep.csv")
-wf_growth <- read.csv("data/r_outputs/wf_growth.csv")
+wf_welfare <- read.csv("data/r_outputs/wf_welfare.csv")
 
 
 ## CHES 
@@ -113,8 +113,7 @@ manifesto_spec_topic <- manifesto_cs_topic %>%
     mutate(
         spec_topic = case_when(
             cmp_code == "501" ~ "Environment Protection",
-            cmp_code %in% c("410","416","416.1") ~ "Growth",
-            #topic == "Immigration" ~ "Growth",
+            cmp_code %in% c("504","505") ~ "Welfare Expansion/Retrenchment",
             TRUE ~ "Other"
         )
     ) %>%
@@ -169,7 +168,7 @@ logscale_spec <- manifesto_org %>%
     mutate(
         spec_topic = case_when(
             cmp_code == "501" ~ "Environment Protection",
-            cmp_code %in% c("410","416", "416.1") ~ "Growth",
+            cmp_code %in% c("504","505") ~ "Welfare Expansion/Retrenchment",
             TRUE ~ "Other"
         )
     ) %>%
@@ -220,12 +219,12 @@ df_ep_deu <-  manifesto_spec_topic %>%
     dplyr::select(-party) %>%
     rename(party=party_name) %>%
     filter(party!= "Other") 
-  
-df_imm_deu <-  manifesto_topic_aggr %>%
+
+df_eu_deu <-  manifesto_topic_aggr %>%
     left_join(d2v_topic, by = c("country","party", "election", "topic")) %>%
-    left_join(wf_topic, by = c("country","party", "election", "topic")) %>% 
+    left_join(wf_topic, by = c("country","party", "election","topic")) %>% 
     left_join(logscale, by = c("country","party","election", "topic")) %>%
-    filter(country == "Germany" & topic == "Immigration") %>%
+    filter(country == "Germany" & topic == "European Integration") %>%
     mutate(
         party_name = case_when(
           party %in% c(41111,41112,41113) ~ "Alliance 90/Greens",
@@ -240,6 +239,8 @@ df_imm_deu <-  manifesto_topic_aggr %>%
     dplyr::select(-party) %>%
     rename(party=party_name) %>%
     filter(party!= "Other") 
+  
+
 
 
 plot_wf_ep <- ggplot(data = df_ep_deu,
@@ -254,7 +255,7 @@ plot_wf_ep <- ggplot(data = df_ep_deu,
     xlab("Election") +
     ylab("Wordfish - Environment Protection Only") 
 
-plot_wf_imm <- ggplot(data = df_imm_deu,
+plot_wf_eu <- ggplot(data = df_eu_deu,
                   aes(x=factor(election), y=wf_score*-1, color=party,group=party)) +
     geom_point() +
     geom_line(alpha=0.8, linewidth = 1) + 
@@ -264,7 +265,7 @@ plot_wf_imm <- ggplot(data = df_imm_deu,
                        values = c("blue","green", "black","yellow", "red", "purple")) +
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
     xlab("Election") +
-    ylab("Wordfish - Immigration") 
+    ylab("Wordfish - European Integration") 
 
 
 plot_d2v_ep <- ggplot(data = df_ep_deu,
@@ -277,15 +278,15 @@ plot_d2v_ep <- ggplot(data = df_ep_deu,
     xlab("Election") +
     ylab("R&C - Environment Protection Only") 
 
-plot_d2v_imm <- ggplot(data = df_imm_deu,
-                  aes(x=factor(election), y=d2v_d1*-1, color=party,group=party)) +
+plot_d2v_eu <- ggplot(data = df_eu_deu,
+                  aes(x=factor(election), y=d2v_d1, color=party,group=party)) +
     geom_point() +
     geom_line(alpha=0.8, linewidth = 1) + 
     scale_color_manual(name = "Party",  
                        values = c("blue","green", "black","yellow", "red", "purple")) +
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
     xlab("Election") +
-    ylab("R&C - Immigration") 
+    ylab("R&C - European Integration") 
 
 plot_cmplog_ep <- ggplot(data = df_ep_deu,
                   aes(x=factor(election), y=lr_log, color=party,group=party)) +
@@ -295,9 +296,9 @@ plot_cmplog_ep <- ggplot(data = df_ep_deu,
                        values = c("blue","green", "black","yellow", "red", "purple")) +
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
     xlab("Election") +
-    ylab("CMP Log - Environment Protection Only") 
+    ylab("MARPOR Log - Environment Protection Only") 
 
-plot_cmplog_imm <- ggplot(data = df_imm_deu,
+plot_cmplog_eu <- ggplot(data = df_eu_deu,
                   aes(x=factor(election), y=lr_log, color=party,group=party)) +
     geom_point() +
     geom_line(alpha=0.8, linewidth = 1) + 
@@ -305,11 +306,11 @@ plot_cmplog_imm <- ggplot(data = df_imm_deu,
                        values = c("blue","green", "black","yellow", "red", "purple")) +
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
     xlab("Election") +
-    ylab("CMP Log - Immigration") 
+    ylab("MARPOR Log - European Integration") 
 
 figure_1 <- ggarrange(
       plot_wf_ep, plot_d2v_ep, plot_cmplog_ep,
-      plot_wf_imm, plot_d2v_imm, plot_cmplog_imm,
+      plot_wf_eu, plot_d2v_eu, plot_cmplog_eu,
       common.legend = TRUE
 )
 
@@ -322,7 +323,7 @@ invisible(dev.off())
 
 ```
 
-# Figure 3
+# Figure 2
 ```{r}
 
 
@@ -337,11 +338,11 @@ plot_cs_ep <- ggplot(data = df_ep_deu,
                        values = c("blue","green", "black","yellow", "red", "purple")) +
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
     xlab("Election") +
-    ylab("ContextScale - EP") + 
+    ylab("ContextScale - Environment Protection") + 
     ylim(-1,1)
 
 
-plot_cs_imm <- ggplot(data = df_imm_deu,
+plot_cs_eu <- ggplot(data = df_eu_deu,
                   aes(x=factor(election), y=cs_mean, color=party,group=party)) +
     geom_point() +
     geom_line(alpha=0.8, linewidth = 1) + 
@@ -351,19 +352,19 @@ plot_cs_imm <- ggplot(data = df_imm_deu,
                        values = c("blue","green", "black","yellow", "red", "purple")) +
     theme(axis.title = element_text(size = 15),legend.title = element_text(size = 15), legend.text = element_text(size = 14), title =  element_text(size = 18, face = "bold")) +
     xlab("Election") +
-    ylab("ContextScale - Growth") +
+    ylab("ContextScale - European Integration") +
     ylim(-1,1)
 
-figure_3 <- ggarrange(
+figure_2 <- ggarrange(
     plot_cs_ep,
-    plot_cs_growth,
+    plot_cs_eu,
     nrow = 2,
     common.legend = TRUE
 )
 
 
-agg_png(filename = here::here("results","tabs and figs","figure 3.png"), res = 360, width = 3600, height = 3000)
-figure_3
+agg_png(filename = here::here("results","tabs and figs","figure 2.png"), res = 360, width = 3600, height = 3000)
+figure_2
 invisible(dev.off())
 
 ```
@@ -500,15 +501,15 @@ cor_table_all <- bind_rows(cor_table_gen, cor_table_econ, cor_table_eu,
     )
 ```
 
-## Figure 4
+## Figure 3
 
-```{r figure_2}
+```{r figure_3}
 cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#0072B2", "#F0E442", "#D55E00", "#CC79A7")
 
 plot_cor_ches <- ggplot(data = cor_table_all, aes(x = topic, y = abs(cor), fill = factor(techniques))) +
     geom_bar(stat = "identity", position = position_dodge(width = 0.8), color = "black") +
     scale_fill_manual(name = "Techniques",  
-                      labels = c("CMP - Log", "ContextScale", "R&C - Dim 1", "Wordfish"),
+                      labels = c("MARPOR - Log", "ContextScale", "R&C - Dim 1", "Wordfish"),
                       values = cbbPalette[1:4]) +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) + # Wrap x-axis labels
     xlab("Topic") +
@@ -516,72 +517,72 @@ plot_cor_ches <- ggplot(data = cor_table_all, aes(x = topic, y = abs(cor), fill 
     theme_bw(base_size = 18) +
     theme(legend.position = "top")
 
-figure_4 <- plot_cor_ches
-agg_png(filename = here::here("results", "tabs and figs", "figure 4.png"), res = 360, width = 4800, height = 3200)
-print(figure_4)
+figure_3 <- plot_cor_ches
+agg_png(filename = here::here("results", "tabs and figs", "figure 3.png"), res = 360, width = 4800, height = 3200)
+print(figure_3)
 invisible(dev.off())
 
 ```
 
 
-## Figure 5
-```{r figure_5}
+## Figure 4
+```{r figure_4}
 cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#0072B2", "#F0E442", "#D55E00", "#CC79A7")
 
 manifesto_test_sent <- data.frame(t(
-    round(colMeans(manifesto_testset_sent %>% dplyr::select(-sentiment)),2)
+    round(colMeans(sa_sentiment),2)
   )) %>%
   mutate(
-    model = "Model 1\nTest set",
+    model = "Model 1\nTest Set",
     prediction_task = "Sentiment"
   )
 manifesto_test_topic <- data.frame(t(
-    round(colMeans(manifesto_testset_topic %>% dplyr::select(-topic)),2)
+    round(colMeans(sa_topic),2)
   )) %>%
   mutate(
-    model = "Model 1\nTest set",
+    model = "Model 1\nTest Set",
     prediction_task = "Topic"
   )
 
 manifesto_diff_sent <- data.frame(t(
-    round(colMeans(manifesto_diflang_sent %>% dplyr::select(-sentiment)),2)
+    round(colMeans(dl_sentiment),2)
   )) %>%
   mutate(
-    model = "Model 2\nDifferent languages",
+    model = "Model 2\nDifferent Languages",
     prediction_task = "Sentiment"
   )
 manifesto_diff_topic <- data.frame(t(
-    round(colMeans(manifesto_diflang_topic %>% dplyr::select(-topic)),2)
+    round(colMeans(dl_topic),2)
   )) %>%
   mutate(
-    model = "Model 2\nDifferent languages",
+    model = "Model 2\nDifferent Languages",
     prediction_task = "Topic"
   )
 
-cagree25_sent <- data.frame(t(
-    round(colMeans(cagree_25ft_sent %>% dplyr::select(-sentiment)),2)
+cagree10_sent <- data.frame(t(
+    round(colMeans(cagree_10ft_sentiment),2)
   )) %>%
   mutate(
-    model = "Model 4\nCOALITIONAGREE\n(25% FT)",
+    model = "Model 4\nCOALITIONAGREE\n(10% FT)",
     prediction_task = "Sentiment"
   )
-cagree25_topic <- data.frame(t(
-    round(colMeans(cagree_25ft_topic %>% dplyr::select(-topic)),2)
+cagree10_topic <- data.frame(t(
+    round(colMeans(cagree_10ft_topic),2)
   )) %>%
   mutate(
-    model = "Model 4\nCOALITIONAGREE\n(25% FT)",
+    model = "Model 4\nCOALITIONAGREE\n(10% FT)",
     prediction_task = "Topic"
   )
 
 cagree_sent <- data.frame(t(
-    round(colMeans(cagree_noft_sent %>% dplyr::select(-sentiment)),2)
+    round(colMeans(cagree_noft_sentiment),2)
   )) %>%
   mutate(
     model = "Model 3\nCOALITIONAGREE\n(No FT)",
     prediction_task = "Sentiment"
   )
 cagree_topic <- data.frame(t(
-    round(colMeans(cagree_noft_topic %>% dplyr::select(-topic)),2)
+    round(colMeans(cagree_noft_topic),2)
   )) %>%
   mutate(
     model = "Model 3\nCOALITIONAGREE\n(No FT)",
@@ -589,22 +590,22 @@ cagree_topic <- data.frame(t(
   )
 
 tweets_sent <- data.frame(t(
-    round(colMeans(tw_sent %>% dplyr::select(-sentiment_name)),2)
+    round(colMeans(tw_10ft_sentiment),2)
   )) %>%
   mutate(
-    model = "Model 5\nTweets\n(25% FT)",
+    model = "Model 5\nTweets\n(10% FT)",
     prediction_task = "Sentiment"
   )
 tweets_topic <- data.frame(t(
-    round(colMeans(tw_topic %>% dplyr::select(-topic_name)),2)
+    round(colMeans(tw_10ft_topic),2)
   )) %>%
   mutate(
-    model = "Model 5\nTweets\n(25% FT)",
+    model = "Model 5\nTweets\n(10% FT)",
     prediction_task = "Topic"
   )
 
-fig5_df <- bind_rows(manifesto_test_sent, manifesto_test_topic, manifesto_diff_sent, manifesto_diff_topic,
-                     cagree25_sent, cagree25_topic, cagree_sent, cagree_topic, tweets_sent, tweets_topic) %>%
+fig4_df <- bind_rows(manifesto_test_sent, manifesto_test_topic, manifesto_diff_sent, manifesto_diff_topic,
+                     cagree10_sent, cagree10_topic, cagree_sent, cagree_topic, tweets_sent, tweets_topic) %>%
     mutate(
       label = case_when(
         f1 == max(f1) ~ as.character(f1),
@@ -615,72 +616,174 @@ fig5_df <- bind_rows(manifesto_test_sent, manifesto_test_topic, manifesto_diff_s
 
 
 
-figure_5 <- ggplot(fig5_df, aes(x = model, y = f1, fill = prediction_task)) +
+fig4_long <- fig4_df %>%
+    pivot_longer(cols = c(f1, accuracy, precision, recall), 
+                 names_to = "metric", 
+                 values_to = "score")
+
+
+
+figure_4 <- ggplot(fig4_long, aes(x = model, y = score, fill = prediction_task)) +
     geom_bar(stat = "identity", position = position_dodge(width = 0.8), color = "black") +
-     geom_text(aes(label = round(f1, 2)), # Annotate with the rounded F1 score for each bar
-            position = position_dodge(width = 0.8), 
-            vjust = -0.5, 
-            size = 8) + # Display text for all bars
-    scale_fill_manual(values = cbbPalette) +
+    geom_text(aes(label = round(score, 2)), 
+              position = position_dodge(width = 0.8), 
+              vjust = -1.2,  # Moves annotations higher
+              size = 5) +  # Adjust text size if needed
+    scale_fill_manual(values = c("steelblue", "darkorange")) +
+    facet_wrap(~ metric, scales = "free_y") +  # Separate panels for each metric
     xlab("Validation Model") +
-    ylab("F1 Score") +
+    ylab("Score") +
+    expand_limits(y = max(figa1_long$score) + 0.23) +  # Adds extra space above bars
     theme_bw(base_size = 14) +
     theme(legend.position = "top",
-          text = element_text(size = 16),    
-          axis.title = element_text(size = 18), 
-          axis.text = element_text(size = 14),  
-          legend.title = element_text(size = 16),
-          legend.text = element_text(size = 14),  
-          ) +
+          text = element_text(size = 14),
+          axis.title = element_text(size = 16),
+          axis.text = element_text(size = 12),
+          axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels
+          legend.title = element_text(size = 14),
+          legend.text = element_text(size = 12),
+          panel.spacing = unit(1.2, "lines")) +  # Add more space between facets
     labs(fill = "Prediction Task")
 
 
-agg_png(filename = here::here("results", "tabs and figs", "figure 5.png"), res = 360, width = 4800, height = 3200)
-print(figure_5)
+agg_png(filename = here::here("results", "tabs and figs", "figure 4.png"), res = 360, width = 4800, height = 3200)
+print(figure_4)
 invisible(dev.off())
 ```
 
+## Figure 5
+```{r}
+cs_topic_deu <- manifesto_topic_aggr %>%
+    filter(country == "Germany") %>%
+    mutate(
+        party_name = case_when(
+          party %in% c(41111,41112,41113) ~ "Alliance 90/Greens",
+          party %in% c(41220, 41221, 41222, 41223) ~ "The Left",
+          party == 41320 ~ "SPD",
+          party == 41420 ~ "FDP",
+          party == 41521 ~ "CDU/CSU",
+          party == 41953 ~ "AfD",
+          TRUE ~ "Other"  
+        )
+    ) %>%
+    filter(party_name != "Other" & topic %in% c("Economics", "Labour and Social Welfare", "Immigration",
+                                                             "European Integration", "Environment - Growth"))
 
+figure_5 <- ggplot(cs_topic_deu, aes(x = factor(election), y = topic, fill = cs_mean)) +
+    geom_tile(color = "white") +  # Add a white border to separate cells
+    scale_fill_scico(
+      palette = "vik",  # Other good options: "roma", "batlow", "berlin"
+      name = "Mean Position Score",
+      limits = c(-1, 1),
+      na.value = "grey80"
+    )+
+    facet_wrap(~ party_name, scales = "fixed") +  # Create facets by party
+    labs(x = "Election Year", y = "Policy Topic") +
+    theme_minimal(base_size = 14) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          panel.grid = element_blank(),
+          strip.text = element_text(size = 14, face="bold"),
+          axis.text = element_text(size=16),
+          axis.title = element_text(size=18, face="bold"),
+          title = element_text(size=22, face="bold"),
+          legend.title = element_text(size=18, face = "bold"))
+
+
+agg_png(filename = here::here("results", "tabs and figs", "figure 5.png"), res = 320, width = 4800, height = 3600)
+print(figure_5)
+invisible(dev.off())
+
+
+```
 
 ## Figure 6
+```{r}
+wf_topic_deu <- wf_topic %>%
+    filter(country == "Germany") %>%
+    mutate(
+        party_name = case_when(
+          party %in% c(41111,41112,41113) ~ "Alliance 90/Greens",
+          party %in% c(41220, 41221, 41222, 41223) ~ "The Left",
+          party == 41320 ~ "SPD",
+          party == 41420 ~ "FDP",
+          party == 41521 ~ "CDU/CSU",
+          party == 41953 ~ "AfD",
+          TRUE ~ "Other"  
+        ),
+        wf_corrected = case_when(
+            topic %in% c("Labour and Social Welfare", "Environment - Growth", "Economics") ~ wf_score,
+            TRUE ~ wf_score*-1
+        ),
+        wf_norm = 2 * ((wf_corrected - min(wf_corrected)) / (max(wf_corrected) - min(wf_corrected))) - 1 
+    ) %>%
+    filter(party_name != "Other" & topic != "Other")
 
-```{r figure_6}
+figure_6 <- ggplot(wf_topic_deu, aes(x = factor(election), y = topic, fill = wf_norm)) +
+    geom_tile(color = "white") +  # Add a white border to separate cells
+    scale_fill_scico(
+      palette = "vik",  # Other good options: "roma", "batlow", "berlin"
+      name = "Mean Position Score",
+      limits = c(-1, 1),
+      na.value = "grey80"
+    )+
+    facet_wrap(~ party_name, scales = "fixed") +  # Create facets by party
+    labs(x = "Election Year", y = "Policy Topic") +
+    theme_minimal(base_size = 12) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          panel.grid = element_blank(),
+          strip.text = element_text(size = 14, face="bold"),
+          axis.text = element_text(size=16),
+          axis.title = element_text(size=18, face="bold"),
+          title = element_text(size=22, face="bold"),
+          legend.title = element_text(size=18, face = "bold"))
 
-cagree_unified <- cagree_full %>%
-    dplyr::select(position_scores_full) %>%
-    bind_cols(cagree_25) 
+
+agg_png(filename = here::here("results", "tabs and figs", "figure 6.png"), res = 320, width = 4800, height = 3600)
+print(figure_6)
+invisible(dev.off())
+```
+
+## Figure 5 - old
+
+```{r figure_5}
+
+cagree_unified <- cagree_all %>%
+    dplyr::select(position_scores) %>%
+    rename(position_scores_all = position_scores) %>%
+    bind_cols(cagree_10) %>%
+    rename(position_scores_10 = position_scores)
 
 cagree_mean_topic <- cagree_unified %>%
     group_by(country, year, topic) %>%
     summarise(
-        mean_25 = mean(position_scores_25, na.rm=TRUE),
-        mean_full = mean(position_scores_full, na.rm=TRUE)
+        mean_10 = mean(position_scores_10, na.rm=TRUE),
+        mean_full = mean(position_scores_all, na.rm=TRUE)
     ) 
 
 
 country_agg <- cagree_unified %>%
     group_by(country) %>%
     summarise(
-        mean_full = mean(position_scores_full),
-        mean_25 = mean(position_scores_25),
+        mean_full = mean(position_scores_all),
+        mean_10 = mean(position_scores_10),
     )
 
 ## Mean correlation across countries
 mean_cor <- cagree_unified %>%
     group_by(country) %>%
     summarise(
-        cor_scores = cor(position_scores_full, position_scores_25)
+        cor_scores = cor(position_scores_all, position_scores_10)
     ) 
 
 
 
 ## F1 scores
 
-cm_sentiment <- confusionMatrix(factor(cagree_25$sentiment), 
-                      factor(cagree_25$sentiment_25),
+cm_sentiment <- confusionMatrix(factor(cagree_10$sentiment), 
+                      factor(cagree_10$pred_sentiment),
                       mode = "everything")
-cm_topic <- confusionMatrix(factor(cagree_25$topic), 
-                      factor(cagree_25$topic_25),
+cm_topic <- confusionMatrix(factor(cagree_10$topic), 
+                      factor(cagree_10$pred_topic),
                       mode = "everything")
 
 mean_f1_sentiment <- mean(cm_sentiment[["byClass"]][,"F1"])
@@ -688,7 +791,7 @@ mean_f1_sentiment <- mean(cm_sentiment[["byClass"]][,"F1"])
 mean_f1_topic <- mean(cm_topic[["byClass"]][,"F1"])
 
 plot_corr <- ggplot(data = cagree_mean_topic,
-                  aes(x=mean_full, y=mean_25, color=factor(country))) +
+                  aes(x=mean_full, y=mean_10, color=factor(country))) +
     geom_point(alpha=0.2) +
     geom_point(data=country_agg, size = 6) +
     geom_smooth(method=lm , color="#E69F00", se=TRUE) +
@@ -702,7 +805,6 @@ plot_corr <- ggplot(data = cagree_mean_topic,
           legend.text = element_text(size = 14), 
           title =  element_text(size = 18, face = "bold")) +
     xlab("Position scores; all labels provided") +
-    ylab("Position scores; 25% labels provided")
 
 
 
@@ -712,10 +814,10 @@ plot_corr <- ggplot(data = cagree_mean_topic,
 plot_coalition_hist <- ggMarginal(plot_corr, type="histogram")
 
 
-figure_6 <- plot_coalition_hist
+figure_5 <- plot_coalition_hist
 
-agg_png(filename = here::here("results","tabs and figs","figure 6.png"), res = 360, width = 4800, height = 3200)
-figure_6
+agg_png(filename = here::here("results","tabs and figs","figure 5.png"), res = 360, width = 4800, height = 3200)
+figure_5
 invisible(dev.off())
 
 
@@ -765,6 +867,137 @@ save_as_docx(table_a1, path ="results/tabs and figs/table_a1.docx", align="left"
 ```
 
 ## Figure A1
+
+```{r}
+base_topic <- read_csv("results/classification results/base_topic.csv")
+base_sentiment <- read_csv("results/classification results/base_sentiment.csv")
+
+sf_topic <- read_csv("results/classification results/sf_topic.csv")
+sf_sentiment <- read_csv("results/classification results/sf_sentiment.csv")
+
+sa_topic <- read_csv("results/classification results/sa_topic.csv")
+sa_sentiment <- read_csv("results/classification results/sa_sentiment.csv")
+
+dg_topic <- read_csv("results/classification results/dg_topic.csv")
+dg_sentiment <- read_csv("results/classification results/dg_sentiment.csv")
+
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#0072B2", "#F0E442", "#D55E00", "#CC79A7")
+
+base_topic <- data.frame(t(
+    round(colMeans(base_topic),2)
+  )) %>%
+  mutate(
+    model = "Base Multitask Model",
+    prediction_task = "Topic"
+  )
+
+base_sentiment <- data.frame(t(
+    round(colMeans(base_sentiment),2)
+  )) %>%
+  mutate(
+    model = "Base Multitask Model",
+    prediction_task = "Sentiment"
+  )
+
+sf_topic <- data.frame(t(
+    round(colMeans(sf_topic),2)
+  )) %>%
+  mutate(
+    model = "Simple Flow Model",
+    prediction_task = "Topic"
+  )
+
+sf_sentiment <- data.frame(t(
+    round(colMeans(sf_sentiment),2)
+  )) %>%
+  mutate(
+    model = "Simple Flow Model",
+    prediction_task = "Sentiment"
+  )
+
+sa_topic <- data.frame(t(
+    round(colMeans(sa_topic),2)
+  )) %>%
+  mutate(
+    model = "Shared Attention Model",
+    prediction_task = "Topic"
+  )
+
+sa_sentiment <- data.frame(t(
+    round(colMeans(sa_sentiment),2)
+  )) %>%
+  mutate(
+    model = "Shared Attention Model",
+    prediction_task = "Sentiment"
+  )
+
+dg_topic <- data.frame(t(
+    round(colMeans(dg_topic),2)
+  )) %>%
+  mutate(
+    model = "Dynamic Gating Model",
+    prediction_task = "Topic"
+  )
+
+dg_sentiment <- data.frame(t(
+    round(colMeans(dg_sentiment),2)
+  )) %>%
+  mutate(
+    model = "Dynamic Gating Model",
+    prediction_task = "Sentiment"
+  )
+
+figa1_df <- bind_rows(base_topic, dg_topic, sa_topic, sf_topic,
+                     base_sentiment, dg_sentiment, sa_sentiment, sf_sentiment) %>%
+    mutate(
+      label = case_when(
+        f1 == max(f1) ~ as.character(f1),
+        f1 == min(f1) ~ as.character(f1),
+        TRUE ~ NA_character_
+      )
+    )
+
+figa1_long <- figa1_df %>%
+    pivot_longer(cols = c(f1, accuracy, precision, recall), 
+                 names_to = "metric", 
+                 values_to = "score")
+
+
+
+figure_a1 <- ggplot(figa1_long, aes(x = model, y = score, fill = prediction_task)) +
+    geom_bar(stat = "identity", position = position_dodge(width = 0.8), color = "black") +
+    geom_text(aes(label = round(score, 2)), 
+              position = position_dodge(width = 0.8), 
+              vjust = -1.2,  # Moves annotations higher
+              size = 5) +  # Adjust text size if needed
+    scale_fill_manual(values = c("steelblue", "darkorange")) +
+    facet_wrap(~ metric, scales = "free_y") +  # Separate panels for each metric
+    xlab("Validation Model") +
+    ylab("Score") +
+    expand_limits(y = max(figa1_long$score) + 0.15) +  # Adds extra space above bars
+    theme_bw(base_size = 14) +
+    theme(legend.position = "top",
+          text = element_text(size = 14),
+          axis.title = element_text(size = 16),
+          axis.text = element_text(size = 12),
+          axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels
+          legend.title = element_text(size = 14),
+          legend.text = element_text(size = 12),
+          panel.spacing = unit(1.2, "lines")) +  # Add more space between facets
+    labs(fill = "Prediction Task")
+
+
+
+
+agg_png(filename = here::here("results", "tabs and figs", "figure A1.png"), res = 360, width = 4800, height = 3200)
+print(figure_a1)
+invisible(dev.off())
+```
+
+
+
+
+## Figure A1 - old
 ```{r figure_a1}
 df_a1 <- dr_scaled_scores %>%
     mutate(
@@ -1070,8 +1303,6 @@ invisible(dev.off())
 
 ```{r}
 
-
-
 manifesto_deu <- manifesto_org %>%
     filter(countryname=="Germany") %>%
     mutate(
@@ -1122,7 +1353,7 @@ logscale <- manifesto_deu %>%
     ) 
 
 
-fig_1_diss <- ggplot(df_log, aes(x = as.factor(election), y = lr_log, shape = as.factor(coalition), color = party)) +
+fig_1_diss <- ggplot(logscale, aes(x = as.factor(election), y = lr_log, shape = as.factor(coalition), color = party)) +
     geom_point(size = 4) +  # Add points with size for better visibility
     scale_color_manual(name = "Party",  
                        values =  c("blue","black", "gold", "red", "green", "purple")) +
@@ -1134,9 +1365,12 @@ fig_1_diss <- ggplot(df_log, aes(x = as.factor(election), y = lr_log, shape = as
     theme_minimal() +
     theme(
       legend.position = "right",
-      text = element_text(size = 12)
+      axis.title = element_text(size=18),
+      axis.text  = element_text(size=16),
+      legend.title = element_text(size=18),
+      legend.text = element_text(size=16)
   )
-agg_png(filename = here::here("results","tabs and figs","temp","fig1diss.png"), res = 500, width = 4800, height = 3200)
+agg_png(filename = here::here("results","tabs and figs","temp","fig1diss.png"), res = 320, width = 4800, height = 2400)
 fig_1_diss
 invisible(dev.off())
 
@@ -1186,9 +1420,12 @@ fig_2_diss <- ggplot(logscale_wf, aes(x = as.factor(election), y = lr_log, shape
     theme_minimal() +
     theme(
       legend.position = "right",
-      text = element_text(size = 12)
+      axis.title = element_text(size=18),
+      axis.text = element_text(size=16),
+      legend.title = element_text(size=18),
+      legend.text = element_text(size=16)
   )
-agg_png(filename = here::here("results","tabs and figs","temp","fig2diss.png"), res = 500, width = 4800, height = 3200)
+agg_png(filename = here::here("results","tabs and figs","temp","fig2diss.png"), res = 320, width = 4800, height = 2400)
 fig_2_diss
 invisible(dev.off())
 ```
@@ -1257,5 +1494,4 @@ invisible(dev.off())
 
 
 ```
-
 
