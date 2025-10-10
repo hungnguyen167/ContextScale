@@ -155,7 +155,7 @@ def sentiment_code(cmp_code):
         '703', ## Agriculture and Farmers, positive
         '703.1', ## Agriculture and Farmers, positive
         '201.2', ## Human Rights
-        '302', ## Decentralization
+        '302', ## Centralization
         '103', ## Anti-imperialism
     ]
     ls_right =  [
@@ -184,7 +184,7 @@ def sentiment_code(cmp_code):
         '703.2', ## Agriculture and Farmers, negative
         '201.1', ## Freedom
         '305', ## Political Authority
-        '301' ## Centralization
+        '301' ## Decentralization
     ]
     if cmp_code in ls_left:
         return('left')
@@ -655,7 +655,9 @@ def scale_func(dataloader,
                topic_label=None, 
                sentiment_label=None, 
                timing_log=True,
-               use_ground_truth_topic=False):
+               use_ground_truth_topic=False,
+               beta=1.0,
+               use_exponential=False):
     model.eval()
     res_topic = []
     res_sentiment_sigmoid = []
@@ -721,34 +723,45 @@ def scale_func(dataloader,
         topic_for_scaling = true_topics
     else:
         topic_for_scaling = pred_topics
-    position_scores = np.zeros(len(topic_for_scaling))
-    original_indices = np.arange(len(topic_for_scaling))
-    min_adjustment = 0.3
-    for topic_id in np.unique(topic_for_scaling):
-        topic_mask = topic_for_scaling == topic_id
-        topic_indices = original_indices[topic_mask]
-        if sentiment_sigmoid.shape[1] == 3:
-            left_values = sentiment_sigmoid[topic_mask][:, 0]
-            neutral_values = sentiment_sigmoid[topic_mask][:, 1]
-            right_values = sentiment_sigmoid[topic_mask][:, 2]
+    
+    if use_exponential:
+        # Use the new exponential approach
+        from .uncertainty import compute_position_scores_by_topic
+        position_scores = compute_position_scores_by_topic(
+            sentiment_sigmoid, 
+            topic_for_scaling, 
+            beta=beta
+        )
+    else:
+        # Use the original approach
+        position_scores = np.zeros(len(topic_for_scaling))
+        original_indices = np.arange(len(topic_for_scaling))
+        min_adjustment = 0.3
+        for topic_id in np.unique(topic_for_scaling):
+            topic_mask = topic_for_scaling == topic_id
+            topic_indices = original_indices[topic_mask]
+            if sentiment_sigmoid.shape[1] == 3:
+                left_values = sentiment_sigmoid[topic_mask][:, 0]
+                neutral_values = sentiment_sigmoid[topic_mask][:, 1]
+                right_values = sentiment_sigmoid[topic_mask][:, 2]
 
-            neutral_range = np.max(neutral_values) - np.min(neutral_values)
-            if neutral_range > 0:
-                raw_adjustment = 1 - (neutral_values - np.min(neutral_values)) / neutral_range
+                neutral_range = np.max(neutral_values) - np.min(neutral_values)
+                if neutral_range > 0:
+                    raw_adjustment = 1 - (neutral_values - np.min(neutral_values)) / neutral_range
 
+                else:
+                    raw_adjustment = 1 - neutral_values  
+                adjustment = min_adjustment + (1 - min_adjustment) * raw_adjustment
+
+                position_scores[topic_indices] = (right_values - left_values) * adjustment
+                
+            elif sentiment_sigmoid.shape[1] == 2:
+                left_values = sentiment_sigmoid[topic_mask][:, 0]
+                right_values = sentiment_sigmoid[topic_mask][:, 1]
+                position_scores[topic_indices] = right_values - left_values
             else:
-                raw_adjustment = 1 - neutral_values  
-            adjustment = min_adjustment + (1 - min_adjustment) * raw_adjustment
-
-            position_scores[topic_indices] = (right_values - left_values) * adjustment
-            
-        elif sentiment_sigmoid.shape[1] == 2:
-            left_values = sentiment_sigmoid[topic_mask][:, 0]
-            right_values = sentiment_sigmoid[topic_mask][:, 1]
-            position_scores[topic_indices] = right_values - left_values
-        else:
-            print('Function supports only 2 or 3 categories. Aborting!')
-            position_scores = None
+                print('Function supports only 2 or 3 categories. Aborting!')
+                position_scores = None
 
     # Compute metrics for topics
     if true_topics is not None:
@@ -790,7 +803,9 @@ def scale_func(dataloader,
         'res_table_sentiment': res_table_sentiment,
         'position_scores': position_scores,
         'pred_topics': pred_topics,
-        'pred_sentiment': pred_sentiment
+        'pred_sentiment': pred_sentiment,
+        'beta': beta,
+        'use_exponential': use_exponential
     }
     if timing_log is True:
         outputs['total_time'] = total_time

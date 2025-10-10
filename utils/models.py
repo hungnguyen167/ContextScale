@@ -27,7 +27,7 @@ class ContextScalePrediction(nn.Module):
         roberta_dim = self.roberta.config.hidden_size
 
         if lora:
-            lora_config = LoraConfig(r=8, lora_alpha=32, lora_dropout=0.1, use_rslora=True)
+            lora_config = LoraConfig(r=16, lora_alpha=32, lora_dropout=0.05, use_rslora=True)
             self.roberta = get_peft_model(self.roberta, lora_config)
 
         self.num_topics = num_topics
