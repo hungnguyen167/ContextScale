@@ -14,7 +14,7 @@ from torch.utils.data import DataLoader
 import pandas as pd
 import pickle
 import time
-from typing import List, Dict, Tuple, Optional, Union
+from typing import List, Dict, Tuple, Optional, Union, Any, Callable
 from transformers import get_linear_schedule_with_warmup
 from safetensors.torch import save_file, load_file
 import os
@@ -211,7 +211,7 @@ def compute_aleatoric_variance(probs_list: List[np.ndarray]) -> np.ndarray:
 def train_ensemble_member(
     model,
     train_dataloader: DataLoader,
-    eval_dataloader: DataLoader,
+    eval_dataloader: Optional[DataLoader],
     device: torch.device,
     n_epochs: int = 5,
     lr: float = 2e-5,
@@ -228,7 +228,7 @@ def train_ensemble_member(
     Args:
         model: The model to train
         train_dataloader: Training data loader
-        eval_dataloader: Evaluation data loader
+        eval_dataloader: Evaluation data loader (optional, can be None)
         device: Device to train on
         n_epochs: Number of training epochs
         lr: Learning rate
@@ -262,7 +262,7 @@ def train_ensemble_member(
         'train_times': []
     }
     
-    print(f"Training ensemble member {model_id}")
+    print(f"Training ensemble member {model_id+1}")
     
     # Create shuffled dataloader for this ensemble member if requested
     if reshuffle_dataloader:
@@ -289,16 +289,19 @@ def train_ensemble_member(
             timing_log=True
         )
         
-        # Evaluate
-        eval_loop(
-            eval_dataloader, 
-            model, 
-            device, 
-            criterion_sent, 
-            criterion_topic, 
-            sentiment_var=sentiment_var, 
-            topic_var=topic_var
-        )
+        # Evaluate (only if eval_dataloader is provided)
+        if eval_dataloader is not None:
+            eval_loop(
+                eval_dataloader, 
+                model, 
+                device, 
+                criterion_sent, 
+                criterion_topic, 
+                sentiment_var=sentiment_var, 
+                topic_var=topic_var
+            )
+        else:
+            print("  Skipping evaluation (no eval_dataloader provided)")
         
         training_info['epochs'].append(epoch)
         training_info['train_times'].append(timing_log.get('epoch_time', 0))
@@ -316,11 +319,10 @@ def train_ensemble_member(
 
 def train_deep_ensemble(
     model_factory,
-    data_splits: List[Dict],
-    tokenizer,
-    data_collator,
+    train_dataloader: DataLoader,
+    eval_dataloader: Optional[DataLoader],
     device: torch.device,
-    batch_size: int = 16,
+    num_models: int = 5,
     n_epochs: int = 5,
     lr: float = 2e-5,
     sentiment_var: str = 'sentiment',
@@ -330,36 +332,32 @@ def train_deep_ensemble(
     org_seed: int = 42
 ) -> List[Dict]:
     """
-    Train a deep ensemble of models with different data splits.
+    Train a deep ensemble of models using the same data split but different shuffles.
     
     Args:
         model_factory: Function that returns a new model instance
-        data_splits: List of data split dictionaries from create_multiple_data_splits
-        tokenizer: Tokenizer for the model
-        data_collator: Data collator for batching
+        train_dataloader: Training data loader (will be reshuffled for each model)
+        eval_dataloader: Evaluation data loader (optional, can be None)
         device: Device to train on
-        batch_size: Batch size for data loaders
+        num_models: Number of ensemble models to train
         n_epochs: Number of training epochs per model
         lr: Learning rate
         sentiment_var: Name of sentiment variable in batch
         topic_var: Name of topic variable in batch
         save_dir: Directory to save model checkpoints
         model_prefix: Prefix for model checkpoint filenames
-        org_seed: Base seed for model initialization
+        org_seed: Base seed for model initialization and data shuffling
     
     Returns:
         ensemble_info: List of training info for each model
     """
-    from torch.utils.data import DataLoader
     
     ensemble_info = []
-    num_models = len(data_splits)
     
-    for i, split_data in enumerate(data_splits):
+    for i in range(num_models):
         print(f"\n{'='*50}")
         print(f"Training ensemble member {i+1}/{num_models}")
-        print(f"Using data split {split_data['split_id']} with seed {split_data['seed']}")
-        print(f"Train size: {len(split_data['train'])}, Eval size: {len(split_data['eval'])}")
+        print(f"Using shuffled training data with seed {org_seed + i}")
         print(f"{'='*50}")
         
         # Set different random seed for each model (but consistent across runs)
@@ -369,49 +367,10 @@ def train_deep_ensemble(
         # Create model instance
         model = model_factory().to(device)
         
-        # Tokenize the datasets for this split
-        print(f"Tokenizing datasets for split {i+1}...")
-        
-        def tokenize_function(examples):
-            return tokenizer(
-                examples['text'],
-                truncation=True,
-                padding=False,
-                max_length=512
-            )
-        
-        # Tokenize train and eval datasets
-        train_tokenized = split_data['train'].map(
-            tokenize_function,
-            batched=True,
-            remove_columns=['text', 'topic_sentiment']
-        )
-        
-        eval_tokenized = split_data['eval'].map(
-            tokenize_function,
-            batched=True,
-            remove_columns=['text', 'topic_sentiment']
-        )
-        
-        # Create data loaders for this specific split
-        train_dataloader = DataLoader(
-            train_tokenized,
-            batch_size=batch_size,
-            shuffle=True,
-            collate_fn=data_collator
-        )
-        
-        eval_dataloader = DataLoader(
-            eval_tokenized,
-            batch_size=batch_size,
-            shuffle=False,
-            collate_fn=data_collator
-        )
-        
         # Define save path
         save_path = os.path.join(save_dir, f"{model_prefix}_{i}.safetensors")
         
-        # Train this ensemble member
+        # Train this ensemble member with shuffled data
         info = train_ensemble_member(
             model=model,
             train_dataloader=train_dataloader,
@@ -423,23 +382,19 @@ def train_deep_ensemble(
             topic_var=topic_var,
             model_id=i,
             save_path=save_path,
-            reshuffle_dataloader=False,  # No need to shuffle since we have different splits
+            reshuffle_dataloader=True,  # Shuffle training data for each model
             org_seed=org_seed
         )
-        
-        # Add split information
-        info['data_split_seed'] = split_data['seed']
-        info['data_split_id'] = split_data['split_id']
         
         ensemble_info.append(info)
         
         # Clean up memory
-        del model, train_tokenized, eval_tokenized, train_dataloader, eval_dataloader
+        del model
         torch.cuda.empty_cache() if torch.cuda.is_available() else None
     
     print(f"\n{'='*50}")
-    print(f"Ensemble training with different splits completed!")
-    print(f"Used {num_models} different data splits")
+    print(f"Ensemble training completed!")
+    print(f"Trained {num_models} models with different data shuffles")
     print(f"{'='*50}")
     
     return ensemble_info
@@ -491,150 +446,159 @@ def ensemble_inference(
     timing_log: bool = True
 ) -> Dict:
     """
-    Perform ensemble inference with uncertainty estimation.
-    
+    Run ensemble inference on a given dataloader.
+
     Args:
-        models: List of ensemble models
-        dataloader: Data loader for inference
-        device: Device to run inference on
-        beta: Beta parameter for exponential position score computation
-        topic_label: Name of topic label in batch (if available)
-        sentiment_label: Name of sentiment label in batch (if available)
-        use_ground_truth_topic: Whether to use ground truth topics for position scaling.
-                               If True and topic_label is available, uses ground truth topics.
-                               If False, uses predicted topics from each model.
-        timing_log: Whether to log timing information
-    
+        models: List of ensemble models.
+        dataloader: DataLoader to run inference on.
+        device: Device to run inference on.
+        beta: Beta parameter for exponential position score computation.
+        topic_label: Name of topic label in batch (if available).
+        sentiment_label: Name of sentiment label in batch (if available).
+        use_ground_truth_topic: If True and topic_label is available, uses ground truth topics for scaling.
+        timing_log: Whether to log timing information.
+
     Returns:
-        results: Dictionary containing predictions and uncertainties
+        results: Dictionary with ensemble predictions and uncertainty estimates.
     """
-    print(f"Running ensemble inference with {len(models)} models...")
-    
-    t0 = time.time() if timing_log else None
-    
     # Collect predictions from all models
     all_pred_topics = []
     all_pred_sentiments = []
     all_sentiment_probs = []
     all_position_scores = []
-    
-    # Ground truth storage
-    true_topics = []
-    true_sentiments = []
-    ground_truth_topics = None
-    
-    for model_idx, model in enumerate(models):
-        print(f"Running inference with model {model_idx + 1}/{len(models)}")
-        
+    all_ground_truth_topics = []
+    all_ground_truth_sentiments = []
+    t0_local = time.time() if timing_log else None
+
+    print(f"Running ensemble inference with {len(models)} models...")
+
+    for i, model in enumerate(models):
+        print(f"\nRunning inference with model {i+1}/{len(models)}")
         model.eval()
+        
+        # Storage for this model's predictions
         pred_topics = []
         pred_sentiments = []
         sentiment_probs = []
-        
+        true_topics_local = []
+        true_sentiments_local = []
+        t1_local = time.time() if timing_log else None
         with torch.no_grad():
             for batch_num, batch in enumerate(dataloader):
-                if timing_log and t0 is not None and (batch_num + 1) % 1000 == 0:
-                    elapsed = time.time() - t0
-                    avg_batch_time = elapsed / ((model_idx * len(dataloader)) + batch_num + 1)
-                    total_batches = len(models) * len(dataloader)
+                if timing_log and t1_local is not None and (batch_num + 1) % 100 == 0:
+                    elapsed = time.time() - t1_local
+                    avg_batch_time = elapsed / (batch_num + 1)
+                    total_batches = len(dataloader)
                     estimated_total_time = avg_batch_time * total_batches
                     estimated_remaining_time = estimated_total_time - elapsed
-                    print(f"Elapsed: {elapsed:.2f}s, Remaining: {estimated_remaining_time:.2f}s")
-                
+                    print(f"  Batch {batch_num+1}/{total_batches} | Elapsed: {elapsed:.2f}s, Remaining: {estimated_remaining_time:.2f}s")
+
                 batch = {k: v.to(device) for k, v in batch.items()}
                 topic_labels = batch.get(topic_label, None)
                 sent_labels = batch.get(sentiment_label, None)
-                
+
                 # Forward pass
                 outputs = model(
                     input_ids=batch['input_ids'],
                     attention_mask=batch['attention_mask']
                 )
-                
+
                 # Store predictions
                 pred_topic = outputs['logits_topic'].argmax(1)
                 pred_sentiment = outputs['logits_sentiment'].argmax(1)
                 sentiment_sigmoid = torch.sigmoid(outputs['logits_sentiment'])
-                
+
                 pred_topics.append(pred_topic)
                 pred_sentiments.append(pred_sentiment)
                 sentiment_probs.append(sentiment_sigmoid)
-                
-                # Store ground truth (only once)
-                if model_idx == 0:
+
+                # Store ground truth (only for first model to avoid duplicates)
+                if i == 0:
                     if topic_labels is not None:
-                        true_topics.append(topic_labels)
+                        true_topics_local.append(topic_labels)
                     if sent_labels is not None:
-                        true_sentiments.append(sent_labels)
-        
-        # Process ground truth topics (only once after first model)
-        if model_idx == 0 and use_ground_truth_topic and len(true_topics) > 0:
-            ground_truth_topics = torch.cat(true_topics, dim=0).cpu().detach().numpy()
-            print("Using ground truth topic labels for position score computation")
-        elif model_idx == 0:
-            print("Using predicted topic labels for position score computation")
-        
+                        true_sentiments_local.append(sent_labels)
+
         # Concatenate predictions for this model
         model_pred_topics = torch.cat(pred_topics, dim=0).cpu().detach().numpy()
         model_pred_sentiments = torch.cat(pred_sentiments, dim=0).cpu().detach().numpy()
         model_sentiment_probs = torch.cat(sentiment_probs, dim=0).cpu().detach().numpy()
-        
+        # Process ground truth topics (only for first model)
+        ground_truth_topics_local = None
+        if i == 0 and use_ground_truth_topic and len(true_topics_local) > 0:
+            ground_truth_topics_local = torch.cat(true_topics_local, dim=0).cpu().detach().numpy()
+            print("  Using ground truth topic labels for position score computation")
+        elif i == 0:
+            print("  Using predicted topic labels for position score computation")
+
         # Determine which topic labels to use for position score computation
-        if use_ground_truth_topic and ground_truth_topics is not None:
-            # Use ground truth topics if available and requested
-            topic_labels_for_scaling = ground_truth_topics
+        if use_ground_truth_topic and ground_truth_topics_local is not None:
+            topic_labels_for_scaling = ground_truth_topics_local
         else:
-            # Use predicted topic labels
             topic_labels_for_scaling = model_pred_topics
+
+
+        ground_truth_sentiments_local = None
         
+        if i == 0 and len(true_sentiments_local) > 0:
+            ground_truth_sentiments_local = torch.cat(true_sentiments_local, dim=0).cpu().detach().numpy()
+
+        # Determine which topic labels to use for position score computation
+        if use_ground_truth_topic and ground_truth_topics_local is not None:
+            topic_labels_for_scaling = ground_truth_topics_local
+        else:
+            topic_labels_for_scaling = model_pred_topics
         # Compute position scores for this model
         model_position_scores = compute_position_scores_by_topic(
             model_sentiment_probs,
             topic_labels_for_scaling,
             beta=beta
         )
-        
+
         all_pred_topics.append(model_pred_topics)
         all_pred_sentiments.append(model_pred_sentiments)
         all_sentiment_probs.append(model_sentiment_probs)
         all_position_scores.append(model_position_scores)
-    
-    # Process ground truth
-    true_topics = torch.cat(true_topics, dim=0).cpu().detach().numpy() if len(true_topics) > 0 else None
-    true_sentiments = torch.cat(true_sentiments, dim=0).cpu().detach().numpy() if len(true_sentiments) > 0 else None
-    
+        if i == 0:  # Only store ground truth once
+            all_ground_truth_topics = ground_truth_topics_local if ground_truth_topics_local is not None else None
+            all_ground_truth_sentiments = ground_truth_sentiments_local if ground_truth_sentiments_local is not None else None
     # Aggregate ensemble results
-    print("Computing ensemble statistics...")
-    
-    # Mean predictions
-    mean_sentiment_probs = np.mean(all_sentiment_probs, axis=0)
-    mean_position_scores = np.mean(all_position_scores, axis=0)
-    
-    # Compute position score variance (epistemic uncertainty)
-    position_score_variance = np.var(all_position_scores, axis=0)
-    
-    # Use majority vote for discrete predictions
-    ensemble_pred_topics = np.array([
-        np.bincount([all_pred_topics[i][j] for i in range(len(models))]).argmax()
-        for j in range(len(all_pred_topics[0]))
-    ])
-    
-    ensemble_pred_sentiments = np.array([
-        np.bincount([all_pred_sentiments[i][j] for i in range(len(models))]).argmax()
-        for j in range(len(all_pred_sentiments[0]))
-    ])
-    
-    # Compute uncertainties
-    epistemic_var = compute_epistemic_variance(all_position_scores)
-    aleatoric_var = compute_aleatoric_variance(all_sentiment_probs)
-    total_var = epistemic_var + aleatoric_var
-    
-    # Timing
-    total_time = time.time() - t0 if timing_log and t0 is not None else None
-    
+    print("\nComputing ensemble statistics...")
+
+    if len(models) == 1:
+        # Single model case - no aggregation across models needed
+        mean_sentiment_probs = all_sentiment_probs[0]
+        mean_position_scores = all_position_scores[0]
+        ensemble_pred_topics = all_pred_topics[0]
+        ensemble_pred_sentiments = all_pred_sentiments[0]
+        
+        # For single model, epistemic uncertainty is zero
+        epistemic_var = np.zeros_like(mean_position_scores)
+        aleatoric_var = compute_aleatoric_variance(all_sentiment_probs)
+        total_var = aleatoric_var
+    else:
+        # Multiple models case - do ensemble aggregation
+        mean_sentiment_probs = np.mean(all_sentiment_probs, axis=0)
+        mean_position_scores = np.mean(all_position_scores, axis=0)
+        epistemic_var = compute_epistemic_variance(all_position_scores)
+        
+        # Use majority vote for discrete predictions
+        ensemble_pred_topics = np.array([
+            np.bincount([all_pred_topics[i][j] for i in range(len(models))]).argmax()
+            for j in range(len(all_pred_topics[0]))
+        ])
+
+        ensemble_pred_sentiments = np.array([
+            np.bincount([all_pred_sentiments[i][j] for i in range(len(models))]).argmax()
+            for j in range(len(all_pred_sentiments[0]))
+        ])
+
+        # Compute uncertainties
+        aleatoric_var = compute_aleatoric_variance(all_sentiment_probs)
+        total_var = epistemic_var + aleatoric_var
+
     results = {
         'mean_position_scores': mean_position_scores,
-        'position_score_variance': position_score_variance,
         'epistemic_variance': epistemic_var,
         'aleatoric_variance': aleatoric_var,
         'total_variance': total_var,
@@ -645,26 +609,31 @@ def ensemble_inference(
         'individual_sentiment_probs': all_sentiment_probs,
         'individual_pred_topics': all_pred_topics,
         'individual_pred_sentiments': all_pred_sentiments,
-        'true_topics': true_topics,
-        'true_sentiments': true_sentiments,
-        'used_ground_truth_topics': use_ground_truth_topic and ground_truth_topics is not None,
-        'topic_labels_for_scaling': ground_truth_topics if (use_ground_truth_topic and ground_truth_topics is not None) else ensemble_pred_topics,
+        'used_ground_truth_topics': use_ground_truth_topic and len(all_ground_truth_topics) > 0 and all_ground_truth_topics[0] is not None,
+        'ground_truth_topics': all_ground_truth_topics if (use_ground_truth_topic and len(all_ground_truth_topics) > 0 and all_ground_truth_topics[0] is not None) else all_pred_topics,
+        'ground_truth_sentiments': all_ground_truth_sentiments if len(all_ground_truth_sentiments) > 0 and all_ground_truth_sentiments[0] is not None else None,
         'beta': beta,
         'num_models': len(models)
     }
+
+    # Timing and summary
+    total_time_local = time.time() - t0_local if timing_log and t0_local is not None else None
+    if timing_log and total_time_local is not None:
+        print(f"Total inference time: {total_time_local:.2f}s")
     
-    if timing_log and total_time is not None:
-        results['total_time'] = total_time
-        results['avg_batch_time'] = total_time / (len(dataloader) * len(models))
+    if len(models) == 1:
+        print("Single model inference - no epistemic uncertainty")
+    else:
+        used_gt = use_ground_truth_topic and len(all_ground_truth_topics) > 0 and all_ground_truth_topics[0] is not None
+        print(f"Used {'ground truth' if used_gt else 'predicted'} topic labels for position scaling")
+        print(f"Mean position score range: [{mean_position_scores.min():.3f}, {mean_position_scores.max():.3f}]")
+        print(f"Mean epistemic variance: {epistemic_var.mean():.6f}")
+        print(f"Mean aleatoric variance: {aleatoric_var.mean():.6f}")
+
+    print("Ensemble inference completed!")
     
-    print(f"Ensemble inference completed!")
-    if timing_log and total_time is not None:
-        print(f"Total time: {total_time:.2f}s")
-    print(f"Used {'ground truth' if (use_ground_truth_topic and ground_truth_topics is not None) else 'predicted'} topic labels for position scaling")
-    print(f"Mean position score range: [{mean_position_scores.min():.3f}, {mean_position_scores.max():.3f}]")
-    print(f"Mean epistemic variance: {epistemic_var.mean():.6f}")
-    print(f"Mean aleatoric variance: {aleatoric_var.mean():.6f}")
-    
+    # Clean up
+    torch.cuda.empty_cache() if torch.cuda.is_available() else None
     return results
 
 
@@ -747,27 +716,23 @@ def create_ensemble_summary_dataframe(results: Dict) -> pd.DataFrame:
     """
     df = pd.DataFrame({
         'mean_position_score': results['mean_position_scores'],
-        'position_score_variance': results['position_score_variance'],
         'epistemic_variance': results['epistemic_variance'],
         'aleatoric_variance': results['aleatoric_variance'],
         'total_variance': results['total_variance'],
         'ensemble_pred_topic': results['ensemble_pred_topics'],
-        'ensemble_pred_sentiment': results['ensemble_pred_sentiments']
+        'ensemble_pred_sentiment': results['ensemble_pred_sentiments'],
+        'ground_truth_topic': results['ground_truth_topics'] if results['ground_truth_topics'] is not None else [None]*len(results['mean_position_scores']),
+        'ground_truth_sentiment': results['ground_truth_sentiments'] if results['ground_truth_sentiments'] is not None else [None]*len(results['mean_position_scores']),
     })
     
-    # Add ground truth if available
-    if results['true_topics'] is not None:
-        df['true_topic'] = results['true_topics']
-    if results['true_sentiments'] is not None:
-        df['true_sentiment'] = results['true_sentiments']
-    
+
     # Add uncertainty statistics
     df['epistemic_std'] = np.sqrt(df['epistemic_variance'])
     df['aleatoric_std'] = np.sqrt(df['aleatoric_variance'])
     df['total_std'] = np.sqrt(df['total_variance'])
     
     # Add confidence intervals (approximate)
-    df['position_score_lower_95'] = df['mean_position_score'] - 1.96 * df['total_std']
-    df['position_score_upper_95'] = df['mean_position_score'] + 1.96 * df['total_std']
+    df['position_score_lower_95'] = df['mean_position_score'] - 1.96 * df['epistemic_std']
+    df['position_score_upper_95'] = df['mean_position_score'] + 1.96 * df['epistemic_std']
     
     return df

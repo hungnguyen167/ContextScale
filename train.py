@@ -15,6 +15,9 @@ Usage:
     
     # With custom settings
     python train.py --num_models 3 --epochs 3 --lr 1e-5 --beta 0.8 --batch_size 32
+    
+    # Train for scaling (use entire dataset, no evaluation)
+    python train.py --train_for_scaling --num_models 5 --epochs 5
 """
 
 import os
@@ -38,7 +41,7 @@ from datasets import Dataset, DatasetDict
 import pickle
 
 # Import our custom modules
-from utils.uncertainty import create_multiple_data_splits, train_deep_ensemble
+from utils.uncertainty import train_deep_ensemble
 from utils.models import ContextScalePrediction
 from utils.functions import sentiment_code, topic_code, group_texts, tokenize_function
 
@@ -123,7 +126,7 @@ def load_and_prepare_data():
     return manifesto_reduced
 
 
-def create_dataset(manifesto_reduced, seed_val):
+def create_dataset(manifesto_reduced):
     """Create and encode the dataset following notebook pattern."""
     print("Creating dataset...")
     
@@ -148,7 +151,7 @@ def create_dataset(manifesto_reduced, seed_val):
     return manifesto_dataset
 
 
-def create_model_factory(model_name, num_topics, num_sentiments, lora=True):
+def create_model_factory(model_name, num_topics, num_sentiments, lora=False):
     """Create model factory function following notebook pattern."""
     def create_model():
         return ContextScalePrediction(
@@ -169,17 +172,17 @@ def signal_handler(signum, frame):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Deep Ensemble Training with Different Data Splits')
+    parser = argparse.ArgumentParser(description='Deep Ensemble Training with Different Training Data Shuffles')
     parser.add_argument('--num_models', type=int, default=5, help='Number of ensemble models')
-    parser.add_argument('--num_splits', type=int, default=5, help='Number of data splits')
     parser.add_argument('--epochs', type=int, default=5, help='Number of epochs per model')
     parser.add_argument('--lr', type=float, default=2e-5, help='Learning rate')
     parser.add_argument('--beta', type=float, default=1.0, help='Beta parameter for exponential position score')
-    parser.add_argument('--model_name', type=str, default='xlm-roberta-large', help='Model name')
-    parser.add_argument('--save_dir', type=str, default='results/models/ensemble_splits', help='Save directory')
+    parser.add_argument('--model_name', type=str, default='xlm-roberta-base', help='Model name')
+    parser.add_argument('--save_dir', type=str, default='results/models/ensemble', help='Save directory')
     parser.add_argument('--lora', action='store_true', default=False, help='Use LoRA')
-    parser.add_argument('--batch_size', type=int, default=16, help='Batch size')
+    parser.add_argument('--batch_size', type=int, default=64, help='Batch size')
     parser.add_argument('--max_length', type=int, default=512, help='Maximum sequence length')
+    parser.add_argument('--train_for_scaling', action='store_true', default=False, help='Train on  the entire dataset for scaling (no evaluation)')
     
     args = parser.parse_args()
     
@@ -203,7 +206,7 @@ def main():
         manifesto_reduced = load_and_prepare_data()
         
         # Create dataset
-        manifesto_dataset = create_dataset(manifesto_reduced, seed_val)
+        manifesto_dataset = create_dataset(manifesto_reduced)
         
         # Setup tokenizer and data collator
         print(f"Loading tokenizer: {args.model_name}")
@@ -222,7 +225,7 @@ def main():
             'n_epochs': args.epochs,
             'lr': args.lr,
             'save_dir': args.save_dir,
-            'model_prefix': 'model_ensemble_splits'
+            'model_prefix': 'model_ensemble'
         }
         
         print("\nEnsemble Configuration:")
@@ -238,23 +241,84 @@ def main():
         print(f"Model created successfully: {test_model.__class__.__name__}")
         del test_model  # Free memory
         
-        # Create multiple data splits
-        print(f"\nCreating {args.num_splits} different data splits from the original dataset...")
-        print("Each split will have different train/eval/test samples for better ensemble diversity")
+        # Create data splits based on train_for_scaling flag
+        if args.train_for_scaling:
+            print(f"\nTraining for scaling: using the entire dataset for training...")
+
+            train_dataset = manifesto_dataset
+            eval_dataset = None
+            print(f"Dataset configuration:")
+            print(f"  Train: {len(train_dataset)} samples")
+            print(f"  Eval: None (train_for_scaling=True)")
+
+        else:
+            print(f"\nCreating single train/eval/test split from the original dataset...")
+            
+            # Create a single train/eval/test split
+            train_eval_test = manifesto_dataset.train_test_split(
+                test_size=0.1, 
+                stratify_by_column='topic_sentiment', 
+                seed=seed_val
+            )
+            
+            train_eval_split = train_eval_test['train'].train_test_split(
+                test_size=0.3, 
+                stratify_by_column='topic_sentiment', 
+                seed=seed_val
+            )
+            
+            train_dataset = train_eval_split['train']
+            eval_dataset = train_eval_split['test']  # Note: 'test' from second split becomes 'eval'
+            
+            print(f"Dataset split created:")
+            print(f"  Train: {len(train_dataset)} samples")
+            print(f"  Eval: {len(eval_dataset)} samples") 
         
-        data_splits = create_multiple_data_splits(
-            original_dataset=manifesto_dataset,
-            num_splits=args.num_splits,
-            test_size=0.1,  # 10% for test
-            eval_size=0.3,  # 30% of remaining data for eval
-            stratify_column='topic_sentiment',
-            base_seed=seed_val
+        # Tokenize datasets
+        print(f"\nTokenizing datasets...")
+        
+        def tokenize_function_local(examples):
+            return tokenizer(
+                examples['text'],
+                truncation=True,
+                padding=False,
+                max_length=512
+            )
+        
+        train_tokenized = train_dataset.map(
+            tokenize_function_local,
+            batched=True,
+            remove_columns=['text', 'topic_sentiment']
         )
         
-        print(f"\nSuccessfully created {len(data_splits)} different data splits!")
-        print("Summary of splits:")
-        for i, split in enumerate(data_splits):
-            print(f"Split {i+1}: Train={len(split['train'])}, Eval={len(split['eval'])}, Test={len(split['test'])}, Seed={split['seed']}")
+        # Only tokenize eval dataset if it exists
+        eval_tokenized = None
+        if eval_dataset is not None:
+            eval_tokenized = eval_dataset.map(
+                tokenize_function_local,
+                batched=True,
+                remove_columns=['text', 'topic_sentiment']
+            )
+        
+        # Create data loaders
+        from torch.utils.data import DataLoader
+        
+        train_dataloader = DataLoader(
+            train_tokenized,
+            batch_size=args.batch_size,
+            shuffle=True,
+            collate_fn=data_collator
+        )
+        
+        # Only create eval dataloader if eval dataset exists
+        eval_dataloader = None
+        if eval_tokenized is not None:
+            eval_dataloader = DataLoader(
+                eval_tokenized,
+                batch_size=args.batch_size,
+                shuffle=False,
+                collate_fn=data_collator
+            )
         
         # Save ensemble configuration
         os.makedirs(args.save_dir, exist_ok=True)
@@ -263,32 +327,39 @@ def main():
             pickle.dump(ENSEMBLE_CONFIG, f)
         print(f"\nEnsemble configuration saved to: {config_path}")
         
-        # Train ensemble with different splits
+        # Train ensemble
         print("\n" + "=" * 80)
-        print("Starting Deep Ensemble Training with Different Data Splits")
-        print(f"This will train {len(data_splits)} models using completely different train/eval/test splits")
+        if args.train_for_scaling:
+            print("Starting Deep Ensemble Training for Scaling")
+            print(f"This will train {args.num_models} models using the entire dataset (no evaluation)")
+        else:
+            print("Starting Deep Ensemble Training with Single Split")
+            print(f"This will train {args.num_models} models using the same data split but different shuffles")
         print(f"Each model will be trained for {args.epochs} epochs")
         print("=" * 80)
         
         train_deep_ensemble(
             model_factory=create_model,
-            data_splits=data_splits,
-            tokenizer=tokenizer,
-            data_collator=data_collator,
+            train_dataloader=train_dataloader,
+            eval_dataloader=eval_dataloader,
             device=device,
-            batch_size=16,
+            num_models=args.num_models,
             n_epochs=ENSEMBLE_CONFIG['n_epochs'],
             lr=ENSEMBLE_CONFIG['lr'],
             sentiment_var='sentiment',
             topic_var='topic',
             save_dir=ENSEMBLE_CONFIG['save_dir'], 
-            model_prefix=ENSEMBLE_CONFIG['model_prefix'] + '_splits',
+            model_prefix=ENSEMBLE_CONFIG['model_prefix'],
             org_seed=seed_val
         )
         
         
         print("\n" + "=" * 80)
         print("🎉 Training completed successfully!")
+        if args.train_for_scaling:
+            print(f"Trained {args.num_models} models for scaling using the entire dataset")
+        else:
+            print(f"Trained {args.num_models} models with train/eval/test splits")
         print(f"Models saved in: {args.save_dir}")
         print("=" * 80)
         
