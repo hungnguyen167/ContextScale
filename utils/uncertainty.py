@@ -318,7 +318,7 @@ def train_ensemble_member(
 
 
 def train_deep_ensemble(
-    model_factory,
+    model_base: Callable[[], torch.nn.Module],
     train_dataloader: DataLoader,
     eval_dataloader: Optional[DataLoader],
     device: torch.device,
@@ -365,7 +365,7 @@ def train_deep_ensemble(
         np.random.seed(org_seed + i)
         
         # Create model instance
-        model = model_factory().to(device)
+        model = model_base.to(device)
         
         # Define save path
         save_path = os.path.join(save_dir, f"{model_prefix}_{i}.safetensors")
@@ -402,7 +402,7 @@ def train_deep_ensemble(
 
 
 def load_ensemble_models(
-    model_factory,
+    model_base: Callable[[], torch.nn.Module],
     checkpoint_paths: List[str],
     device: torch.device
 ) -> List[torch.nn.Module]:
@@ -423,7 +423,7 @@ def load_ensemble_models(
         print(f"Loading ensemble member {i} from {checkpoint_path}")
         
         # Create new model instance
-        model = model_factory().to(device)
+        model = model_base.to(device)
         
         # Load checkpoint
         state_dict = load_file(checkpoint_path)
@@ -525,18 +525,18 @@ def ensemble_inference(
         model_sentiment_probs = torch.cat(sentiment_probs, dim=0).cpu().detach().numpy()
         # Process ground truth topics (only for first model)
         ground_truth_topics_local = None
-        if i == 0 and use_ground_truth_topic and len(true_topics_local) > 0:
+        if i == 0 and len(true_topics_local) > 0:
             ground_truth_topics_local = torch.cat(true_topics_local, dim=0).cpu().detach().numpy()
-            print("  Using ground truth topic labels for position score computation")
-        elif i == 0:
-            print("  Using predicted topic labels for position score computation")
+            
+
 
         # Determine which topic labels to use for position score computation
-        if use_ground_truth_topic and ground_truth_topics_local is not None:
+        if ground_truth_topics_local is not None:
             topic_labels_for_scaling = ground_truth_topics_local
+            print("  Using ground truth topic labels for position score computation")
         else:
             topic_labels_for_scaling = model_pred_topics
-
+            print("  Using predicted topic labels for position score computation")
 
         ground_truth_sentiments_local = None
         
@@ -609,9 +609,9 @@ def ensemble_inference(
         'individual_sentiment_probs': all_sentiment_probs,
         'individual_pred_topics': all_pred_topics,
         'individual_pred_sentiments': all_pred_sentiments,
-        'used_ground_truth_topics': use_ground_truth_topic and len(all_ground_truth_topics) > 0 and all_ground_truth_topics[0] is not None,
-        'ground_truth_topics': all_ground_truth_topics if (use_ground_truth_topic and len(all_ground_truth_topics) > 0 and all_ground_truth_topics[0] is not None) else all_pred_topics,
-        'ground_truth_sentiments': all_ground_truth_sentiments if len(all_ground_truth_sentiments) > 0 and all_ground_truth_sentiments[0] is not None else None,
+        'used_ground_truth_topics': use_ground_truth_topic,
+        'ground_truth_topics': all_ground_truth_topics,
+        'ground_truth_sentiments': all_ground_truth_sentiments,
         'beta': beta,
         'num_models': len(models)
     }

@@ -13,6 +13,7 @@ from nltk.corpus import stopwords
 
 
 
+
 def format_time(elapsed):
     # Round to the nearest second.
     elapsed_rounded = int(round((elapsed)))
@@ -723,10 +724,10 @@ def scale_func(dataloader,
         topic_for_scaling = true_topics
     else:
         topic_for_scaling = pred_topics
-    
+    from .uncertainty import compute_position_scores_by_topic
+
     if use_exponential:
         # Use the new exponential approach
-        from .uncertainty import compute_position_scores_by_topic
         position_scores = compute_position_scores_by_topic(
             sentiment_sigmoid, 
             topic_for_scaling, 
