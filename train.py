@@ -151,17 +151,15 @@ def create_dataset(manifesto_reduced):
     return manifesto_dataset
 
 
-def create_model_factory(model_name, num_topics, num_sentiments, lora=False):
+def create_model(model_name, num_topics, num_sentiments, lora=False):
     """Create model factory function following notebook pattern."""
-    def create_model():
-        return ContextScalePrediction(
+    return ContextScalePrediction(
             roberta_model=model_name, 
             num_topics=num_topics, 
             num_sentiments=num_sentiments,
             lora=lora,
             use_shared_attention=True  # Using shared attention architecture
         )
-    return create_model
 
 
 def signal_handler(signum, frame):
@@ -233,13 +231,11 @@ def main():
             print(f"  {key}: {value}")
         
         # Create model factory
-        create_model = create_model_factory(args.model_name, num_topics, num_sentiments, args.lora)
+        model_base = create_model(args.model_name, num_topics, num_sentiments, args.lora)
         
         # Test model creation
         print("\nTesting model creation...")
-        test_model = create_model()
-        print(f"Model created successfully: {test_model.__class__.__name__}")
-        del test_model  # Free memory
+        print(f"Model created successfully: {model_base.__class__.__name__}")
         
         # Create data splits based on train_for_scaling flag
         if args.train_for_scaling:
@@ -339,7 +335,7 @@ def main():
         print("=" * 80)
         
         train_deep_ensemble(
-            model_factory=create_model,
+            model_base=model_base,
             train_dataloader=train_dataloader,
             eval_dataloader=eval_dataloader,
             device=device,
