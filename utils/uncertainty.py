@@ -531,7 +531,7 @@ def ensemble_inference(
 
 
         # Determine which topic labels to use for position score computation
-        if ground_truth_topics_local is not None:
+        if ground_truth_topics_local is not None and use_ground_truth_topic:
             topic_labels_for_scaling = ground_truth_topics_local
             print("  Using ground truth topic labels for position score computation")
         else:
