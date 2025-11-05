@@ -718,7 +718,7 @@ def scale_func(dataloader,
     true_sentiments = torch.cat(true_sentiments, dim=0).cpu().detach().numpy() if len(true_sentiments) > 0 else None
 
     print('Start computing position scores')
-
+    topic_for_scaling = None
     # Compute position scores
     if use_ground_truth_topic is True:
         topic_for_scaling = true_topics
