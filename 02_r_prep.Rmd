@@ -13,6 +13,8 @@ manifesto <- read_csv("data/temps/manifesto.csv")
 ches <- read_csv("data/ches/1999-2019_CHES_dataset_meansv3.csv")
 manifesto_text_en <- manifesto %>% filter(!countryname %in% c("Iceland", "Spain"))
 countries <- unique(manifesto_text_en$countryname)
+tw_df <- read_csv("data/py_outputs/tw_processed.csv")
+
 ```
 ## CHES - Process data
 
@@ -314,6 +316,36 @@ all_results_combined <- bind_rows(all_results)
 
 write.csv(all_results_combined, "data/r_outputs/wf_welfare.csv", row.names = FALSE)
 
+```
+## Wordfish - TW 
+```{r wf_tw}
+
+grouped_texts <- tw_df %>%
+    group_by(topic, lr) %>%
+    summarise(
+      text_new = paste(text, collapse = " "),
+      num_speeches = n(),
+      doc_id = cur_group_id(),
+      .groups = "drop"
+    ) %>%
+    filter(!is.na(text_new))
+dfmat <- corpus(grouped_texts, text_field = "text_new", docid_field = "doc_id") %>%
+              tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
+              tokens_remove(stopwords("en")) %>%
+              dfm() %>%
+              dfm_trim(min_termfreq = 10, max_docfreq = 0.75, docfreq_type = "prop", verbose = TRUE)
+
+wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson")
+    
+results_tw <- grouped_texts %>% 
+    select(-text_new) %>%
+    mutate(
+      wf_score = wf_mod$theta,
+      wf_se = wf_mod$se.theta
+    )
+
+
+write.csv(results_tw, "data/r_outputs/wf_tw.csv", row.names = FALSE)
 ```
 
 ## Prepping data for COALITIONAGREE
