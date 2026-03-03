@@ -1,7 +1,6 @@
 ---
 title: "manifesto_pull"
 output: html_document
-date: "2022-12-02"
 ---
 
 ```{r setup }
@@ -9,9 +8,10 @@ knitr::opts_chunk$set(echo = TRUE)
 pacman::p_load(tidyverse, manifestoR)
 ```
 
-Train countries
+## Train countries
 ```{r pull}
 rm(list=ls())
+
 cmp_parties <- read.csv(here::here("data","CMP","parties_MPDataset_MPDS2024a.csv"))
 mp_dataset <- read_csv("data/CMP/MPDataset_MPDS2024a.csv")
 
@@ -20,7 +20,10 @@ country_list <- c("Austria","Belgium","Denmark","Finland","Germany","Greece",
                   "Iceland", "Ireland", "France", "United Kingdom", "Italy",
                   "Spain","Sweden","Norway","Portugal","Netherlands",
                   "Switzerland")
-corpora <-  mp_corpus_df_bilingual(countryname %in% country_list, tibble_metadata = "all")
+
+main_dataset <- mp_maindataset(version="2024a") %>% 
+    filter(countryname %in% country_list)
+corpora <-  mp_corpus_df_bilingual(main_dataset, tibble_metadata = "all")
 
 mp_dataset <- mp_dataset %>%
     filter(countryname %in% country_list) %>%
@@ -34,16 +37,15 @@ party_info <- cmp_parties %>%
 pulled_manifesto <- corpora %>%
     filter(!is.na(cmp_code) & annotations==TRUE & !is.na(text)) %>%
     mutate(
-        country = as.numeric(ifelse(nchar(party)==13, substr(party,1,3), substr(party,1,2))),
-        party_code = as.numeric(ifelse(nchar(party)==13, substr(party,1,6), substr(party,1,5)))
+        country = as.numeric(substr(party,1,2)),
     ) %>%
-    left_join(party_info, by = c("country","party_code"="party")) %>%
-    left_join(mp_dataset, by = c("country","party","date"))
+    left_join(party_info, by = c("country","party")) %>%
+    left_join(mp_dataset, by = c("country","countryname","party","date"))
 
 write_csv(pulled_manifesto,here::here("data", "r_outputs", "pulled_manifestoes.csv"))
 ```
 
-Test countries
+## Test countries
 
 
 
@@ -56,7 +58,9 @@ mp_setapikey("manifesto_apikey.txt")
 
 country_list <- c("Czech Republic", "Japan", "Turkey","Russia","South Korea")
 
-corpora <-  mp_corpus(countryname %in% country_list, as_tibble =TRUE)
+main_dataset <- mp_maindataset(version="2024a") %>% 
+    filter(countryname %in% country_list)
+corpora <-  mp_corpus_df_bilingual(main_dataset, tibble_metadata = "all")
 
 mp_dataset <- mp_dataset %>%
     filter(countryname %in% country_list) %>%
@@ -70,12 +74,16 @@ party_info <- cmp_parties %>%
 pulled_manifesto <- corpora %>%
     filter(!is.na(cmp_code) & annotations==TRUE & !is.na(text)) %>%
     mutate(
-        country = as.numeric(ifelse(nchar(party)==13, substr(party,1,3), substr(party,1,2))),
-        party_code = as.numeric(ifelse(nchar(party)==13, substr(party,1,6), substr(party,1,5)))
+        country = as.numeric(substr(party,1,2)),
     ) %>%
-    left_join(party_info, by = c("country","party_code"="party")) %>%
+    left_join(party_info, by = c("country","party")) %>%
     left_join(mp_dataset, by = c("country","countryname","party","date"))
 
 write_csv(pulled_manifesto,here::here("data", "r_outputs", "pulled_manifestoes_test.csv"))
 ```
 
+## - Cite 
+
+```{r}
+print(mp_cite())
+```
