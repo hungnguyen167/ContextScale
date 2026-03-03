@@ -5,16 +5,11 @@
 *.json
 *.pt
 /results/
-/data/temps
 /data/coalitionagree
 /data/CMP
 /data/r_outputs
 /data/py_outputs
-manifesto_test_pred.csv
-manifesto_lang_pred.csv
-/outputs
-/runs
-/cache
 data/r_outputs/pulled_manifestoes.csv
 /utils/legacy.py
 data/py_outputs/cs_topic.csv
+manifesto_apikey.txt
