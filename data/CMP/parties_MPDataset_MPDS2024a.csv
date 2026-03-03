@@ -1,0 +1,1388 @@
+country,countryname,party,abbrev,name,name_english,year_min,year_max,is_alliance,max_pervote,max_presvote,year_max_pervote,year_max_presvote
+11,Sweden,11110,MP,Miljöpartiet de Gröna,Green Ecology Party,1988,2022,0,7.34,NA,2010,NA
+11,Sweden,11220,V,Vänsterpartiet,Left Party,1944,2022,0,11.99,NA,1998,NA
+11,Sweden,11320,SAP,Socialdemokratiska Arbetareparti,Social Democratic Labour Party,1944,2022,0,50.116,NA,1968,NA
+11,Sweden,11420,L,Liberalerna,Liberals,1944,2022,0,24.442,NA,1952,NA
+11,Sweden,11520,Kd,Kristdemokraterna,Christian Democrats,1985,2022,0,11.77,NA,1998,NA
+11,Sweden,11620,MSP,Moderata Samlingspartiet,Moderate Coalition Party,1944,2022,0,30.06,NA,2010,NA
+11,Sweden,11710,SD,Sverigedemokraterna,Sweden Democrats,2010,2022,0,20.5366981413734,NA,2022,NA
+11,Sweden,11810,CP,Centerpartiet,Centre Party,1944,2022,0,25.101,NA,1973,NA
+11,Sweden,11951,NyD,Ny Demokrati,New Democracy,1991,1991,0,6.732,NA,1991,NA
+12,Norway,12110,MDG,Miljøpartiet De Grønna,Green Party,2013,2017,0,3.239,NA,2017,NA
+12,Norway,12220,NKP,Norges Kommunistiske Parti,Norwegian Communist Party,1945,1957,0,11.886,NA,1945,NA
+12,Norway,12221,SV,Sosialistisk Venstreparti,Socialist Left Party,1961,2017,0,12.548,NA,2001,NA
+12,Norway,12230,NA,Rødt,Red Party,2017,2017,0,2.409,NA,2017,NA
+12,Norway,12320,Ap,Arbeiderpartiet,Labour Party,1945,2017,0,48.331,NA,1957,NA
+12,Norway,12410,DLF,Det Liberale Folkeparti,Liberal People’s Party,1973,1973,0,3.432,NA,1973,NA
+12,Norway,12420,V,Venstre,Liberal Party,1945,2017,0,14.75,NA,1949,NA
+12,Norway,12520,KrF,Kristelig Folkeparti,Christian People’s Party,1945,2017,0,13.66,NA,1997,NA
+12,Norway,12620,H,Høyre,Conservative Party,1945,2017,0,31.739,NA,1981,NA
+12,Norway,12810,Sp,Senterpartiet,Centre Party,1945,2017,0,16.742,NA,1993,NA
+12,Norway,12951,FrP,Fremskrittspartiet,Progress Party,1973,2017,0,22.91,NA,2009,NA
+13,Denmark,13001,NA,Liberal Alliance,Liberal Alliance,2007,2019,0,7.534,NA,2015,NA
+13,Denmark,13110,NA,Alternativet,Alternativ,2015,2019,0,4.796,NA,2015,NA
+13,Denmark,13210,VS,Venstresocialisterne,Left Socialist Party,1968,1984,0,3.66,NA,1979,NA
+13,Denmark,13220,DKP,Danmarks Kommunistiske Parti,Danish Communist Party,1945,1984,0,12.455,NA,1945,NA
+13,Denmark,13221,FK,Fælles Kurs,Common Course,1987,1987,0,2.16,NA,1987,NA
+13,Denmark,13229,EL,Enhedslisten - De Rød-Grønne,Red-Green Unity List,1994,2019,0,7.799,NA,2015,NA
+13,Denmark,13230,SF,Socialistisk Folkeparti,Socialist People’s Party,1960,2019,0,14.577,NA,1987,NA
+13,Denmark,13320,SD,Socialdemokratiet,Social Democratic Party,1945,2019,0,42.098,NA,1960,NA
+13,Denmark,13330,CD,Centrum-Demokraterne,Centre Democrats,1973,2005,0,8.277,NA,1981,NA
+13,Denmark,13410,RV,Det Radikale Venstre,Danish Social-Liberal Party,1945,2019,0,14.969,NA,1968,NA
+13,Denmark,13420,V,Venstre,Liberals,1945,2019,0,31.25,NA,2001,NA
+13,Denmark,13421,DU,De Uafhængige,Independents’ Party,1953,1968,0,3.336,NA,1960,NA
+13,Denmark,13422,LC,Liberalt Centrum,Liberal Centre,1966,1968,0,2.476,NA,1966,NA
+13,Denmark,13520,K,Kristendemokraterne,Christian Democrats,1971,2005,0,5.336,NA,1975,NA
+13,Denmark,13620,KF,Konservative Folkeparti,Conservative People’s Party,1945,2019,0,23.445,NA,1984,NA
+13,Denmark,13720,DF,Dansk Folkeparti,Danish People’s Party,1998,2019,0,21.078,NA,2015,NA
+13,Denmark,13730,NA,Nye Borgerlige,The New Right,2019,2019,0,2.356,NA,2019,NA
+13,Denmark,13951,FP,Fremskridtspartiet,Progress Party,1973,1998,0,15.894,NA,1973,NA
+13,Denmark,13952,RF,Retsforbund,Justice Party,1945,1984,0,8.216,NA,1950,NA
+13,Denmark,13953,DS,Dansk Samling,Danish Union,1945,1945,0,3.111,NA,1945,NA
+14,Finland,14110,VL,Vihreä Liitto,Green Union,1983,2019,0,11.493,NA,2019,NA
+14,Finland,14221,SKDL,Suomen Kansan Demokraattinen Liitto,Finnish People’s Democratic Union,1945,1987,0,23.471,NA,1945,NA
+14,Finland,14222,Deva,Demokraattinen Vaihtoehto,Democratic Alternative,1987,1987,0,4.242,NA,1987,NA
+14,Finland,14223,VAS,Vasemmistoliitto,Left Wing Alliance,1991,2019,0,11.16,NA,1995,NA
+14,Finland,14310,TPSL,Tyäväen ja Pienviljelijäin Sosialdemokraattinen Liitto,Social Democratic League of Workers and Smallholders,1958,1966,0,4.361,NA,1962,NA
+14,Finland,14320,SSDP,Suomen Sosialidemokraattinen Puolue,Finnish Social Democrats,1945,2019,0,28.251,NA,1995,NA
+14,Finland,14420,LKP,Liberaalinen Kansanpuolue,Liberal People’s Party,1945,1991,0,7.884,NA,1954,NA
+14,Finland,14430,NSP,Nuorsuomalainen Puolue,Young Finnish Party,1995,1995,0,2.807,NA,1995,NA
+14,Finland,14440,NA,Liike Nyt,Movement Now,2019,2019,0,2.253,NA,2019,NA
+14,Finland,14520,KD,Suomen Kristillisdemokraatit,Christian Democrats in Finland,1970,2019,0,5.337,NA,2003,NA
+14,Finland,14620,KK,Kansallinen Kokoomus,National Coalition,1945,2019,0,23.132,NA,1987,NA
+14,Finland,14810,SK,Suomen Keskusta,Finnish Centre,1945,2019,0,24.825,NA,1991,NA
+14,Finland,14820,PS,Perussuomalaiset,True Finns,1966,2019,0,19.053,NA,2011,NA
+14,Finland,14901,RKP/SFP,Ruotsalainen Kansanpuolue/Svenska Folkpartiet,Swedish People’s Party,1945,2019,0,8.378,NA,1945,NA
+15,Iceland,15111,VGF,Vinstrihreyfing - Grænt Framboð,Left Green Movement,1999,2021,0,21.68,NA,2009,NA
+15,Iceland,15220,Ab,Alþýðubandalagið,People’s Alliance,1946,1995,0,22.873,NA,1978,NA
+15,Iceland,15320,A,Alþýðuflokkurinn,Social Democratic Party,1946,1995,0,22.022,NA,1978,NA
+15,Iceland,15321,BJ,Bandalag Jafnaðarmanna,Social Democratic Federation,1983,1983,0,7.552,NA,1983,NA
+15,Iceland,15322,SFVM,Samtök Frjálslyndra og Vinstri Manna,Union of Liberals and Leftists,1967,1974,0,8.914,NA,1971,NA
+15,Iceland,15323,TfFf,Þjóðvaki - Hreyfing Fólksins,Awakening of the Nation,1995,1995,0,7.15,NA,1995,NA
+15,Iceland,15328,S,Samfylkingin - Jafnaðarmannaflokkur Íslands,The Alliance - Social Democratic Party of Iceland,1999,2021,1,30.955,NA,2003,NA
+15,Iceland,15420,FF,Frjálslyndi Flokkurinn,Liberal Party,1999,2007,0,7.383,NA,2003,NA
+15,Iceland,15430,B,Borgarahreyfingin,Citizens' Movement,2009,2009,0,7.222,NA,2009,NA
+15,Iceland,15440,Bf,Björt framtið,Bright Future,2013,2017,0,8.245,NA,2013,NA
+15,Iceland,15450,NA,Viðreisn,Reform Party,2016,2021,0,10.477,NA,2016,NA
+15,Iceland,15620,Sj,Sjálfstæðisflokkurinn,Independence Party,1946,2021,0,42.735,NA,1974,NA
+15,Iceland,15621,Bf,Borgaraflokkurinn,Citizens’ Party,1987,1987,0,10.862,NA,1987,NA
+15,Iceland,15630,NA,Miðflokkurinn,Centre Party,2017,2021,0,10.872,NA,2017,NA
+15,Iceland,15710,Tf,þjodvarnarflokkurinn,National Preservation Party,1953,1953,0,6.029,NA,1953,NA
+15,Iceland,15810,F,Framsóknarflokkurinn,Progressive Party,1946,2021,0,28.222,NA,1963,NA
+15,Iceland,15951,Kv,Samtök um Kvennalista,Women’s Alliance,1983,1995,0,10.13,NA,1987,NA
+15,Iceland,15952,Þ,Pírataflokkurinn,Pirate Party,2013,2021,0,14.483,NA,2016,NA
+15,Iceland,15953,NA,Flokkur fólksins,People’s Party,2017,2021,0,8.84794472537926,NA,2021,NA
+21,Belgium,21111,ECOLO,Écologistes Confédérés pour l’Organisation de Luttes Originales,Ecologists,1981,2019,0,7.359,NA,1999,NA
+21,Belgium,21112,groen!,Groen!,Green!,1981,2019,0,6.991,NA,1999,NA
+21,Belgium,21221,sp.a-SPIRIT,Socialistische Partij Anders - Spirit,Socialist Party Different - Spirit,2003,2007,0,14.908,NA,2003,NA
+21,Belgium,21230,PTB/PVDA,Partij van de Arbeid van België/Parti du Travail de Belgique,Workers' Party of Belgium,2014,2019,0,8.622,NA,2019,NA
+21,Belgium,21320,BSP/PSB,Belgische Socialistische Partij/Parti Socialiste Belge,Belgian Socialist Party,1946,1977,0,38.99,NA,1954,NA
+21,Belgium,21321,sp.a,Socialistische Partij Anders,Socialist Party Different,1978,2019,0,14.883,NA,1987,NA
+21,Belgium,21322,PS,Parti Socialiste,Francophone Socialist Party,1978,2019,0,15.655,NA,1987,NA
+21,Belgium,21330,SPIRIT,"Sociaal, Progressief, International, Regionalistisch, Integraal-democratisch en Toekomstgericht","Social, Progressive, International, Regionalist, Integrally Democartic  and Forward-Looking",2007,2007,0,NA,NA,NA,NA
+21,Belgium,21420,PVV/PLP,Partij voor Vrijheid en Vooruitgang/Parti de la Liberté et du Progrès,Party of Liberty and Progress,1946,1968,0,21.615,NA,1965,NA
+21,Belgium,21421,openVLD,Open Vlaamse Liberalen en Demokraten,Open Flemish Liberals and Democrats,1971,2019,0,15.356,NA,2003,NA
+21,Belgium,21422,PRL,Parti Réformateur Libéral,Liberal Reformation Party,1971,1991,0,10.214,NA,1985,NA
+21,Belgium,21423,PRL-FDF,Parti Réformateur Libéral - Front Démocratique des Francophones,Liberal Reformation Party - Francophone Democratic Front,1995,1995,0,10.264,NA,1995,NA
+21,Belgium,21424,PL,Parti Libéral,Liberal Party,1971,1978,0,1.31,NA,1971,NA
+21,Belgium,21425,PRL-FDF-MCC,Parti réformateur libéral - Front Démocratique des Francophones - Mouvement des Citoyens pour la Changement,Liberal Reformation Party - Francophone Democratic Front - Citizens’ Movement for Change,1999,1999,1,10.14,NA,1999,NA
+21,Belgium,21426,MR,Mouvement Réformateur,Reform Movement,2003,2019,1,12.517,NA,2007,NA
+21,Belgium,21430,LDD,Lijst Dedecker,List Dedecker,2007,2010,0,4.027,NA,2007,NA
+21,Belgium,21520,PSC/CVP,Parti Social Chrétien/Christelijke Volkspartij,Francophone Christian Social Party and Flemish Christian People’s Party,1946,1965,0,47.678,NA,1950,NA
+21,Belgium,21521,CD&V,Christen-Democratisch en Vlaams,Christian Democratic and Flemish,1968,2019,0,26.192,NA,1977,NA
+21,Belgium,21522,cdH,Centre démocrate humaniste,Humanist Democratic Centre,1968,2019,0,11.709,NA,1968,NA
+21,Belgium,21710,PP,Parti Populaire,People's Party,2014,2014,0,1.521,NA,2014,NA
+21,Belgium,21911,RW,Rassemblement Wallon,Walloon Rally,1968,1981,0,6.691,NA,1971,NA
+21,Belgium,21912,DéFI,Démocrate fédéraliste indépendant,"Democratic, Federalist, Independent",1965,2019,0,4.541,NA,1971,NA
+21,Belgium,21913,VU,De Volksunie,Peoples’ Union,1954,1995,0,11.112,NA,1971,NA
+21,Belgium,21914,VB,Vlaams Blok,Flemish Bloc,1978,2003,0,11.68,NA,2003,NA
+21,Belgium,21915,VU-ID21,De Volksunie –Integrale Democratie voor de 21ste Eeuw,People’s Union - Complete Democracy for the 21st century,1999,1999,0,5.561,NA,1999,NA
+21,Belgium,21916,N-VA,Nieuw-Vlaamse Alliantie,New Flemish Alliance,2003,2019,0,20.259,NA,2014,NA
+21,Belgium,21917,VB,Vlaams Belang,Flemish Interest,2007,2019,0,11.99,NA,2007,NA
+22,Netherlands,22110,GL,GroenLinks,Green Left,1989,2021,0,9.125,NA,2017,NA
+22,Netherlands,22210,CPN,Communistische Partij van Nederland,Communist Party of the Netherlands,1946,1982,0,10.6,NA,1946,NA
+22,Netherlands,22220,SP,Socialistische Partij,Socialist Party,1994,2021,0,16.575,NA,2006,NA
+22,Netherlands,22230,PSP,Pacifistisch-Socialistische Partij,Pacifist Socialist Party,1986,1986,0,1.2,NA,1986,NA
+22,Netherlands,22235,Volt,Volt Nederland,Volt Netherlands,2021,2021,0,2.4223696163008,NA,2021,NA
+22,Netherlands,22240,NA,BIJ1,Together,2021,2021,0,0.83698780333828,NA,2021,NA
+22,Netherlands,22310,PPR,Politieke Partij Radicalen,Radical Political Party,1971,1986,0,4.799,NA,1972,NA
+22,Netherlands,22320,PvdA,Partij van de Arbeid,Labour Party,1946,2021,0,33.829,NA,1977,NA
+22,Netherlands,22321,DENK,DENK,DENK,2017,2021,0,2.055,NA,2017,NA
+22,Netherlands,22330,D’66,Democraten‘66,Democrats‘66,1967,2021,0,15.49,NA,1994,NA
+22,Netherlands,22420,VVD,Volkspartij voor Vrijheid en Democratie,People’s Party for Freedom and Democracy,1946,2021,0,26.58,NA,2012,NA
+22,Netherlands,22430,LN,Leefbaar Nederland,Livable Netherlands,2002,2003,0,1.61,NA,2002,NA
+22,Netherlands,22521,CDA,Christen-Democratisch Appèl,Christian Democratic Appeal,1977,2021,0,35.313,NA,1989,NA
+22,Netherlands,22522,KVP,Katholieke Volkspartij,Catholic People’s Party,1946,1972,0,31.882,NA,1963,NA
+22,Netherlands,22523,ARP,Anti-Revolutionaire Partij,Anti-Revolutionary Party,1946,1972,0,13.209,NA,1948,NA
+22,Netherlands,22524,DS‘70,Democratisch Socialisten‘70,Democratic Socialists‘70,1971,1977,0,5.329,NA,1971,NA
+22,Netherlands,22525,CHU,Christelijk-Historische Unie,Christian Historical Union,1946,1972,0,9.188,NA,1948,NA
+22,Netherlands,22526,CU,ChristenUnie,Christian Union,2002,2021,0,3.974,NA,2006,NA
+22,Netherlands,22527,GPV,Gereformeerd Politiek Verbond,Reformed Political League,1982,1998,0,1.3,NA,1994,NA
+22,Netherlands,22528,RPF,Reformatorische Politieke Federatie,Reformatory Political Federation,1981,1998,0,2.028,NA,1998,NA
+22,Netherlands,22710,NA,Centrumpartij,Centre Party,1982,1982,0,0.831,NA,1982,NA
+22,Netherlands,22711,NA,Centrumdemocraten,Centre Democrats,1989,1994,0,2.5,NA,1994,NA
+22,Netherlands,22720,LPF,Lijst Pim Fortuyn,List Pim Fortuyn,2002,2003,0,17,NA,2002,NA
+22,Netherlands,22722,PVV,Partij voor de Vrijheid,Party of Freedom,2006,2021,0,15.45,NA,2010,NA
+22,Netherlands,22730,FvD,Forum voor Democratie,Forum for Democracy,2017,2021,0,5.0186167855017,NA,2021,NA
+22,Netherlands,22731,JA21,Juiste Antwoord 21,Right Answer 21,2021,2021,0,2.36614700084008,NA,2021,NA
+22,Netherlands,22820,BBB,BoerBurgerBewegning,Farmer-Citizen Movement,2021,2021,0,1.0008680925336,NA,2021,NA
+22,Netherlands,22951,PvdD,Partij voor de Dieren,Party for the Animals,2006,2021,0,3.83532261611313,NA,2021,NA
+22,Netherlands,22952,SGP,Staatskundig Gereformeerde Partij,Reformed Political Party,1946,2021,0,2.371,NA,1948,NA
+22,Netherlands,22953,50PLUS,50Plus,50Plus,2012,2021,0,3.111,NA,2017,NA
+22,Netherlands,22954,AOV,Algemeen Ouderenverbond,General Elderly Alliance,1994,1994,0,3.6,NA,1994,NA
+22,Netherlands,22955,Unie 55+,Unie 55+,Union 55+,1994,1994,0,0.9,NA,1994,NA
+23,Luxembourg,23111,GLEI,"Gréng Lëscht Ekologesch Initiativ/Liste Verte, Initiative Écologiste",Green Left Ecological Initiative,1989,1989,0,3.7,NA,1989,NA
+23,Luxembourg,23112,GAP,Déi Gréng Alternativ/Parti de l'Alternative Verte,Green Alternative,1984,1989,0,4.2,NA,1984,NA
+23,Luxembourg,23113,NA,Déi Gréng/Les Verts,The Greens,1994,2013,0,11.704,NA,2009,NA
+23,Luxembourg,23220,KPL/PCL,Kommunistesch Partei vu Lëtzebuerg/Parti Communiste Luxembourgeois,Communist Party of Luxembourg,1945,1989,0,14.3,NA,1948,NA
+23,Luxembourg,23230,NA,Déi Lénk/La Gauche,The Left,2009,2013,0,4.937,NA,2013,NA
+23,Luxembourg,23320,LSAP/POSL,Lëtzebuerger Sozialistesch Arbechterpartei/Parti Ouvrier Socialiste Luxembourgeois,Socialist Workers’ Party of Luxembourg,1945,2013,0,37.8,NA,1948,NA
+23,Luxembourg,23420,DP/PD,Demokratesch Partei/Parti Démocratique,Democratic Party,1945,2013,0,23.3,NA,1974,NA
+23,Luxembourg,23520,CSV/PCS,Chrëschtlech Sozial Vollekspartei/Parti Chrétien Social,Christian Social People’s Party,1945,2013,0,45.2,NA,1954,NA
+23,Luxembourg,23951,ADR,Alternativ Demokratesch Reformpartei/Parti Réformiste d'Alternative Démocratique,Alternative Democatic Reform Party,1989,2013,0,10.4,NA,1999,NA
+31,France,31021,FDG,Front de Gauche,Left Front,2012,2012,1,6.909,NA,2012,NA
+31,France,31110,EÉLV,Europe Écologie Les Verts,Europe Ecology - The Greens,1993,2017,0,7.84,NA,1993,NA
+31,France,31111,GE,Generation Écologie,Ecology Generation,1997,1997,0,2.674,NA,1997,NA
+31,France,31220,PCF,Parti Communiste Français,French Communist Party,1946,2017,0,28.585,NA,1946,NA
+31,France,31230,PRG,Parti Radical de Gauche,Left Radical Party,2012,2017,0,1.653,NA,2012,NA
+31,France,31240,NA,La France insoumise,Indomitable France,2017,2017,0,11.025,NA,2017,NA
+31,France,31320,PS,Parti Socialiste,Socialist Party,1946,2017,0,36.57,NA,1981,NA
+31,France,31421,PR,Parti Radical,Radical Party,1946,2012,0,15.018,NA,1956,NA
+31,France,31425,NA,Renaissance,Renaissance,2017,2017,0,28.212,NA,2017,NA
+31,France,31430,UDI,Union des démocrates et indépendants,Union of Democrats and Independents,2017,2017,0,3.034,NA,2017,NA
+31,France,31521,MRP,Mouvement Républicain Populaire,Popular Republican Movement,1946,1962,0,26.341,NA,1946,NA
+31,France,31522,PDM,Groupe Progrès et Démocratie Moderne,Progress and Modern Democracy,1967,1968,0,14.093,NA,1967,NA
+31,France,31523,CDP,Centre Démocratie et Progrés,"Centre, Democracy and Progress",1973,1973,0,3.85,NA,1973,NA
+31,France,31529,MR,Mouvement Réformateur,Reformers’ Movement,1973,1973,0,13.3,NA,1973,NA
+31,France,31621,NA,Union de la Nouvelle Majorite - Gaullists/Conservatives,Union for a New Majority - Gaullists/Conservatives,1946,1988,0,38.029,NA,1968,NA
+31,France,31622,NA,Union de la Nouvelle Majorite - Conservatives/Gaullists,Union for a New Majority - Conservatives/Gaullists,1946,1988,0,19.964,NA,1958,NA
+31,France,31623,UDCA,Union de Defense Commercants et Artisans - Poujadists,Union for the Defence of Traders and Artisans - Poujadists,1956,1956,0,11.558,NA,1956,NA
+31,France,31624,MoDem,Mouvement Démocrate,Democratic Movement,1978,2017,0,22.017,NA,1978,NA
+31,France,31625,RPR,Rassemblement pour la République,Rally for the Republic,1993,1997,0,20.24,NA,1993,NA
+31,France,31626,NA,Les Républicains,The Republicans,2002,2017,1,39.54,NA,2007,NA
+31,France,31630,NC,Nouveau Centre,New Centre,2012,2012,0,2.196,NA,2012,NA
+31,France,31631,AC,Alliance Centriste,Centrist Alliance,2012,2012,0,0.601,NA,2012,NA
+31,France,31720,FN,Front National,National Front,1986,2017,0,14.932,NA,1997,NA
+32,Italy,32021,RC,Rivoluzione Civile,Civil Revolution,2013,2013,1,2.25,NA,2013,NA
+32,Italy,32022,I,Italia Europa Insieme,Italy Europe Together,2018,2018,1,0.56,NA,2018,NA
+32,Italy,32031,LeU,Liberi e Uguali,Free and Equal,2018,2018,1,3.466,NA,2018,NA
+32,Italy,32051,CP,Civica Popolare,Popular Civic List,2018,2018,1,0.618,NA,2018,NA
+32,Italy,32055,NcL,Noi con l'Italia,Us with Italy,2018,2018,1,1.292,NA,2018,NA
+32,Italy,32061,PdL,Il Popolo della Libertà,People of Freedom,2008,2013,1,37.217,NA,2008,NA
+32,Italy,32090,SVP-PATT,Coalizione Südtiroler Volkspartei e Partito Autonomista Trentino Tirolese,Coalition of South Tyrolean People’s Party and Trentino Tyrolean Autonomist Party,2018,2018,1,0.396,NA,2018,NA
+32,Italy,32110,FdV,Federazione dei Verdi,Green Federation,1987,2006,0,2.787,NA,1992,NA
+32,Italy,32111,NA,Il Girasole,The Girasole ‘Sunflower',2001,2001,1,2.17,NA,2001,NA
+32,Italy,32210,PdUP,Partito di Unità Proletaria per il Comunismo (Il Manifesto + Partito di Unità Proletaria),Proletarian Unity Party for Communism The Manifesto + Proletarian Unity Party,1976,1983,0,1.372,NA,1979,NA
+32,Italy,32211,DP,Democrazia Proletaria,Proletarian Democracy,1983,1987,0,1.664,NA,1987,NA
+32,Italy,32212,PRC,Partito della Rifondazione Comunista,Communist Refoundation Party,1992,2006,0,8.576,NA,1996,NA
+32,Italy,32213,PdCI,Partito dei Comunisti Italiani,Party of Italian Communists,2001,2006,0,2.319,NA,2006,NA
+32,Italy,32220,DS,Democratici di Sinistra,Democrats of the Left,1946,2001,0,34.372,NA,1976,NA
+32,Italy,32221,RnP,Rosa nel Pugno,Rose in the Fist,2006,2006,1,2.597,NA,2006,NA
+32,Italy,32230,SEL,Sinistra Ecologia Libertà,Left Ecology Freedom,2013,2013,0,3.204,NA,2013,NA
+32,Italy,32310,NA,Lista Pannella-Sgarbi,Pannella-Sgarbi List,1976,1996,0,3.513,NA,1994,NA
+32,Italy,32320,PSI,Partito Socialista Italiano,Italian Socialist Party,1946,1994,0,20.705,NA,1946,NA
+32,Italy,32321,RI,Rinnovamento Italiano,Italian Renewal,1996,1996,0,4.339,NA,1996,NA
+32,Italy,32322,PSI-PSDI,Partito Socialista Italiano-Partito Socialista Democratico Italiano Unificati,Unified Italian Socialist Party-Italian Democratic Socialist Party,1968,1968,0,14.482,NA,1968,NA
+32,Italy,32329,NA,L'Ulivo,Olive Tree,2001,2006,1,31.265,NA,2006,NA
+32,Italy,32330,PSDI,Partito Socialista Democratico Italiano,Italian Democratic Socialist Party,1948,1992,0,7.074,NA,1948,NA
+32,Italy,32410,PRI,Partito Repubblicano Italiano,Italian Republican Party,1946,1992,0,5.08,NA,1983,NA
+32,Italy,32420,PLI,Partito Liberale Italiano,Italian Liberal Party,1946,1992,0,6.97,NA,1963,NA
+32,Italy,32421,M-DL,Margherita - Democrazia è Libertà,Daisy - Democracy is Freedom,2001,2001,0,14.51,NA,2001,NA
+32,Italy,32440,PD,Partito Democratico,Democratic Party,2008,2018,0,33.163,NA,2008,NA
+32,Italy,32450,CD,Centro Democratico,Democratic Centre,2013,2013,0,0.491,NA,2013,NA
+32,Italy,32451,E,Più Europa,More Europe,2018,2018,0,2.662,NA,2018,NA
+32,Italy,32460,SC,Scelta Civica,Civic Choice,2013,2013,0,8.305,NA,2013,NA
+32,Italy,32520,PPI,Partito Popolare Italiano,Italian Popular Party,1946,1996,0,48.503,NA,1948,NA
+32,Italy,32521,CCD,Centro Cristiano Democratico,Christian Democratic Centre,1996,1996,0,NA,NA,NA,NA
+32,Italy,32522,NA,Biancofiore,White Flower,2001,2001,1,3.22,NA,2001,NA
+32,Italy,32528,PI,Patto per l’Italia,Pact for Italy,1994,1994,0,15.713,NA,1994,NA
+32,Italy,32529,AD,Alleanza Democratica,Democratic Alliance,1994,1996,0,5.84,NA,1996,NA
+32,Italy,32530,UdC,Unione di Centro,Union of the Center,2006,2013,1,6.762,NA,2006,NA
+32,Italy,32610,FI,Forza Italia,Go Italy,1994,2018,0,29.42,NA,2001,NA
+32,Italy,32611,NPSI,Nuovo Partito Socialista Italiano,New Italian Socialist Party,2001,2006,0,0.95,NA,2001,NA
+32,Italy,32629,NA,Casa delle Libertà,House of Freedom,2001,2006,1,NA,NA,NA,NA
+32,Italy,32630,FDI,Fratelli d'Italia,Brothers of Italy,2013,2018,0,4.201,NA,2018,NA
+32,Italy,32640,3L,Lista Lavoro e Libertà,Labour and Freedom List,2013,2013,0,0.227,NA,2013,NA
+32,Italy,32710,AN,Alleanza Nazionale,National Alliance,1948,2006,0,15.667,NA,1996,NA
+32,Italy,32720,L,Lega,League,1992,2018,0,17.488,NA,2018,NA
+32,Italy,32901,DE,Democrazia Europea,European Democracy,2001,2001,0,2.4,NA,2001,NA
+32,Italy,32902,IdV,Lista di Pietro - Italia del Valori,List Di Pietro - Italy of Values,2001,2008,0,4.364,NA,2008,NA
+32,Italy,32903,ALD,Autonomie Liberté Démocratie (Valle d’Aosta),Autonomy Liberty Democracy Aosta Valley,2006,2006,0,NA,NA,NA,NA
+32,Italy,32904,SVP,Südtiroler Volkspartei,South Tyrolean People’s Party,2006,2013,0,0.478,NA,2006,NA
+32,Italy,32906,NA,Vallée d'Aoste - Autonomie Prògres Fédéralisme,Autonomy Progress Federalism Aosta Valley,2013,2013,1,0.05,NA,2013,NA
+32,Italy,32951,LR,La Rete/Movimento per la Democrazia,The Network/Movement for Democracy,1992,1994,0,1.861,NA,1994,NA
+32,Italy,32952,InM,Italiani nel Mondo,Italy in the World,2006,2006,0,NA,NA,NA,NA
+32,Italy,32953,P-UDEUR,Popolari Unione Democratica per l'Europa,Popular Democratic Union for Europe,2006,2006,0,1.401,NA,2006,NA
+32,Italy,32955,NA,L’Unione-Prodi,The Union – Prodi,2006,2006,1,NA,NA,NA,NA
+32,Italy,32956,M5S,MoVimento 5 Stelle,Five Star Movement,2013,2018,0,32.165,NA,2018,NA
+33,Spain,33020,UP,Unidad Popular,Popular Unity,2015,2015,1,3.676,NA,2015,NA
+33,Spain,33025,NA,Unidas Podemos,United We Can,2016,2016,1,13.416,NA,2016,NA
+33,Spain,33091,NA,Geroa Bai,Future Yes,2011,2011,1,0.177,NA,2011,NA
+33,Spain,33092,NA,Amaiur,Amaiur,2011,2011,1,1.39,NA,2011,NA
+33,Spain,33093,NA,Compromís-Q,Commitment-Q,2011,2011,1,0.523,NA,2011,NA
+33,Spain,33095,EH Bildu,Euskal Herria Bildu,Basque Country Unite,2015,2019,1,1.155,NA,2019,NA
+33,Spain,33096,NA,En Comú Podem,In Common We Can,2015,2016,1,3.688,NA,2015,NA
+33,Spain,33097,NA,En marea,In Tide,2015,2016,1,1.629,NA,2015,NA
+33,Spain,33098,Compromís–Podemos–EUPV,A la valencia,Valencian style,2015,2016,1,2.743,NA,2016,NA
+33,Spain,33099,DL,Democràcia i Libertat,Democracy and Freedom,2015,2015,1,2.25,NA,2015,NA
+33,Spain,33210,NA,Podemos,We can,2015,2019,0,12.6,NA,2015,NA
+33,Spain,33220,IU,Izquierda Unida,United Left,1977,2019,0,10.797,NA,1979,NA
+33,Spain,33230,NA,Más País-Equo,More Country - Equo,2019,2019,1,1.692,NA,2019,NA
+33,Spain,33320,PSOE,Partido Socialista Obrero Español,Spanish Socialist Workers’ Party,1977,2019,0,48.38,NA,1982,NA
+33,Spain,33420,C's,Ciudadanos - Partido de la Ciudadania,Citizens - Party of the Citizens,2015,2019,0,15.98,NA,2019,NA
+33,Spain,33430,UCD,Unión de Centro Democrático,Union of the Democratic Centre/Centrist Bloc,1977,1982,0,35.047,NA,1979,NA
+33,Spain,33438,PDP,Partido Demócrata Popular,Popular Democratic Party,1982,1986,0,6,NA,1982,NA
+33,Spain,33439,PL,Partido Liberal,Liberal Party,1986,1986,0,2.74,NA,1986,NA
+33,Spain,33440,UPyD,"Unión, Progreso y Democracia","Union, Progress and Democracy",2011,2011,0,4.76,NA,2011,NA
+33,Spain,33512,CDS,Centro Democrático y Social,Centre Democrats,1982,1993,0,9.16,NA,1986,NA
+33,Spain,33610,PP,Partido Popular,People's Party,1977,2019,0,45.24,NA,2011,NA
+33,Spain,33611,CiU,Convergència i Unió,Convergence and Union,1979,2011,1,5.072,NA,1989,NA
+33,Spain,33612,FAC,Foro Asturias,Forum Asturias,2011,2011,0,0.414,NA,2011,NA
+33,Spain,33710,VOX,Vox,Voice,2019,2019,0,15.211,NA,2019,NA
+33,Spain,33901,EE,Euskadiko Ezkerra,Basque Left,1977,1989,0,0.533,NA,1986,NA
+33,Spain,33902,PNV/EAJ,Partido Nacionalista Vasco/Euzko Alderdi Jeltzalea,Basque Nationalist Party,1977,2019,0,1.89,NA,1982,NA
+33,Spain,33903,EA,Eusko Alkartasuna,Basque Solidarity,1989,2008,0,0.673,NA,1989,NA
+33,Spain,33904,PAR,Partido Aragonés,Aragonese Party,1977,2000,0,0.62,NA,1993,NA
+33,Spain,33905,ERC,Esquerra Republicana de Catalunya,Catalan Republican Left,1977,2019,0,3.922,NA,2019,NA
+33,Spain,33906,PA,Partido Andalucista,Andalusian Party,1977,2004,0,1.81,NA,1979,NA
+33,Spain,33907,CCa-PNC-NC,Coalición Canaria - Nueva Canarias,Canarian Coalition–New Canaries,1993,2019,0,1.071,NA,2000,NA
+33,Spain,33908,BNG,Bloque Nacionalista Galego,Galician Nationalist Bloc,1996,2019,0,1.321,NA,2000,NA
+33,Spain,33909,CHA,Chunta Aragonesista,Aragonist Council,2004,2008,0,0.364,NA,2004,NA
+33,Spain,33910,UPN,Unión del Pueblo Navarro,Navarrese People's Union,2004,2008,0,0.57,NA,2004,NA
+33,Spain,33911,CDC,Convergència Democràtica de Catalunya,Democratic Convergence of Catalonia,2016,2016,0,2.01,NA,2016,NA
+33,Spain,33912,JxCat,Junts per Catalunya,Together for Catalonia,2019,2019,0,2.206,NA,2019,NA
+33,Spain,33913,PRC,Partido Regionalista de Cantabria,Regionalist Party of Cantabria,2019,2019,0,0.202,NA,2019,NA
+33,Spain,33914,NA,Més Compromís,More Commitment,2019,2019,0,0.73,NA,2019,NA
+33,Spain,33915,CUP,Cadidatura d'Unitat Popular,Popular Unity Candidacy,2019,2019,0,1.027,NA,2019,NA
+33,Spain,33916,NA,¡Teruel Existe!,Teruel exists,2019,2019,0,0.082,NA,2019,NA
+34,Greece,34020,SYRIZA,Synaspismós Rizospastikís Aristerás,Coalition of the Radical Left,2004,2012,1,16.781,NA,2012,NA
+34,Greece,34210,KKE,Kommounistiko Komma Elladas,Communist Party of Greece,1974,2019,0,10.938,NA,1981,NA
+34,Greece,34211,SYN,Synaspismos tis Aristeras kai tis Proodou,Progressive Left Coalition,1989,2000,1,13.126,NA,1989,NA
+34,Greece,34212,SYRIZA,Synaspismós Rizospastikís Aristerás,Coalition of the Radical Left,2012,2019,0,36.34,NA,2015,NA
+34,Greece,34213,DIMAR,Dimokratiki Aristera,Democratic Left,2012,2015,0,6.256,NA,2012,NA
+34,Greece,34214,LAE,Laīkí Enótita,Popular Unity,2015,2015,0,2.86,NA,2015,NA
+34,Greece,34215,MeRA25,Μétopo Evropaikís Realistikís Anypakoís,European Realistic Disobedience Front,2019,2019,0,3.44411133887846,NA,2019,NA
+34,Greece,34313,PASOK,Panellinio Socialistiko Kinima,Panhellenic Socialist Movement,1974,2015,0,48.074,NA,1981,NA
+34,Greece,34314,DIKKI,Dimokratiko Kinoniko Kinima,Democratic Social Movement,1996,1996,0,4.437,NA,1996,NA
+34,Greece,34315,PASOK-KINAL,PASOK – Kínima Allagís,PASOK – Movement for Change,2019,2019,0,8.10020024685252,NA,2019,NA
+34,Greece,34340,NA,To Potami,The River,2015,2015,0,5.906,NA,2015,NA
+34,Greece,34410,EK,Enosi Kentroon,Union of Centrists,2015,2015,0,3.352,NA,2015,NA
+34,Greece,34510,EDIK,Enosi Dimokratikou Kentrou,Union of the Democratic Centre,1974,1977,0,20.423,NA,1974,NA
+34,Greece,34511,ND,Nea Dimokratia,New Democracy,1974,2019,0,54.373,NA,1974,NA
+34,Greece,34512,Pola,Politiki Anixi,Political Spring,1993,1996,0,4.874,NA,1993,NA
+34,Greece,34610,EP,Ethniki Parataxis,National Alignment,1977,1977,0,6.823,NA,1977,NA
+34,Greece,34710,LAOS,Laikós Orthódoxos Synagermós,Popular Orthodox Rally,2007,2012,0,5.63,NA,2009,NA
+34,Greece,34711,EL,Ellinikí Lýsi,Greek Solution,2019,2019,0,3.70455792139767,NA,2019,NA
+34,Greece,34720,XA,Chrysi Avgi,Golden Dawn,2012,2019,0,6.972,NA,2012,NA
+34,Greece,34730,ANEL,Anexartitoi Ellines,Independent Greeks,2012,2015,0,10.605,NA,2012,NA
+35,Portugal,35060,PàF,Portugal à Frente,Portugal Ahead,2015,2015,1,40.034,NA,2015,NA
+35,Portugal,35110,PEV,Partido Ecologista ‘Os Verdes’,Ecologist Party ‘The Greens',1983,2019,0,1.167,NA,2002,NA
+35,Portugal,35120,PAN,Pessoas-Animais-Natureza,People-Animals-Nature,2015,2019,0,3.493,NA,2019,NA
+35,Portugal,35130,L,LIVRE,Free,2019,2019,0,1.144,NA,2019,NA
+35,Portugal,35210,UDP,União Democrática Popular,Popular Democratic Union,1975,1987,0,2.225,NA,1979,NA
+35,Portugal,35211,BE,Bloco de Esquerda,Left Bloc,1999,2019,0,10.581,NA,2015,NA
+35,Portugal,35220,PCP,Partido Comunista Português,Portuguese Communist Party,1975,2019,0,18.27,NA,1979,NA
+35,Portugal,35229,CDU,Coligação Democrática Unitária,Unified Democratic Coalition,1991,2005,0,9.103,NA,1999,NA
+35,Portugal,35310,MDP,Movimento Democrático Português,Popular Democratic Movement,1975,1985,0,4.43,NA,1975,NA
+35,Portugal,35311,PS,Partido Socialista,Socialist Party,1975,2019,0,46.396,NA,2005,NA
+35,Portugal,35312,PRD,Partido Renovador Democrático,Democratic Renewal Party,1985,1987,0,18.526,NA,1985,NA
+35,Portugal,35313,PSD,Partido Social Democrata,Social Democratic Party,1975,2019,0,51.287,NA,1987,NA
+35,Portugal,35315,ID,Intervenção Democrática,Democratic Intervention,1987,1987,0,0.804,NA,1987,NA
+35,Portugal,35316,ASDI,Associação dos Sociais Democratas Independentes,Association of Independent Social Democrats,1980,1980,0,1.55,NA,1980,NA
+35,Portugal,35317,UEDS,União de Esquerda para a Democracia Socialista,Leftwing Union for the Socialist Democracy,1980,1980,0,1.55,NA,1980,NA
+35,Portugal,35410,IL,Iniciativa Liberal,Liberal Iniciative,2019,2019,0,1.355,NA,2019,NA
+35,Portugal,35520,CDS-PP,Centro Democrático Social-Partido Popular,Social Democratic Center-Popular Party,1975,2019,0,16.69,NA,1976,NA
+35,Portugal,35710,PPM,Partido Popular Monárquico,Popular Monarchist Party,1976,1983,0,2.16,NA,1980,NA
+35,Portugal,35720,NA,Chega,Enough,2019,2019,0,1.358,NA,2019,NA
+35,Portugal,35951,PSN,Partido de Solidariedade Nacional,National Solidarity Party,1991,1991,0,1.706,NA,1991,NA
+41,Germany,41111,NA,Die Grünen,The Greens,1983,1987,0,8.256,NA,1987,NA
+41,Germany,41112,Greens/90,Grüne/Bündnis‘90,Greens/Alliance‘90,1990,1990,0,1.203,NA,1990,NA
+41,Germany,41113,90/Greens,Bündnis‘90/Die Grünen,Alliance‘90/Greens,1994,2021,0,14.8,NA,2021,NA
+41,Germany,41220,KPD,Kommunistische Partei Deutschlands,Communist Party of Germany,1949,1949,0,5.738,NA,1949,NA
+41,Germany,41221,PDS,Partei des Demokratischen Sozialismus,Party of Democratic Socialism,1990,2002,0,5.101,NA,1998,NA
+41,Germany,41222,L-PDS,Die Linke.PDS,The Left. Party of Democratic Socialism,2005,2005,0,8.709,NA,2005,NA
+41,Germany,41223,LINKE,Die Linke,The Left,2009,2021,0,11.888,NA,2009,NA
+41,Germany,41320,SPD,Sozialdemokratische Partei Deutschlands,Social Democratic Party of Germany,1949,2021,0,45.85,NA,1972,NA
+41,Germany,41420,FDP,Freie Demokratische Partei,Free Democratic Party,1949,2021,0,14.563,NA,2009,NA
+41,Germany,41521,CDU/CSU,Christlich-Demokratische Union/Christlich-Soziale Union,Christian Democratic Union/Christian Social Union,1949,2021,1,50.186,NA,1957,NA
+41,Germany,41522,DZ,Deutsche Zentrumspartei,Centre Party,1949,1953,0,3.065,NA,1949,NA
+41,Germany,41620,DP,Deutsche Partei,German Party,1949,1957,0,3.961,NA,1949,NA
+41,Germany,41711,WAV,Wirtschaftliche Aufbauvereinigung,Economic Reconstruction League,1949,1949,0,2.873,NA,1949,NA
+41,Germany,41712,DRP,Deutsche Reichspartei,German Reich Party,1949,1949,0,1.808,NA,1949,NA
+41,Germany,41911,BP,Bayernpartei,Bavarian Party,1949,1949,0,4.157,NA,1949,NA
+41,Germany,41912,SSW,Südschleswigscher Wählerverband - Sydslesvigsk Vælgerforening,South Schleswig Voters’ Union,1949,2021,0,0.318,NA,1949,NA
+41,Germany,41951,GB/BHE,Gesamtdeutscher Block/Bund der Heimatvertriebenen und Entrechteten,Refugee Party,1953,1953,0,5.869,NA,1953,NA
+41,Germany,41952,NA,Piraten,Pirates,2013,2013,0,2.2,NA,2013,NA
+41,Germany,41953,AfD,Alternative für Deutschland,Alternative for Germany,2013,2021,0,12.637,NA,2017,NA
+42,Austria,42110,GRÜNE,Die Grünen,The Greens,1986,2019,0,13.9,NA,2019,NA
+42,Austria,42120,PILZ,Liste Peter Pilz,Peter Pilz List,2017,2017,0,4.409,NA,2017,NA
+42,Austria,42220,KPÖ,Kommunistische Partei Österreichs,Austrian Communist Party,2002,2008,0,0.76,NA,2008,NA
+42,Austria,42320,SPÖ,Sozialdemokratische Partei Österreichs,Austrian Social Democratic Party,1949,2019,0,51.028,NA,1979,NA
+42,Austria,42420,FPÖ,Freiheitliche Partei Österreichs,Austrian Freedom Party,1949,2019,0,26.91,NA,1999,NA
+42,Austria,42421,LIF,Liberales Forum,Liberal Forum,1994,1995,0,5.97,NA,1994,NA
+42,Austria,42430,NEOS,Das Neue Österreich und Liberales Forum,The New Austria and Liberal Forum,2013,2019,0,8.103,NA,2019,NA
+42,Austria,42520,ÖVP,Österreichische Volkspartei,Austrian People’s Party,1949,2019,0,48.349,NA,1966,NA
+42,Austria,42710,BZÖ,Bündnis Zukunft Österreich,Alliance for the Future of Austria,2006,2008,0,10.7,NA,2008,NA
+42,Austria,42951,TS,Team Stronach für Österreich,Team Stronach for Austria,2013,2013,0,5.725,NA,2013,NA
+43,Switzerland,43020,EAG,Ensemble à Gauche,Together on the Left,2019,2019,1,NA,NA,NA,NA
+43,Switzerland,43110,GPS/PES,Grüne Partei der Schweiz/Parti écologiste suisse,Green Party of Switzerland,1979,2019,0,13.2,NA,2019,NA
+43,Switzerland,43120,GLP,Grünliberale Partei der Schweiz,Green Liberal Party,2007,2019,0,7.803,NA,2019,NA
+43,Switzerland,43220,PdAS/PdTS,Partei der Arbeit der Schweiz/Parti suisse du travail,Swiss Labour Party,1991,2019,0,1.21,NA,1995,NA
+43,Switzerland,43320,SPS/PSS,Sozialdemokratische Partei der Schweiz/Parti socialiste suisse,Social Democratic Party of Switzerland,1947,2019,0,26.849,NA,1955,NA
+43,Switzerland,43321,LdU/AdI,Landesring der Unabhängigen/Alliance des Indépendants,Independents’ Alliance,1947,1999,0,8.978,NA,1967,NA
+43,Switzerland,43420,FDP/PLR,FDP.Die Liberalen/PLR.Les Libéraux-Radicaux,FDP.The Liberals,1947,2019,0,24.069,NA,1979,NA
+43,Switzerland,43520,CVP/PDC,Christlichdemokratische Volkspartei der Schweiz/Parti démocrate-chrétien suisse,Christian Democratic People’s Party of Switzerland,1947,2019,0,23.235,NA,1963,NA
+43,Switzerland,43530,EVP/PEV,Evangelische Volkspartei der Schweiz/Parti Evangélique Suisse,Protestant People’s Party of Switzerland,1971,2019,0,2.442,NA,2007,NA
+43,Switzerland,43531,LPS/PLS,Liberale Partei der Schweiz/Parti libéral suisse,Liberal Party of Switzerland,1991,2003,0,3.04,NA,1991,NA
+43,Switzerland,43540,CSP/PCS,Christlich-soziale Partei/Parti Chrétien-Social,Christian Social Party,2007,2011,0,0.434,NA,2007,NA
+43,Switzerland,43710,SD/DS,Schweizer Demokraten/Démocrates suisses,Swiss Democrats,1971,2003,0,3.312,NA,1991,NA
+43,Switzerland,43711,EDU/UDF,Eidgenössisch-Demokratische Union/Union Démocratique Fédérale,Federal Democratic Union,1991,2019,0,1.31,NA,1995,NA
+43,Switzerland,43810,SVP/UDC,Schweizerische Volkspartei/Union démocratique du centre,Swiss People’s Party,1947,2019,0,29.386,NA,2015,NA
+43,Switzerland,43811,BDP/PBD,Bürgerlich-Demokratische Partei Schweiz/Parti Bourgeois Démocratique Suisse,Conservative Democratic Party of Switzerland,2011,2019,0,5.415,NA,2011,NA
+43,Switzerland,43901,LdT,Lega dei Ticinesi,Ticino League,2007,2019,0,0.805,NA,2011,NA
+43,Switzerland,43902,MCG,Mouvement Citoyens Genevios,Geneva Citizens' Movement,2011,2015,0,0.439,NA,2011,NA
+43,Switzerland,43951,FPS,Freiheitspartei der Schweiz,Freedom Party of Switzerland,1987,1995,0,5.067,NA,1991,NA
+51,United Kingdom,51110,GPEW,Green Party of England and Wales,Green Party of England and Wales,2015,2019,0,3.8,NA,2015,NA
+51,United Kingdom,51210,SF,Sinn Féin,We Ourselves,1997,2019,0,0.742,NA,2017,NA
+51,United Kingdom,51320,Labour,Labour Party,Labour Party,1945,2019,0,48.778,NA,1951,NA
+51,United Kingdom,51330,SDP,Social Democratic Party,Social Democratic Party,1983,1987,0,11.642,NA,1983,NA
+51,United Kingdom,51340,SDLP,Social Democratic and Labour Party,Social Democratic and Labour Party,2015,2019,0,0.371,NA,2019,NA
+51,United Kingdom,51420,NA,Liberal Party,Liberal Party,1945,1987,0,19.335,NA,1974,NA
+51,United Kingdom,51421,LibDems,Liberal Democrats,Liberal Democrats,1992,2019,0,23,NA,2010,NA
+51,United Kingdom,51430,Alliance,Alliance Party of Northern Ireland,Alliance Party of Northern Ireland,2019,2019,0,0.419,NA,2019,NA
+51,United Kingdom,51620,Conservatives,Conservative Party,Conservative Party,1945,2019,0,49.742,NA,1955,NA
+51,United Kingdom,51621,UUP,Ulster Unionist Party,Ulster Unionist Party,1992,2015,0,0.83,NA,1997,NA
+51,United Kingdom,51901,PC,Plaid Cymru,The Party of Wales,2015,2019,0,0.591,NA,2015,NA
+51,United Kingdom,51902,SNP,Scottish National Party,Scottish National Party,1992,2019,0,4.733,NA,2015,NA
+51,United Kingdom,51903,DUP,Democratic Unionist Party,Democratic Unionist Party,1992,2019,0,0.908,NA,2017,NA
+51,United Kingdom,51951,UKIP,United Kingdom Independence Party,United Kingdom Independence Party,2001,2017,0,12.629,NA,2015,NA
+52,Northern Ireland,52320,NILP,Northern Ireland Labour Party,Northern Ireland Labour Party,1925,1969,0,NA,NA,NA,NA
+52,Northern Ireland,52620,UP,Unionist Party,Unionist Party,1921,1973,0,NA,NA,NA,NA
+52,Northern Ireland,52710,NP,Nationalist Party,Nationalist Party,1921,1969,0,NA,NA,NA,NA
+53,Ireland,53021,ULA,United Left Alliance,United Left Alliance,2011,2011,1,2.7,NA,2011,NA
+53,Ireland,53110,Greens,Green Party/Comhaontas Glas,Green Party,1989,2020,0,7.13056030966952,NA,2020,NA
+53,Ireland,53220,WP,Páirtí na nOibri,Workers’ Party,1981,1989,0,4.965,NA,1989,NA
+53,Ireland,53221,DLP,Democratic Left Party,Democratic Left Party,1992,1997,0,2.78,NA,1992,NA
+53,Ireland,53230,NA,Páirtí Sóisialach,Socialist Party,2011,2011,0,NA,NA,NA,NA
+53,Ireland,53231,PBP,People Before Profit,People Before Profit,2016,2020,0,1.977,NA,2016,NA
+53,Ireland,53240,S,Solidarity,Solidarity,2016,2020,0,1.969,NA,2016,NA
+53,Ireland,53250,WUA,Workers and Unemployment Action,Workers and Unemployment Action,2016,2016,0,0.349,NA,2016,NA
+53,Ireland,53260,NA,RISE,RISE,2020,2020,0,0.205038816316455,NA,2020,NA
+53,Ireland,53270,I4C,Independents 4 Change,Independents 4 Change,2020,2020,0,0.385667159303299,NA,2020,NA
+53,Ireland,53320,Labour,Páirti Lucht Oibre,Labour Party,1948,2020,0,19.447,NA,2011,NA
+53,Ireland,53321,NA,Social Democrats,Social Democrats,2016,2020,0,3.005,NA,2016,NA
+53,Ireland,53420,PD,Progressive Democrats,Progressive Democrats,1987,2007,0,11.849,NA,1987,NA
+53,Ireland,53520,NA,Fine Gael,Family of the Irish,1948,2020,0,39.218,NA,1982,NA
+53,Ireland,53620,NA,Fianna Fáil,Soldiers of Destiny,1948,2020,0,50.63,NA,1977,NA
+53,Ireland,53714,CnP,Clann na Poblachta,Republican Party,1948,1965,0,13.21,NA,1948,NA
+53,Ireland,53810,CnT,Clann na Talmhan,Party of the Land,1948,1961,0,5.577,NA,1948,NA
+53,Ireland,53951,SF,Sinn Féin,We Ourselves,1997,2020,0,24.5283122562101,NA,2020,NA
+53,Ireland,53952,NA,Aontú,Unite,2020,2020,0,1.9040627179711,NA,2020,NA
+53,Ireland,53981,NA,Independent Alliance,Independent Alliance,2016,2016,0,4.212,NA,2016,NA
+54,Malta,54320,PL,Partit Laburista,Labour Party,1996,1998,0,50.73,NA,1996,NA
+54,Malta,54620,PN,Partit Nazzjonalista,Nationalist Party,1996,1998,0,51.811,NA,1998,NA
+55,Cyprus,55110,NA,Kinima Ikologon - Sinergasia Politón,Movement of Ecologists - Citizens' Cooperation,2006,2016,0,4.812,NA,2016,NA
+55,Cyprus,55321,AKEL,Anorthotikó Kómma Ergazómenou Laóu,Progressive Party of the Working People,1996,2016,0,35.2,NA,2001,NA
+55,Cyprus,55322,EDEK,Kinima Sosialdimokraton,Social Democrats' Movement,1996,2016,0,8.926,NA,2011,NA
+55,Cyprus,55340,SYPOL,Simmachía Politón,Citizens' Alliance,2016,2016,0,6.009,NA,2016,NA
+55,Cyprus,55421,KF,Komma Fileleftheron,Liberal Party,1996,1996,0,NA,NA,NA,NA
+55,Cyprus,55422,DiKo,Dimokratikó Kómma,Democratic Party,1996,2016,0,17.92,NA,2006,NA
+55,Cyprus,55423,KED,Kinima ton Eleftheron Dimokratikon,Free Democrats Movement,1996,1996,0,3.69,NA,1996,NA
+55,Cyprus,55430,EVROKO,Evropaikó Kómma,European Party,2006,2011,0,5.746,NA,2006,NA
+55,Cyprus,55610,KA,Kinima Allileggiis,Solidarity Movement,2016,2016,0,5.243,NA,2016,NA
+55,Cyprus,55711,DISY,Dimokratikós Synagermós,Democratic Coalition,1996,2016,0,34.48,NA,2001,NA
+55,Cyprus,55720,ELAM,Ethniko Laiko Metopo,National Popular Front,2016,2016,0,3.711,NA,2016,NA
+61,United States,61320,Democrats,Democratic Party,Democratic Party,1920,2020,0,57.71,61.0499992370605,1964,1964
+61,United States,61620,Republicans,Republican Party,Republican Party,1920,2020,0,58.2,60.689998626709,1920,1972
+61,United States,61621,NA,La Follette Progressive Party,La Follette Progressive Party,1924,1924,0,0.1,16.6000003814697,1924,1924
+61,United States,61622,NA,Progressive Party (H. Wallace),Progressive Party H. Wallace,1948,1948,0,0.1,2.40000009536743,1948,1948
+61,United States,61911,NA,State’s Rights Party,State’s Rights Party,1948,1948,0,0.1,2.40000009536743,1948,1948
+62,Canada,62110,NA,Green Party,Green Party,2008,2019,0,6.801,NA,2008,NA
+62,Canada,62320,NDP,New Democratic Party,New Democratic Party,1945,2019,0,30.647,NA,2011,NA
+62,Canada,62420,LP,Liberal Party of Canada,Liberal Party of Canada,1945,2019,0,49.541,NA,1949,NA
+62,Canada,62620,PCP,Progressive Conservative Party,Progressive Conservative Party,1945,2000,0,53.636,NA,1958,NA
+62,Canada,62621,RPC,Reform Party of Canada,Reform Party of Canada,1993,1997,0,19.352,NA,1997,NA
+62,Canada,62622,CA,Canadian Reform Conservative Alliance,Canadian Reform Conservative Alliance,2000,2000,0,25.49,NA,2000,NA
+62,Canada,62623,CP,Conservative Party of Canada,Conservative Party of Canada,2004,2019,0,39.631,NA,2011,NA
+62,Canada,62901,BQ,Bloc Québécois,Quebec Bloc,1993,2019,0,13.507,NA,1993,NA
+62,Canada,62951,Socred,Social Credit,Social Credit,1945,1974,0,11.917,NA,1963,NA
+63,Australia,63110,NA,Australian Greens,Australian Greens,2004,2022,0,12.2517214972165,NA,2022,NA
+63,Australia,63320,ALP,Australian Labor Party,Australian Labor Party,1946,2022,0,50.032,NA,1954,NA
+63,Australia,63321,AD,Australian Democrats,Australian Democrats,1990,2001,0,11.255,NA,1990,NA
+63,Australia,63330,DLP,Democratic Labor Party,Democratic Labor Party,1955,1977,0,7.804,NA,1958,NA
+63,Australia,63410,PUP,Palmer United Party,Palmer United Party,2013,2013,0,5.49,NA,2013,NA
+63,Australia,63620,LPA,Liberal Party of Australia,Liberal Party of Australia,1946,2022,0,41.799,NA,1975,NA
+63,Australia,63621,LNP,Liberal National Party of Queensland,Liberal National Party of Queensland,2010,2022,0,9.115,NA,2010,NA
+63,Australia,63622,CLP,Country Liberal Party,Country Liberal Party,2013,2013,0,0.321,NA,2013,NA
+63,Australia,63710,KAT,Katter's Australian Party,Katter's Australian Party,2013,2022,0,1.039,NA,2013,NA
+63,Australia,63810,NPA,National Party of Australia,National Party of Australia,1946,2022,0,11.524,NA,1987,NA
+63,Australia,63901,NA,Centre Alliance,Centre Alliance,2016,2022,0,1.849,NA,2016,NA
+64,New Zealand,64110,Greens,Green Party of Aotearoa New Zealand,Green Party of Aotearoa New Zealand,1999,2020,0,11.056,NA,2011,NA
+64,New Zealand,64320,Labour,New Zealand Labour Party,New Zealand Labour Party,1946,2020,0,51.279,NA,1946,NA
+64,New Zealand,64321,Alliance,The Alliance,The Alliance,1993,1999,1,18.206,NA,1993,NA
+64,New Zealand,64420,ACT,ACT New Zealand,ACT New Zealand,1996,2020,0,7.588,NA,2020,NA
+64,New Zealand,64421,NA,United Future New Zealand,United Future New Zealand,2002,2014,0,6.69,NA,2002,NA
+64,New Zealand,64422,Progressive,Progressive Party,Progressive Party,2002,2008,0,1.7,NA,2002,NA
+64,New Zealand,64620,National,New Zealand National Party,New Zealand National Party,1946,2020,0,53.995,NA,1951,NA
+64,New Zealand,64621,NZF,New Zealand First Party,New Zealand First Party,1993,2020,0,12.95,NA,1996,NA
+64,New Zealand,64901,NA,Māori Party,Māori Party,2005,2020,0,3.4,NA,2005,NA
+64,New Zealand,64902,Mana,Mana Party,Mana Party,2011,2011,0,1.08,NA,2011,NA
+64,New Zealand,64951,NZDP,New Zealand Democratic Party,New Zealand Democratic Party,1954,1990,0,20.657,NA,1981,NA
+71,Japan,71110,NA,Nippon Mirai no Tō,Tomorrow Party of Japan,2012,2012,0,5.69,NA,2012,NA
+71,Japan,71111,PLP,Seikatsu no Tō,People's Life Party,2014,2014,0,1.929,NA,2014,NA
+71,Japan,71220,JCP,Nihon Kyōsan-tō,Japanese Communist Party,1960,2017,0,13.08,NA,1996,NA
+71,Japan,71320,SDP,Shakai Minshu-tō,Social Democratic Party,1960,2017,0,29.029,NA,1963,NA
+71,Japan,71321,DSP,Minshu-Shakai-tō,Democratic Socialist Party,1960,1993,0,8.768,NA,1960,NA
+71,Japan,71322,SDF,Shaminren,Social Democratic Federation,1979,1990,0,0.863,NA,1990,NA
+71,Japan,71410,NA,Minna no Tō,Your Party,2009,2012,0,8.717,NA,2012,NA
+71,Japan,71420,LL,Jiyū Rengō,Liberal League,2003,2003,0,0,NA,2003,NA
+71,Japan,71430,JRP,Nippon Ishin no Kai,Japan Restoration Party,2012,2017,0,20.376,NA,2012,NA
+71,Japan,71440,CDP,Rikken Minshutō,Constitutional Democratic Party of Japan,2017,2017,0,19.881,NA,2017,NA
+71,Japan,71530,NKP,Shin Kōmei-tō,New Clean Government Party,1967,2017,0,14.777,NA,2003,NA
+71,Japan,71620,LDP,Jiyū-Minshu-tō,Liberal Democratic Party,1960,2017,0,57.557,NA,1960,NA
+71,Japan,71621,NLC,Shin-Jiyū-Kurabu,New Liberal Club,1976,1986,0,4.176,NA,1976,NA
+71,Japan,71622,JRP,Shinsei-tō,Japan Renewal Party,1993,1993,0,10.097,NA,1993,NA
+71,Japan,71623,NFP,Sinshin-tō,New Frontier Party,1996,1996,0,28.04,NA,1996,NA
+71,Japan,71624,DPJ,Minshu-tō,Democratic Party of Japan,1996,2014,0,42.411,NA,2009,NA
+71,Japan,71625,LP,Jiyū-tō,Liberal Party,2000,2000,0,11.01,NA,2000,NA
+71,Japan,71626,NCP,Hoshu-tō,New Conservative Party,2000,2003,0,0.41,NA,2000,NA
+71,Japan,71627,NA,Kibō no Tō,Party of Hope,2017,2017,0,17.356,NA,2017,NA
+71,Japan,71630,PNP,Kokumin Shin-tō,People's New Party,2005,2012,0,1.74,NA,2005,NA
+71,Japan,71640,NA,Mushozoku no Kai,Independent's Party,2003,2003,0,0,NA,2003,NA
+71,Japan,71650,NPD,Shin-tō Daichi,New Party Mother Earth,2012,2012,0,0.576,NA,2012,NA
+71,Japan,71660,JIP,Ishin no Tō,Japan Innovation Party,2014,2014,0,15.717,NA,2014,NA
+71,Japan,71710,PFG,Jisedai No Tou,Party for Future Generations,2014,2014,0,2.653,NA,2014,NA
+71,Japan,71951,NPH,Shin-tō Sakigake,New Party Harbinger,1993,1996,0,2.64,NA,1993,NA
+71,Japan,71952,JNP,Nihon Shin-tō,Japan New Party,1993,1993,0,8.047,NA,1993,NA
+71,Japan,71953,NPN,Shin-tō Nippon,New Party Nippon,2009,2009,0,0.751,NA,2009,NA
+72,Israel,72031,NA,HaAvoda - Gesher - Meretz,Labour - Gesher - Meretz,2019,2020,1,5.827,NA,2020,NA
+72,Israel,72032,NA,HaMaḥaneh HaDemokrati,Democratic Camp,2019,2019,1,4.339,NA,2019,NA
+72,Israel,72033,NA,Hazit Datit Toratit,Religious Torah Front,1973,1973,1,3.83,NA,1973,NA
+72,Israel,72041,NA,Kahol Lavan,Blue and White,2019,2021,1,26.587,NA,2020,NA
+72,Israel,72071,NA,Ihud Miflagot HaYamin,United Right,2019,2019,1,3.701,NA,2019,NA
+72,Israel,72072,NA,Yemina,Right,2019,2021,1,6.20935988963395,NA,2021,NA
+72,Israel,72091,NA,al-Qa'imah al-Mushtaraka/HaReshima HaMeshutefet,Joint List,2015,2021,1,12.669,NA,2020,NA
+72,Israel,72092,Ra'am-Ta'al,HaReshima Ha’aravit HaMeuchedet - Tun'a Aravit LeHithadshut,United Arab List - Arab movement for revival,2006,2009,1,3.378,NA,2009,NA
+72,Israel,72220,Maki,HaMiflaga HaKomunistit HaYisraelit,Israel Communist Party,1949,1969,0,4.51,NA,1955,NA
+72,Israel,72221,MOKED,Moked,Focus,1973,1973,0,1.413,NA,1973,NA
+72,Israel,72222,PLP,Hareshima Ha’mitkademet le-Shalom,Progressive List for Peace,1984,1988,1,1.833,NA,1984,NA
+72,Israel,72223,SHELLI,Shalom Lemaan Israel,Peace for Israel,1977,1981,0,1.561,NA,1977,NA
+72,Israel,72224,RAKAH,Reshima Kommunistit Hadasha,New Communist Party,1965,1973,0,3.405,NA,1973,NA
+72,Israel,72225,HADASH,HaHazit HaDemokratit LeShalom uLeShivion,Democratic Front for Peace and Equality,1977,2019,0,4.584,NA,1977,NA
+72,Israel,72310,RATZ,Hatnuah Lezhiot Ha’ezrach,Citizens’ Rights Movement,1973,1988,0,4.271,NA,1988,NA
+72,Israel,72311,MAPAM,Mifleget Ha’poalim Hameudet,United Workers’ Party,1949,1988,0,14.727,NA,1949,NA
+72,Israel,72312,NA,Am Ehad,One Nation,1999,2003,0,2.757,NA,2003,NA
+72,Israel,72320,NA,Maarach,Alignment,1965,1984,1,46.21,NA,1969,NA
+72,Israel,72322,RAFI,Reshimat Poalei Israel,Israel Workers’ List,1965,1965,0,7.9,NA,1965,NA
+72,Israel,72323,HaAvoda,Mifleget HaAvoda HaYisraelit,Israeli Labour Party,1988,2021,0,34.65,NA,1992,NA
+72,Israel,72324,Mapai,Mifleget Poalei Eretz Yisrael,Worker's Party of the Land of Israel,1949,1961,0,38.231,NA,1959,NA
+72,Israel,72325,NA,Ahdut Ha’avodah,Unity of Labour,1955,1961,0,7.513,NA,1961,NA
+72,Israel,72326,MERETZ,Meretz,Meretz,1992,2021,0,9.58,NA,1992,NA
+72,Israel,72327,NA,Yisrael Ahat,One Israel,1999,1999,0,19.874,NA,1999,NA
+72,Israel,72328,NA,HaMahane Hazioni,Zionist Union,2015,2015,0,18.673,NA,2015,NA
+72,Israel,72410,NA,H’Miflaga H’Liberalit H’Atzmaeet,Progressive and Independent Liberal Party,1965,1981,0,3.754,NA,1965,NA
+72,Israel,72411,NA,Miflaga Haliberalit,Liberal Party,1961,1961,0,13.631,NA,1961,NA
+72,Israel,72412,DASH,Hatnuah Hademokratit Le-shinui,Democratic Movement for Change,1977,1977,0,11.572,NA,1977,NA
+72,Israel,72413,SHINUI,Shinui,Change,1981,2003,0,12.277,NA,2003,NA
+72,Israel,72414,NA,Yahad,Together,1984,1984,0,2.233,NA,1984,NA
+72,Israel,72415,NA,NA,Center Party,1999,1999,0,4.909,NA,1999,NA
+72,Israel,72420,NA,Zionim Klalim,General Zionists’,1949,1959,0,16.203,NA,1951,NA
+72,Israel,72425,NA,Ometz,Courage,1984,1984,0,1.15,NA,1984,NA
+72,Israel,72427,NA,Ha’Derech Ha’Shlishit,The Third Way,1996,1996,0,3.16,NA,1996,NA
+72,Israel,72428,NA,Yisrael Ba-Aliya,Israel for Immigration,1996,1999,0,5.73,NA,1996,NA
+72,Israel,72430,NA,Kadima,Forward,2006,2013,0,22.47,NA,2009,NA
+72,Israel,72431,NA,Hatnua,The Movement,2013,2013,0,4.988,NA,2013,NA
+72,Israel,72440,NA,Yesh Atid,There is a Future,2013,2021,0,14.329,NA,2013,NA
+72,Israel,72450,NA,Kulanu,All of us,2015,2019,0,7.489,NA,2015,NA
+72,Israel,72530,Mafdal,Mifleget Datit Leumit,National Religious Party,1955,2006,0,9.86,NA,1959,NA
+72,Israel,72531,NA,Agudat Yisrael,Union of Israel,1949,2021,0,3.732,NA,1981,NA
+72,Israel,72532,TAMI,Tenua le’Massoret Yisrael,Movement for Israel’s Tradition,1981,1984,0,2.295,NA,1981,NA
+72,Israel,72533,Shas,Shomrei Torah Sephardim,Sephardi Torah Guardians,1984,2021,0,12.766,NA,1999,NA
+72,Israel,72534,NA,Morasha,Heritage,1984,1984,0,1.605,NA,1984,NA
+72,Israel,72535,NA,Yahadut HaTorah HaMeukhedet,United Torah Judaism,1992,2020,1,6.058,NA,2019,NA
+72,Israel,72536,NA,Poalei Agudat Yisrael,Agudat Israel Workers,1961,1961,0,1.93,NA,1961,NA
+72,Israel,72610,NA,Hamerkaz Hahofshi,Free Centre,1969,1969,0,1.199,NA,1969,NA
+72,Israel,72611,NA,Reshima Mamlachtit,State List,1969,1969,0,3.119,NA,1969,NA
+72,Israel,72612,Tehiya,Tenuat Hetehiya,Renaissance Movement,1981,1992,0,3.204,NA,1984,NA
+72,Israel,72613,Tzomet,HaTenua LeHithadashot Zionit Vevilti Miflagtaim,Crossroads - non-aligned movement for Zionist Renewal,1988,1992,0,6.36,NA,1992,NA
+72,Israel,72614,NA,Degel Hatorah,Torah Flag,1988,2021,0,3.21850432343461,NA,2021,NA
+72,Israel,72615,NA,Moledet,Homeland,1988,1996,0,2.38,NA,1992,NA
+72,Israel,72620,NA,Tenuat Ha'Herut,Freedom,1949,1961,0,13.764,NA,1961,NA
+72,Israel,72621,Gahal,Gush-Herut Liberalim,Herut-Liberal Bloc,1965,1969,0,21.663,NA,1969,NA
+72,Israel,72622,Likud,HaLikud,The Consolidation,1973,2021,0,37.111,NA,1981,NA
+72,Israel,72623,NA,Shlomzion,Peace to Zion,1977,1977,0,1.942,NA,1977,NA
+72,Israel,72624,IL,HaIchud HaLeumi,National Union,1999,2009,1,5.526,NA,2003,NA
+72,Israel,72625,NA,Israel Beiteinu,Israel is Our Home,1999,2021,0,11.696,NA,2009,NA
+72,Israel,72626,NA,Tikva Hadasha,New Hope,2021,2021,0,4.74282389414002,NA,2021,NA
+72,Israel,72701,NA,HaBayit HaYehudi,The Jewish Home,2009,2015,0,9.122,NA,2013,NA
+72,Israel,72710,NA,HaTzionut HaDatit,Religious Zionist Party,2021,2021,0,5.11651563292224,NA,2021,NA
+72,Israel,72901,Ra'am,HaReshima Ha’aravit HaMeuchedet,United Arab List,1996,2021,0,3.78825465096557,NA,2021,NA
+72,Israel,72903,BaLaD,at-Tajamu' al-Waṭanī ad-Dīmūcraṭī/ Brit Le'umit Demokratit,National Democratic Assembly,2003,2019,0,2.558,NA,2013,NA
+72,Israel,72951,Gil,Gimla'ey Yisrael LaKnesset,Pensioners Party,2006,2006,0,5.921,NA,2006,NA
+73,Sri Lanka,73310,SLFP,Sri Lanka Nidahas Pakshaya,Sri Lanka Freedom Party,1952,1977,0,NA,NA,NA,NA
+73,Sri Lanka,73330,UNP,Ekshat Jathika Pakshaya,United National Party,1947,1977,0,NA,NA,NA,NA
+74,Turkey,74210,HDP,Halkların Demokratik Partisi,Peoples' Democratic Party,2015,2018,0,12.752,NA,2015,NA
+74,Turkey,74321,CHP,Cumhuriyet Halk Partisi,Republican People’s Party,1950,2018,0,41.385,NA,1977,NA
+74,Turkey,74322,HP,Halkçi Parti,Populist Party,1983,1983,0,30.463,NA,1983,NA
+74,Turkey,74323,SHP,Sosyal Demokrat Halçi Parti,Social Democratic Populist Party,1987,1991,0,24.742,NA,1987,NA
+74,Turkey,74324,DSP,Demokratik Sol Parti,Democratic Left Party,1991,1999,0,22.285,NA,1999,NA
+74,Turkey,74325,BDP,Barış ve Demokrasi Partisi,Peace and Democracy Party,2011,2011,0,6.567,NA,2011,NA
+74,Turkey,74326,DTP,Democratic Toplum Partisi,Democratic Society Party,2007,2007,0,4.6,NA,2007,NA
+74,Turkey,74621,DP,Demokrat Parti,Democratic Party,1950,1957,0,57.61,NA,1954,NA
+74,Turkey,74622,AP,Adalet Partisi,Justice Party,1961,1977,0,52.874,NA,1965,NA
+74,Turkey,74623,ANAP,Anavatan Partisi,Motherland Party,1983,1999,0,45.144,NA,1983,NA
+74,Turkey,74624,DYP,Doğru Yol Partisi,True Path Party,1987,1999,0,27.034,NA,1991,NA
+74,Turkey,74625,MP,Millet Partisi,Nation Party,1965,1969,0,6.261,NA,1965,NA
+74,Turkey,74626,BBP,Büyük Birlik Partisi,Grand Unity Party,1999,1999,0,1.46,NA,1999,NA
+74,Turkey,74627,DTP,Demokrat Türkiye Partisi,Democratic Turkey Party,1999,1999,0,0.58,NA,1999,NA
+74,Turkey,74628,AKP,Adalet ve Kalkınma Partisi,Justice and Development Party,2002,2018,0,49.833,NA,2011,NA
+74,Turkey,74640,İYİ,İYİ Parti,Good Party,2018,2018,0,9.955,NA,2018,NA
+74,Turkey,74710,CMP,Cumhuriyetçi Millet Partisi,Republican National Party,1954,1954,0,5.28,NA,1954,NA
+74,Turkey,74711,MDP,Milliyetçi Demokrasi Partisi,Nationalist Democratic Party,1983,1983,0,23.266,NA,1983,NA
+74,Turkey,74712,MHP,Milliyetçi Hareket Partisi,National Action Party,1961,2018,0,18.056,NA,1999,NA
+74,Turkey,74714,MSP,Millî Selamet Partisi,National Salvation Party,1973,1977,0,11.804,NA,1973,NA
+74,Turkey,74715,RP,Refah Partisi,Welfare Party,1987,1995,0,21.376,NA,1995,NA
+74,Turkey,74716,FP,Fazilet Partisi,Virtue Party,1999,1999,0,15.476,NA,1999,NA
+74,Turkey,74717,SAADET,Saadet Partisi,Felicity Party,2018,2018,0,1.344,NA,2018,NA
+75,Albania,75220,PSS,Partia Socialiste e Shqipërisë,Albanian Socialist Party,1991,2001,0,56.167,NA,1991,NA
+75,Albania,75320,PSD,Partia Socialdemokrate ë Shqipërisë,Social Democratic Party of Albania,1991,2001,0,4.381,NA,1992,NA
+75,Albania,75421,AD,Partia Aleanca Demokratike,Democratic Alliance Party,1992,2001,0,2.74,NA,1997,NA
+75,Albania,75621,PP,Partia Popullore,People’s Party,1991,1991,0,NA,NA,NA,NA
+75,Albania,75622,PUK,Partia e Unitetit Kombëtar,Party of National Unity,1992,1992,0,NA,NA,NA,NA
+75,Albania,75623,PLL,Partia Lëvizja e Legalitetit,Legality Movement Party,1991,1997,0,3.254,NA,1997,NA
+75,Albania,75624,PD,Partia Demokratike e Shqipërisë,Democratic Party of Albania,1991,1997,0,62.087,NA,1992,NA
+75,Albania,75721,DBSH,E Djatha e Bashkuar e Shqipërisë,United Albanian Right,1996,1997,0,4.97,NA,1996,NA
+75,Albania,75722,PRSH,Partia Republikane Shqiptare,Albanian Republican Party,1991,1997,0,5.744,NA,1996,NA
+75,Albania,75810,PASH,Partia Agrare e Shqipërisë,Agrarian Party of Albania,1991,2001,0,2.57,NA,2001,NA
+75,Albania,75951,PBDNJ,Partia Bashkimi për të Drejtat e Njeriut,Union for Human Rights Party,1991,2001,0,4.041,NA,1996,NA
+76,Armenia,76030,HD,Hayastan dashink,Armenia Alliance,2021,2021,1,21.106,NA,2021,NA
+76,Armenia,76041,HAK,Hay Azgayin Kongres,Armenian National Congress,2012,2012,1,7.098,NA,2012,NA
+76,Armenia,76042,NA,YELK Dashink,Way Out Alliance,2017,2017,1,7.78,NA,2017,NA
+76,Armenia,76043,NA,Im Kayly Dashink,My Step Alliance,2018,2018,1,70.443,NA,2018,NA
+76,Armenia,76044,NA,Tsarukyan Dashnik,Tsarukyan Alliance,2017,2017,1,27.35,NA,2017,NA
+76,Armenia,76060,NA,Pativ unem dashink’,I have honor,2021,2021,1,5.22,NA,2021,NA
+76,Armenia,76222,HKK,Hayastani Komunistakan Kusaktsutyun,Communist Party of Armenia,1995,1999,0,12.445,NA,1995,NA
+76,Armenia,76321,HHD,Hay Heghapokhakan Dashnaktsutyun,Armenian Revolutionary Federation,1999,2017,0,13.164,NA,2007,NA
+76,Armenia,76322,MAK,Miavorvac Ashkhatankayin Kusaktsutyun,United Labour Party,2003,2003,0,5.673,NA,2003,NA
+76,Armenia,76410,KP,K'aghak'atsiakan paymanagir,Civil Contract,2021,2021,0,53.944,NA,2021,NA
+76,Armenia,76420,OEK,Orinats' Yerkir,Rule of Law,1999,2012,0,12.598,NA,2003,NA
+76,Armenia,76421,A,Ardarutyun,Justice,2003,2003,1,13.714,NA,2003,NA
+76,Armenia,76430,NA,Zharangutyun,Heritage,2007,2012,0,5.997,NA,2007,NA
+76,Armenia,76435,NA,Lusawor Hajastan,Bright Armenia,2018,2018,0,6.372,NA,2018,NA
+76,Armenia,76521,AIM,Azgayin Inknoroshum Miavorum,National Self-Determination Union,1995,1995,0,5.73,NA,1995,NA
+76,Armenia,76610,HHK,Hayastani Hanrapetakan Kusaktsutyun,Republican Party of Armenia,2003,2017,0,49.165,NA,2017,NA
+76,Armenia,76620,BHK,Bargavadj Hayastan Kusaktsutyun,Prosperous Armenia,2007,2021,0,30.189,NA,2012,NA
+76,Armenia,76711,HA,Hanrapetutyun,Republic,1995,1995,1,43.898,NA,1995,NA
+76,Armenia,76712,AZhM,Azgayin Zhoghovrdakan Miutyun,National Democratic Union,1995,1999,0,7.731,NA,1995,NA
+76,Armenia,76901,NA,Shamiram,Semiramis Women’s Movement,1995,1995,0,17.364,NA,1995,NA
+76,Armenia,76902,IM,Iravunk ev Miabanutyun,Right and Unity,1999,1999,1,8.104,NA,1999,NA
+76,Armenia,76903,M,Miasnutyun,Unity,1999,1999,1,42.359,NA,1999,NA
+76,Armenia,76904,AM,Azgayin Miabanutyun,National Unity Party,2003,2003,0,8.91,NA,2003,NA
+77,Azerbaijan,77220,YAP,Yeni  Azərbaycan Partiyası,New Azerbaijan Party,1995,2000,0,66.118,NA,1995,NA
+77,Azerbaijan,77221,AVKP,Azərbaycan Vahid Kommunist Partiyası,Azerbaijan United Communist Party,2000,2000,0,6.3,NA,2000,NA
+77,Azerbaijan,77420,AXC,Azərbaycan Xalq Cebhesi,Azerbaijan Popular Front,1995,2000,0,11,NA,2000,NA
+77,Azerbaijan,77430,ADPS,Azərbaycan Demokratik Sahibkarlar Partiyası,Azerbaijan Democratic Entrepeneurs Party,1995,1995,0,4.22,NA,1995,NA
+77,Azerbaijan,77710,AMİP,Azərbaycan Milli İstiqlal Partiyası,Azerbaijan National Independence Party,1995,2000,0,9.846,NA,1995,NA
+77,Azerbaijan,77951,VHP,Vatandas Hamrayliyi Partiyası,Civil Solidarity Party,2000,2000,0,6.4,NA,2000,NA
+78,Belarus,78211,PKB,Partiya Komunistau Belaruskaya,Party of Communists of Belarus,1995,1995,0,NA,NA,NA,NA
+78,Belarus,78212,APB,Agrarnaya Partiya Belarusi,Agrarian Party of Belarus,1995,1995,0,NA,NA,NA,NA
+78,Belarus,78213,BKhP,Belaruskaya Syalanskaya Partiya,Belarusan Peasants' Party,1995,1995,0,NA,NA,NA,NA
+78,Belarus,78214,BPR,Belaruski Patryatychny Rukh,Belarusan Patriotic Movement,1995,1995,0,NA,NA,NA,NA
+78,Belarus,78410,PNZ,Partiya Narodnaya Zgody,Party of People’s Consent,1995,1995,0,NA,NA,NA,NA
+78,Belarus,78430,ADPB,Abyadnanya Demakratychnaya Partiya Belarusi,United Democratic Party of Belarus,1995,1995,0,NA,NA,NA,NA
+78,Belarus,78710,BSDP,Belaruskaja Sacyjal-Demakratychnaya Partiya ‘Hramada’,Belarusian Social-Democratic Party ‘Hramada’,1995,1995,0,NA,NA,NA,NA
+78,Belarus,78901,BPZ-N,Belaruskaya Partiya Zhanchyn ‘Nadzeya',Party of Women ‘Nadzeja’,1995,1995,0,NA,NA,NA,NA
+79,Bosnia-Herzegovina,79030,DF-GS,Demokratska Fronta - Građanski Savez,Democratic Front - Civic Alliance,2018,2018,1,5.806,NA,2018,NA
+79,Bosnia-Herzegovina,79090,SDS-NDP-NS-SRS,Srpska demokratska stranka - lista,Serbian Democratic Party - list,2018,2018,1,9.805,NA,2018,NA
+79,Bosnia-Herzegovina,79221,SK BiH-SDP,Savez komunista Bosne i Hercegovine-Socijalistička demokratska partija,League of Communists of Bosnia and Herzegovina-Social Democratic Party,1990,1990,0,4.605,NA,1990,NA
+79,Bosnia-Herzegovina,79222,SRSJ,Savez reformskih snaga Jugoslavije,Alliance of Reform Forces of Yugoslavia,1990,1990,0,7.837,NA,1990,NA
+79,Bosnia-Herzegovina,79223,SPRS,Socijalistička partija Republike Srpske,Socialist Party of the Republika Srpska,1996,1996,0,NA,NA,NA,NA
+79,Bosnia-Herzegovina,79321,SDP BiH,Socijaldemokratska partija Bosne i Hercegovine,Social Democratic Party of Bosnia and Herzegovina,1998,2018,0,18,NA,2000,NA
+79,Bosnia-Herzegovina,79322,DF,Demokratska fronta,Democratic Front,2014,2014,0,9.24,NA,2014,NA
+79,Bosnia-Herzegovina,79421,KCD BiH,Koalicija za cjelovitu i demokratsku Bosnu i Hercegovinu,Coalition for a United and Democratic Bosnia and Herzegovina,1998,1998,1,33.828,NA,1998,NA
+79,Bosnia-Herzegovina,79422,PDP RS,Partija demokratskog progresa Republike Srpske,Party of Democratic Progress of the Republika Srpska,2000,2018,0,6.4,NA,2000,NA
+79,Bosnia-Herzegovina,79423,NHI,Nova hrvatska inicijativa,New Croation Initiative,2000,2000,0,1.583,NA,2000,NA
+79,Bosnia-Herzegovina,79440,NS/HC,Naša stranka,Our Party,2018,2018,0,2.922,NA,2018,NA
+79,Bosnia-Herzegovina,79610,SBB BiH,Savez za bolju budućnost Bosne i Hercegovine,Alliance for a Better Future of Bosnia and Herzegovina,2010,2018,0,8.703,NA,2014,NA
+79,Bosnia-Herzegovina,79721,SRS RS,Srpska radikalna stranka Republike Srpske,Serbian Radical Party of the Republika Srpska,1998,1998,0,6.866,NA,1998,NA
+79,Bosnia-Herzegovina,79722,RS RS,Radikalna stranka Republike Srpske,Radical Party of the Republika Srpska,1998,1998,0,6.866,NA,1998,NA
+79,Bosnia-Herzegovina,79723,SBiH,Stranka za Bosnu i Hercegovinu,Party for Bosnia and Herzegovina,1996,2010,0,15.544,NA,2006,NA
+79,Bosnia-Herzegovina,79730,SNSD,Savez nezavisnih socijaldemokrata,Alliance of Independent Social Democrats,2002,2018,0,19.083,NA,2006,NA
+79,Bosnia-Herzegovina,79901,DNZ BiH,Demokratska narodna zajednica Bosne i Hercegovine,Democratic Peoples’ Union of Bosnia and Herzegovina,2000,2000,0,1.267,NA,2000,NA
+79,Bosnia-Herzegovina,79951,SDA,Stranka demokratske akcije,Party of Democratic Action,1990,2018,0,37.98,NA,1996,NA
+79,Bosnia-Herzegovina,79953,HDZ BiH,Hrvatska demokratska zajednica Bosne i Hercegovine,Croatian Democratic Union of Bosnia and Herzegovina,1990,2018,0,15.646,NA,1990,NA
+79,Bosnia-Herzegovina,79954,MBO,Muslimanska bošnjačka organizacija,Muslim-Bosniac Organization,1990,1990,0,0.903,NA,1990,NA
+79,Bosnia-Herzegovina,79955,SDS,Srpska demokratska stranka,Serbian Democratic Party,1990,2014,0,25.739,NA,1990,NA
+79,Bosnia-Herzegovina,79956,HDZ 1990,Hrvatska demokratska zajednica 1990,Croatian Democratic Union 1990,2006,2014,0,3.731,NA,2006,NA
+79,Bosnia-Herzegovina,79957,BPS,Bosanskohercegovacka Patriotska Stranka,Bosnian-Herzegovinian Patriotic Party,2006,2006,0,2.725,NA,2006,NA
+80,Bulgaria,80051,SK,Sinyata Koalitsiya,Blue Coalition,2009,2009,1,6.759,NA,2009,NA
+80,Bulgaria,80061,NA,Reformatorski blok,Reformist bloc,2014,2014,1,8.888,NA,2014,NA
+80,Bulgaria,80062,NA,Patriotichen front - NFSB i VMRO,Patriotic Front - NFSB and VMRO,2014,2014,1,7.283,NA,2014,NA
+80,Bulgaria,80071,OP,Obedineni Patrioti,United Patriots,2017,2017,1,9.066,NA,2017,NA
+80,Bulgaria,80110,PKE,Politicheski klub ‘Ekoglasnost',Political Club ‘Ekoglasnost',1994,1997,0,NA,NA,NA,NA
+80,Bulgaria,80220,BSP,Balgarska Socialisticheska Partiya,Bulgarian Socialist Party,1990,2013,0,47.151,NA,1990,NA
+80,Bulgaria,80221,BSPzB,BSP za Balgariya,BSP for Bulgaria,2001,2017,1,30.952,NA,2005,NA
+80,Bulgaria,80228,BSP-BZNS-AS-PKE,"Koalitsiya na Balgarska Sotsialisticheska Partiya, Balgarski Zemedelski Naroden Sayuz - Aleksandar Stambolijski i Politicheski klub 'Ekoglasnost'","Coalition of Bulgarian Socialist Party, Bulgarian Agrarian People’s Union - Alexandar Stambolijski and Political Club 'Ekoglasnost'",1991,1994,1,43.501,NA,1994,NA
+80,Bulgaria,80229,DL,Demokratichna Levitsa,Democratic Left,1997,1997,1,22.065,NA,1997,NA
+80,Bulgaria,80320,KEL,Koalitsiya Evrolevitsa,Euroleft Coalition,1997,1997,1,5.498,NA,1997,NA
+80,Bulgaria,80330,ABV,Alternativa za balgarsko vazrazhdane,Alternative for Bulgarian Revival,2014,2014,0,4.149,NA,2014,NA
+80,Bulgaria,80410,SDS,Sayuz na Demokratichnite Sili,Union of Democratic Forces,1990,1994,1,36.212,NA,1990,NA
+80,Bulgaria,80411,ODS,Obedineni Demokratichni Sili,United Democratic Forces,1997,2005,1,52.238,NA,1997,NA
+80,Bulgaria,80510,GERB,Grazhdani za Evropeisko Razvitie Balgariya,Citizens for European Development of Bulgaria,2009,2017,0,39.72,NA,2009,NA
+80,Bulgaria,80610,DSB,Demokrati za Silna Balgariya,Democrats for a Strong Bulgaria,2005,2005,0,6.436,NA,2005,NA
+80,Bulgaria,80620,RZS,"Red, Zakonnost i Spravedlivost","Order, Law and Justice",2009,2009,0,4.131,NA,2009,NA
+80,Bulgaria,80630,BBZ,Balgariya bez tsenzura,Bulgaria without Censorship,2014,2014,0,5.694,NA,2014,NA
+80,Bulgaria,80640,NA,Volya,Will,2017,2017,0,4.145,NA,2017,NA
+80,Bulgaria,80710,ATAKA,Nacionalno Obedinenie Ataka,National Union Attack,2005,2014,0,9.364,NA,2009,NA
+80,Bulgaria,80810,BZNS,Balgarski Zemedelski Naroden Sayuz,Bulgarian Agrarian National Union,1990,1990,0,6.024,NA,1990,NA
+80,Bulgaria,80811,NS,Naroden Sayuz,People’s Union,1994,1994,1,6.507,NA,1994,NA
+80,Bulgaria,80812,BZNS-AS,Balgarski Zemedelski Naroden Sayuz - Aleksandar Stambolijski,Bulgarian Agrarian People’s Union - Alexandar Stambolijski,1994,1994,0,NA,NA,NA,NA
+80,Bulgaria,80813,BNS,Balgarski Naroden Sayuz,Bulgarian People's Union,2005,2005,1,5.191,NA,2005,NA
+80,Bulgaria,80901,BBB,Balgarski Biznes Blok,Bulgarian Business Bloc,1994,1997,0,4.928,NA,1997,NA
+80,Bulgaria,80902,NDSV,Nacionalno Dvizhenie Simeon Vtori,National Movement Simeon the Second,2001,2005,0,42.741,NA,2001,NA
+80,Bulgaria,80951,DPS,Dvizhenie za Prava i Svobodi,Movement for Rights and Freedoms,1990,2017,0,14.837,NA,2014,NA
+80,Bulgaria,80952,ONS,Obedinenie za Natsionalno Spasenie,Union of National Salvation,1997,1997,1,7.566,NA,1997,NA
+81,Croatia,81021,SDP-HSLS,Koalicija Socijaldemokratske partije Hrvatske i Hrvatske socijalno-liberalne stranke,Coalition of the Social Democratic Party of Croatia and the Croatian Social-liberal Party,2000,2000,1,40.991,NA,2000,NA
+81,Croatia,81022,NA,Koalicija Jedina opcija,The Only Option Coalition,2016,2016,1,6.038,NA,2016,NA
+81,Croatia,81032,NA,Restart koalicija,Restart Coalition,2011,2020,1,40.719,NA,2011,NA
+81,Croatia,81041,HSS-HSLS-PGS,Koalicija Hrvatske seljačke stranke i Hrvatske socijalno-liberalne stranke i Primorsko-Goranski Savez,"Coalition of the Croatian Peasant Party, the Croatian Social-liberal Party and the Primorian-Goranski Union",2007,2007,1,6.516,NA,2007,NA
+81,Croatia,81042,HSLS-DC,Koalicija Hrvatske socijalno-liberalne stranke i Demokratskog centra,Coalition of the Croatian Social-liberal Party and the Democratic Centre,2003,2003,1,4.047,NA,2003,NA
+81,Croatia,81043,NA,Koalicija za Premijera,Coalition for Prime Minister,2016,2016,1,3.966,NA,2016,NA
+81,Croatia,81044,SSIP-P-F,Stranka s Imenom i Prezimenom - Pametno - Fokus,Party with a First and Last Name - Smart - Focus,2020,2020,1,3.983,NA,2020,NA
+81,Croatia,81061,NA,Domoljubna koalicija,Patriotic Coalition,2015,2015,1,32.592,NA,2015,NA
+81,Croatia,81091,NA,Istra je jaka,Even Stronger Istria Coalition,2015,2016,1,2.224,NA,2016,NA
+81,Croatia,81111,SZH,Savez Zelenih Hrvatske,Green Alliance of Croatia,1990,1990,0,NA,NA,NA,NA
+81,Croatia,81112,ZAS,Zelena akcija – Split,Green Action of Split,1990,1990,0,NA,NA,NA,NA
+81,Croatia,81220,SDP,Socijaldemokratska partija Hrvatska,Social Democratic Party of Croatia,1990,2007,0,31.234,NA,2007,NA
+81,Croatia,81221,SSH,Socijalistička stranka Hrvatske,Socialist Party of Croatia,1990,1990,0,NA,NA,NA,NA
+81,Croatia,81222,SSOH,Savez socijalističke omladine Hrvatske,Union of Socialist Youth of Croatia,1990,1990,0,NA,NA,NA,NA
+81,Croatia,81229,SKH-SDP-SSH,Savez komunista Hrvatske - Stranka demokratskih promjena i Socijalistička stranka Hrvatske,League of Communists of Croatia - Party of Democratic Changes and Socialist Party of Croatia,1990,1990,1,34.975,NA,1990,NA
+81,Croatia,81230,HL,Hrvatski laburisti - stranka rada,Croatian Labourists - Labour Party,2011,2011,0,5.175,NA,2011,NA
+81,Croatia,81240,NA,Možemo! - politička platforma,We can!-political platform,2020,2020,0,4.991,NA,2020,NA
+81,Croatia,81245,RF,Radnička fronta,Workers' Front,2020,2020,0,0.998,NA,2020,NA
+81,Croatia,81310,NL,Nova ljevica,New Left,2020,2020,0,0.998,NA,2020,NA
+81,Croatia,81410,HSLS,Hrvatska socijalno-liberalna stranka,Croatian Social-Liberal Party,1992,1995,0,17.722,NA,1992,NA
+81,Croatia,81411,LS,Liberalna stranka,Liberal Party,2000,2003,0,2.712,NA,2003,NA
+81,Croatia,81420,KNS,Koalicija narodnog sporazuma,Coalition of People’s Accord,1990,1990,1,15.337,NA,1990,NA
+81,Croatia,81430,HND,Hrvatski nezavisni demokrati,Croatian Independent Democrats,1995,1995,0,3.004,NA,1995,NA
+81,Croatia,81440,NA,Nezavisna lista Ivana Grubišića,Independent List of Ivan Grubišić,2011,2011,0,2.816,NA,2011,NA
+81,Croatia,81450,NS-R,Narodna stranka - Reformisti,People's Party - Reformists,2015,2020,0,1.461,NA,2015,NA
+81,Croatia,81460,MOST,Most nezavisnih lista,Bridge of Independent Lists,2015,2020,0,12.831,NA,2015,NA
+81,Croatia,81711,HDZ,Hrvatska demokratska zajednica,Croatian Democratic Union,1990,2020,0,45.231,NA,1995,NA
+81,Croatia,81712,HNS,Hrvatska narodna stranka - liberalni demokrati,Croatian People’s Party - Liberal Democrats,1992,2020,0,8,NA,2003,NA
+81,Croatia,81713,HSP,Hrvatska stranka prava,Croatian Party of Rights,1992,2003,0,7.068,NA,1992,NA
+81,Croatia,81714,DPMŠ,Domovinski pokret Miroslava Škore,Miroslav Škoro Homeland Movement,2020,2020,0,10.888,NA,2020,NA
+81,Croatia,81810,HSS,Hrvatska seljačka stranka,Croatian Peasant Party,1992,2011,0,9.996,NA,2000,NA
+81,Croatia,81899,ZL,Zajednica lista,Joint List Bloc,1995,1995,1,18.259,NA,1995,NA
+81,Croatia,81910,SDSS,Samostalna demokratska srpska stranka,Independent Democratic Serbian Party,2003,2020,0,NA,NA,NA,NA
+81,Croatia,81951,SNS,Srpska narodna stranka,Serbian People’s Party,1992,1992,0,1.088,NA,1992,NA
+81,Croatia,81952,HDSSB,Hrvatski demokratski savez Slavonije i Baranje,Croatian Democratic Assembly of Slavonia and Baranja,2007,2015,0,2.932,NA,2011,NA
+81,Croatia,81953,IDS,Istarski demokratski sabor,Istrian Democratic Assembly,1992,2007,0,2.352,NA,2000,NA
+81,Croatia,81954,DA,Dalmatinska akcija,Dalmatian Action,1992,1992,0,NA,NA,NA,NA
+81,Croatia,81955,RiDS,Riječki demokratski savez,Democratic Alliance of Rijeka,1992,1992,0,NA,NA,NA,NA
+81,Croatia,81956,SBHS,Slavonsko-Baranjska Hrvatska stranka,Croatian Party of Slavonia and Baranja,1995,1995,0,NA,NA,NA,NA
+81,Croatia,81957,HSU,Hrvatska stranka umirovljenika,Croatian Party of Pensioners,2003,2003,0,3.975,NA,2003,NA
+81,Croatia,81959,DA-IDS-RDS,"Koalicija Dalmatinska akcija, Istarski demokratski savez i Riječki demokratski savez","Coalititon of Dalmatian Action, Istrian Democratic Assembly and Democratic Alliance of Rijeka",1992,1992,1,3.178,NA,1992,NA
+81,Croatia,81960,NA,Živi zid,Human Shield,2015,2015,0,4.01,NA,2015,NA
+81,Croatia,81961,NA,Milan Bandić 365 - Stranka rada i solidarnosti,Milan Bandić 365 - The Party of Labour and Solidarity,2015,2015,0,3.192,NA,2015,NA
+82,Czech Republic,82110,SZ,Strana zelených,Green Party,2006,2013,0,6.29,NA,2006,NA
+82,Czech Republic,82220,KSČM,Komunistická strana Čzech a Moravy,Communist Party of Bohemia and Moravia,1990,2017,0,18.512,NA,2002,NA
+82,Czech Republic,82221,LB,Levý blok,Left Bloc,1992,1992,1,14.023,NA,1992,NA
+82,Czech Republic,82320,ČSSD,Česká strana sociálně demokratická,Czech Social Democratic Party,1992,2017,0,32.32,NA,2006,NA
+82,Czech Republic,82410,OF,Občanské fórum,Civic Forum,1990,1990,1,49.352,NA,1990,NA
+82,Czech Republic,82412,ODA,Občanská demokratická aliance,Civic Democratic Alliance,1992,1996,0,6.36,NA,1996,NA
+82,Czech Republic,82413,ODS,Občanská demokratická strana,Civic Democratic Party,1992,2017,0,35.38,NA,2006,NA
+82,Czech Republic,82419,ODS-KDS,Občanská demokratická strana - Křest'ansko-demokratická strana,Civic Democratic Party - Christian Democratic Party,1992,1992,1,29.67,NA,1992,NA
+82,Czech Republic,82420,LSU,Liberálnĕ sociální unie,Liberal Social Union,1992,1992,1,6.506,NA,1992,NA
+82,Czech Republic,82421,US,Unie svobody,Freedom Union,1998,1998,0,8.604,NA,1998,NA
+82,Czech Republic,82430,ANO,ANO 2011,ANO 2011,2013,2017,0,29.642,NA,2017,NA
+82,Czech Republic,82520,ČSL,Československá strana lidová,Czechoslovak People’s Party,1990,1990,0,NA,NA,NA,NA
+82,Czech Republic,82521,KDS,Křest'ansko-demokratická strana,Christian Democratic Party,1992,1992,0,NA,NA,NA,NA
+82,Czech Republic,82523,KDU-ČSL,Křest'anská a demokratická unie - Česká strana lidová,Christian and Democratic Union - Czech People's Party,1992,2017,0,8.996,NA,1998,NA
+82,Czech Republic,82524,KDU-ČSL-US-DEU,Křest'anská a demokratická unie - Česká strana lidová - Unie svobody - Demokratická unie,Christian and Democratic Union - Czech People's Party -  Freedom Union - Democratic Union,2002,2002,1,14.276,NA,2002,NA
+82,Czech Republic,82529,KDU,Křest'anská a demokratická unie,Christian and Democratic Union,1990,1990,1,8.39,NA,1990,NA
+82,Czech Republic,82530,TOP09,Tradice Odpovědnost Prosperita 09,"Tradition, Responsibility, Prosperity 09",2010,2017,0,16.71,NA,2010,NA
+82,Czech Republic,82610,STAN,Starostové a nezávislí,Mayors and Independents,2017,2017,0,5.18,NA,2017,NA
+82,Czech Republic,82710,SPR-RSČ,Sdruženi pro republiku - Republikánská strana Československa,Association for the Republic – Republican Party of Czechoslovakia,1992,2002,0,8.006,NA,1996,NA
+82,Czech Republic,82720,Úsvit,Úsvit přímé demokracie Tomia Okamury,Tomio Okamura's Dawn of Direct Democracy,2013,2013,0,6.888,NA,2013,NA
+82,Czech Republic,82721,SPD,Svoboda a přímá demokracie,Freedom and Direct Democracy,2017,2017,0,10.642,NA,2017,NA
+82,Czech Republic,82901,DŽJ,Důchodci za životní jistoty,Pensioners for a Life Security,1996,1998,0,3.09,NA,1996,NA
+82,Czech Republic,82951,HSD-SMS,Hnutí za Samosprávnou Demokracii - Společnost pro Moravu a Slezsko,Movement for an Autonomous Democracy - Society for Moravia-Silesia,1990,1992,0,10.005,NA,1990,NA
+82,Czech Republic,82952,VV,Věci veřejné,Public Affairs,2010,2010,0,10.88,NA,2010,NA
+82,Czech Republic,82953,Piráti,Česká pirátská strana,Czech Pirate Party,2017,2017,0,10.797,NA,2017,NA
+83,Estonia,83110,EER,Erakond Eestimaa Rohelise,Estonian Greens,2007,2011,0,7.14,NA,2007,NA
+83,Estonia,83220,NA,Valimisliit ‘Kindel Kodu',Electoral Union ‘Secure Home',1992,1992,1,13.602,NA,1992,NA
+83,Estonia,83320,ESDP,Eesti Sotsiaaldemokraatlik Partei,Estonian Social Democratic Party,1992,1992,0,NA,NA,NA,NA
+83,Estonia,83410,SDE,Sotsiaaldemokraatlik Erakond,Social Democratic Party,1992,2019,1,17.093,NA,2011,NA
+83,Estonia,83411,K,Eesti Keskerakond,Estonian Center Party,1995,2019,0,26.08,NA,2007,NA
+83,Estonia,83421,NA,Valimisliit ‘Rahvarinne',Electoral Union ‘Popular Front',1992,1992,1,12.248,NA,1992,NA
+83,Estonia,83430,ER,Eesti Reformierakond,Estonian Reform Party,1995,2019,0,28.934,NA,2019,NA
+83,Estonia,83440,EVA,Eesti Vabaerakond,Free Party,2015,2015,0,8.688,NA,2015,NA
+83,Estonia,83610,VKRE,Vabariiklaste ja Konservatiivide Rahvaerakond ‘Parempoolsed',Republican and Conservative People’s Party ‘Right-wingers',1995,1995,0,5.003,NA,1995,NA
+83,Estonia,83611,NA,Isamaa,Pro Patria,2003,2019,0,24.615,NA,2003,NA
+83,Estonia,83612,ERL,Eestimaa Rahvaliit,Estonian People’s Union,2003,2011,0,13.027,NA,2003,NA
+83,Estonia,83709,NA,Ismaaaliit,Pro Patria Union,1995,2003,1,16.09,NA,1999,NA
+83,Estonia,83710,RKI,Rahvuslik Koonderakond Isamaa,National Coalition Pro Patria,1992,1992,1,22.003,NA,1992,NA
+83,Estonia,83711,ERSP,Eesti Rahvusliku Sõltumatuse Partei,Estonian National Independence Party,1992,1992,0,8.786,NA,1992,NA
+83,Estonia,83712,NA,Valimisliit ‘Eesti Kodanik',Electoral Union ‘Estonian Citizen',1992,1992,1,6.881,NA,1992,NA
+83,Estonia,83713,KE,Eesti Koonderakond,Coalition Party,1995,1999,0,7.633,NA,1999,NA
+83,Estonia,83719,KMÜ,Koonderakond ja Maarahva Ühendus,Coalition Party and Rural Union,1995,1995,1,32.23,NA,1995,NA
+83,Estonia,83720,EKRE,Eesti Konservatiivne Rahvaerakond,Conservative People's Party of Estonia,2015,2019,0,17.762,NA,2019,NA
+83,Estonia,83810,EME,Eesti Maarahva Erakond,Estonian Rural People’s Party,1999,1999,0,7.27,NA,1999,NA
+83,Estonia,83901,NA,Valimisliit ‘Sõltumatud Kuningriiklased',Electoral Union ‘Independent Royalists',1992,1992,1,7.122,NA,1992,NA
+83,Estonia,83951,NA,Valimisliit ‘Meie Kodu on Eestimaa',Electoral Union ‘Our Home is Estonia',1995,1995,1,5.874,NA,1995,NA
+83,Estonia,83952,EÜRP,Eestimaa Ühendatud Rahvapartei,Estonian United People’s Party,1999,1999,0,6.13,NA,1999,NA
+84,Georgia,84041,NA,Gaertianebuli Opozitsia (Erovnuli Sabcho/Memarjveneeba),United Opposition National Council/Rights,2008,2008,1,17.537,NA,2008,NA
+84,Georgia,84042,NA,Bidzina Ivanishvili - Kartuli Otsneba,Bidzina Ivanishvili - Georgian Dream,2012,2012,1,54.966,NA,2012,NA
+84,Georgia,84095,NA,Mrgvali Magida -Tavisufali Saqar Tvelo,Round Table - Free Georgia,1990,1990,1,54,NA,1990,NA
+84,Georgia,84110,Greens,Sak'art'velos Mtsvaneta Partia,Green Party of Georgia,1992,1992,0,7.2,NA,1992,NA
+84,Georgia,84220,SKP,Sak'art'velos Komunisturi Partia,Communist Party of Georgia,1990,1990,0,29.6,NA,1990,NA
+84,Georgia,84221,Mshvidoba,Saarchevno Blok ‘Mshvidoba’,Election Bloc ‘Peace’,1992,1992,1,19.2,NA,1992,NA
+84,Georgia,84222,SMSP,Sak'art'velos Mshromelta Sotsialisturi Partia,Georgian Workers’ Socialist Party,1992,1992,0,2.1,NA,1992,NA
+84,Georgia,84223,SSP,Sak'art'velos Sotsialisturi Partia,Socialist Party of Georgia,1995,1999,0,3.795,NA,1995,NA
+84,Georgia,84321,SSDP,Sak'art'velos Sotsial-Demokratiuli Partia,Social Democratic Party of Georgia,1992,1992,0,1.3,NA,1992,NA
+84,Georgia,84322,SSSK,Sak'art'velos Sotsialuri Samartlianobis Kavshiri,Georgian Social Justice Union,1992,1992,0,1.2,NA,1992,NA
+84,Georgia,84323,SMK,Sak'art'velos Mokalaketa Kavshiri,Citizens’ Union of Georgia,1995,1999,0,41.751,NA,1999,NA
+84,Georgia,84411,NA,Kartia – 91,Charter 91,1992,1992,0,5.4,NA,1992,NA
+84,Georgia,84421,NA,Saarchevno Bloki ‘Tertmeti Oktomberi’,Election Bloc ‘Oktober 11’,1992,1992,0,12.2,NA,1992,NA
+84,Georgia,84422,NA,Blok ‘Ertoba’,‘Unity' Bloc,1992,1992,1,9,NA,1992,NA
+84,Georgia,84423,DP,Demokratiuli Partia,Democratic Party,1992,1992,0,5.6,NA,1992,NA
+84,Georgia,84424,DAP,Demokratiuli Aghordzinebis Pavshiri,Union for the Democratic Revival,1995,2003,0,25.18,NA,1999,NA
+84,Georgia,84425,BP,Bloki ‘Progresi’,Bloc ‘Progress’,1995,1995,0,1.372,NA,1995,NA
+84,Georgia,84426,PKT,Politikuri Kavshiri ‘Tanadgoma’,Political Alliance ‘Support’,1995,1995,0,2.15,NA,1995,NA
+84,Georgia,84427,SRKET,Sak'art'velos Reformatorta Kavshiri - Erovnuli Tankhmoba,Reformers' Union of Georgia - National Concord,1995,1995,0,2.887,NA,1995,NA
+84,Georgia,84428,MGS,Mretsvelopba Gadaarchens Sak'art'velos,Industry will save Georgia,1999,2016,0,7.078,NA,1999,NA
+84,Georgia,84429,SLP,Sak'art'velos Leiboristuli Partia,Georgian Labour Party,2003,2020,0,12,NA,2003,NA
+84,Georgia,84430,BD,Bloki ‘Burjanadze - Demokratebi’,Burjanadze - Democrats Bloc,2003,2003,0,8.8,NA,2003,NA
+84,Georgia,84431,AM,Akhali Memarjveneebi,New Rights,2003,2004,0,7.3,NA,2003,NA
+84,Georgia,84432,AS,Saarchevno Bloki ‘Axali Sak'art'velostvis’,Election Bloc ‘For a New Georgia’,2003,2003,1,21.3,NA,2003,NA
+84,Georgia,84435,NA,St’rat’egia Aghmashenebeli,Strategy Aghmashenebeli,2020,2020,0,3.153,NA,2020,NA
+84,Georgia,84440,Respublikelebi,Sak’art’velos Respublikuri Partia,Republican Party of Georgia,2008,2008,0,3.736,NA,2008,NA
+84,Georgia,84445,NA,Lelo Sakartvelostvis,Try for Georgia,2020,2020,0,3.155,NA,2020,NA
+84,Georgia,84450,NA,K'art'uli Ots'neba - Demokratiuli Sak'art'velo,Georgian Dream - Democratic Georgia,2016,2020,0,48.683,NA,2016,NA
+84,Georgia,84460,NA,Akhali P’olit’ik’uri Tsent’ri — Girchi,New Political Center - Girchi,2020,2020,0,2.889,NA,2020,NA
+84,Georgia,84521,SGK,Sak'art'velos Ghvtisshvilta Kavshiri,Union of God’s Children of Georgia,1992,1992,0,1.2,NA,1992,NA
+84,Georgia,84530,KDM,K’ristianul-Demokratiuli Modzraoba,Christian-Democratic Movement,2008,2008,0,8.562,NA,2008,NA
+84,Georgia,84610,NA,Evropuli Sakartvelo - Modzraoba Tavisuplebistvis,European Georgia - Movement for Liberty,2020,2020,0,3.793,NA,2020,NA
+84,Georgia,84710,KTK,Kartvel Traditsionalista Kavshiri,Union of Georgian Traditionalists,1992,1995,0,4.5,NA,1992,NA
+84,Georgia,84711,EDP,Erovnul Demokratiuli Partia,National Democratic Party,1992,1995,0,9,NA,1992,NA
+84,Georgia,84712,ICS,Ilia Chavchavadzis Sazogadoeba,Ilia Chavchavadze Society,1992,1992,0,4.5,NA,1992,NA
+84,Georgia,84713,SSMKS,Sruliad Sak'art'velos Merab Kostavas Sazogadoeba,Merab Kostava Society,1992,1992,0,3,NA,1992,NA
+84,Georgia,84714,SETAK,Sak'art'velos Erovnuli Tankhmobis da Aghorzinebis Kavshiri,Union of National Agreement and Revival of Georgia,1992,1992,0,2.5,NA,1992,NA
+84,Georgia,84715,SEDP,Sak'art'velos Erovnuli Damoukideblobis Partia,Georgian National Independent Party,1992,1992,0,2.6,NA,1992,NA
+84,Georgia,84716,ENM,Ertiani Natsionaluri Modzraoba,United National Movement,2003,2020,1,67.75,NA,2004,NA
+84,Georgia,84720,NA,Sakhalkho Fronti,Popular Front,1990,1990,0,1.9,NA,1990,NA
+84,Georgia,84730,NA,Sak'art'velos Patriotta Aliansi,Alliance of Patriots of Georgia,2016,2020,0,5.007,NA,2016,NA
+84,Georgia,84810,SSFK,Sruliad Sak'art'velos Fermerta Kavshiri,All-Georgian Farmers’ Union,1992,1992,0,NA,NA,NA,NA
+84,Georgia,84951,KMSP,Khalkhta Megobrobis da Samartlianobis Partia,People’s Friendship and Justice,1992,1992,0,1.4,NA,1992,NA
+84,Georgia,84952,NA,Demokratiuli Saqartvelo,Democratic Georgia,1990,1990,0,1.8,NA,1990,NA
+85,German Democratic Republic,85111,Grüne-UFV,Grüne Partei-Unabhängiger Frauenverband,Green Party-Independent Women's League,1990,1990,1,1.966,NA,1990,NA
+85,German Democratic Republic,85112,B 90,Bündnis 90,Alliance 90,1990,1990,1,2.912,NA,1990,NA
+85,German Democratic Republic,85210,AVL,Aktionsbündnis Vereinigte Linke,United Left Action Alliance,1990,1990,1,0.176,NA,1990,NA
+85,German Democratic Republic,85221,PDS,Partei des Demokratischen Sozialismus,Party for Democratic Socialism,1990,1990,0,16.397,NA,1990,NA
+85,German Democratic Republic,85320,SPD,Sozialdemokratische Partei Deutschlands,Social Democratic Party of Germany,1990,1990,0,21.883,NA,1990,NA
+85,German Democratic Republic,85421,FDP,Freie Demokratische Partei,Free Democratic Party,1990,1990,0,NA,NA,NA,NA
+85,German Democratic Republic,85422,LDP,Liberal-Demokratische Partei,Liberal Democratic Party,1990,1990,0,NA,NA,NA,NA
+85,German Democratic Republic,85423,DFP,Deutsche Forumpartei,German Forum Party,1990,1990,0,NA,NA,NA,NA
+85,German Democratic Republic,85424,NDPD,National-Demokratische Partei Deutschlands,National Democratic Party of Germany,1990,1990,0,0.384,NA,1990,NA
+85,German Democratic Republic,85429,BFD,Bund Freier Demokraten,Alliance of Free Democrats,1990,1990,1,5.276,NA,1990,NA
+85,German Democratic Republic,85521,CDU,Christlich Demokratische Union,Christian Democratic Union,1990,1990,0,40.816,NA,1990,NA
+85,German Democratic Republic,85522,DSU,Deutsche Soziale Union,German Social Union,1990,1990,0,6.306,NA,1990,NA
+85,German Democratic Republic,85523,DA,Demokratischer Aufbruch - ‘sozial und ökologisch’,Democratic Opening,1990,1990,0,0.92,NA,1990,NA
+85,German Democratic Republic,85524,DBD,Demokratische Bauernpartei Deutschlands,Democratic Peasants’ Party of Germany,1990,1990,0,2.177,NA,1990,NA
+85,German Democratic Republic,85901,DFD,Demokratischer Frauenbund Deutschlands,Democratic Women’s League,1990,1990,0,0.331,NA,1990,NA
+86,Hungary,86110,LMP,Lehet Más Politika!,Politics Can Be Different,2010,2018,0,7.055,NA,2018,NA
+86,Hungary,86111,PM,Párbeszéd Magyarországért,Dialogue for Hungary,2018,2018,0,1.787,NA,2018,NA
+86,Hungary,86220,MSzP,Magyar Szocialista Párt,Hungarian Socialist Party,1990,2018,0,48.19,NA,2006,NA
+86,Hungary,86221,DK,Demokratikus Koalícío,Democratic Coalition,2014,2018,0,5.376,NA,2018,NA
+86,Hungary,86320,MSzDP,Magyarországi Szociáldemokrata Párt,Hungarian Social Democratic Party,1990,2010,0,2.118,NA,1990,NA
+86,Hungary,86340,E14-PM,Együtt 2014 – Párbeszéd Magyarországért Választási Szövetség,Together 2014 -Dialogue for Hungary Electoral Alliance,2014,2018,0,2.057,NA,2014,NA
+86,Hungary,86421,FiDeSz-KDNP,Szövetség Fiatal Demokraták Szövetsége - Kereszténydemokrata Néppárt,Alliance of Federation of Young Democrats - Christian Democratic People's Party,1990,2018,0,67.88,NA,2010,NA
+86,Hungary,86422,SzDSz,Szabad Demokraták Szövetsége,Alliance of Free Democrats,1990,2006,0,21.396,NA,1990,NA
+86,Hungary,86521,MDF,Magyar Demokrata Fórum,Hungarian Democratic Forum,1990,2006,0,22.894,NA,1990,NA
+86,Hungary,86522,KDNP,Kerezténydemokrata Néppárt,Christian Democratic People’s Party,1990,1998,0,7.028,NA,1994,NA
+86,Hungary,86620,MIÉP,Magyar Igazság és Élet Párt,Hungarian Justice and Life Party,1998,1998,0,5.57,NA,1998,NA
+86,Hungary,86710,Jobbik,Jobbik Magyarországért Mozgalom,Movement for a Better Hungary,2010,2018,0,20.583,NA,2014,NA
+86,Hungary,86810,FKgP,Független Kisgazda Párt,Independent Smallholders’ Party,1990,2002,0,13.38,NA,1998,NA
+86,Hungary,86811,ASz,Agrárszövetsége,Agrarian Alliance,1990,1990,1,0,NA,1990,NA
+87,Latvia,87021,SC,Saskaņas Centrs,Concord Centre,2006,2011,1,28.62,NA,2011,NA
+87,Latvia,87041,LPP/LC,‘Latvijas Pirmā partijas' un partijas ‘Latvijas Ceļš' vēlēšanu apvienība',‘Latvia's First Party' and ‘Latvian Way' Union,2006,2006,1,8.581,NA,2006,NA
+87,Latvia,87042,NA,Attīstībai/Par!,Development/For!,2018,2018,1,12.12,NA,2018,NA
+87,Latvia,87061,PLL,Par Labu Latviju!,For a Good Latvia,2010,2010,1,7.819,NA,2010,NA
+87,Latvia,87062,NA,Vienotība,Unity,2010,2018,1,31.903,NA,2010,NA
+87,Latvia,87071,NA,Nacionālā apvienība ‘Visu Latvijai!' – ‘Apvienība Tēvzemei un brīvībai - Latvijas Nacionālās neatkaribas kustība',National Alliance ‘All For Latvia!' – ‘For Fatherland and Freedom - Latvian National Independence Movement',2010,2018,1,16.719,NA,2014,NA
+87,Latvia,87110,ZZS,Zaļo un Zemnieku savienība,Greens' and Farmers’ Union,2002,2018,1,20.112,NA,2010,NA
+87,Latvia,87220,SLAT,Saskaņa Latvijai - Atdzimšana Tautsaimniecībai,Harmony for Latvia - Rebirth of the Economy,1993,1993,0,12.008,NA,1993,NA
+87,Latvia,87310,LSP,Latvijas Sociālistiska partija,Latvian Socialist Party,1995,1995,0,5.607,NA,1995,NA
+87,Latvia,87311,LSDA,Latvijas Sociāldemokrātu apvienība,Latvian Social Democratic Alliance,1998,1998,0,12.878,NA,1998,NA
+87,Latvia,87320,LVP,Latvijas Vienības partija,Latvian Unity Party,1995,1995,0,7.182,NA,1995,NA
+87,Latvia,87340,SDPS,"Sociāldemokrātiskā Partija ""Saskaņa""","Social Democartic Party ""Harmony""",2014,2018,0,23.153,NA,2014,NA
+87,Latvia,87410,LC,Savienība ‘Latvijas ceļš',Latvian Way Union,1993,2002,0,32.412,NA,1993,NA
+87,Latvia,87411,DPS,Demokrātiskā partija ‘Saimnieks',Democratic Party ‘Saimnieks’,1995,1995,0,15.222,NA,1995,NA
+87,Latvia,87420,LLP,Latvijas Liberālā partija,Latvian Liberal Party,1993,1993,0,0.136,NA,1993,NA
+87,Latvia,87421,TSP,Tautas Saskaņas partija,National Harmony Party,1995,1998,0,14.201,NA,1998,NA
+87,Latvia,87422,PCTVL,Par cilvēka tiesībām vienotā Latvijā,For Human Rights in a United Latvia,2002,2006,0,19.095,NA,2002,NA
+87,Latvia,87423,JL,Jaunais laiks,New Era,2002,2006,0,23.979,NA,2002,NA
+87,Latvia,87430,DCP,Demokrātiskā centra partija,Democratic Centre Party,1993,1993,0,4.766,NA,1993,NA
+87,Latvia,87431,JP,Jauna partija,New Party,1998,1998,0,7.348,NA,1998,NA
+87,Latvia,87520,KDS,Kristīgi demokrātiskā savienība,Christian Democratic Union,1993,1993,0,5.013,NA,1993,NA
+87,Latvia,87521,LPP,Latvijas Pirmā partija,Latvia’s First Party,2002,2002,0,9.569,NA,2002,NA
+87,Latvia,87610,TP,Tautas partija,People’s Party,1998,2006,0,21.305,NA,1998,NA
+87,Latvia,87611,LNNK-LZP,Koalīcija Latvijas Nacionālā Konservatīvā Partija un Latvijas Zaļā Partija,Coalition Latvian National Conservative Party and Latvian Green Party,1995,1995,1,6.346,NA,1995,NA
+87,Latvia,87620,ZRP,Zatlera Reformu Partija,Zatlers' Reform Party,2011,2011,0,21.014,NA,2011,NA
+87,Latvia,87630,NA,No sirds Latvijai,For Latvia from the Heart,2014,2014,0,6.897,NA,2014,NA
+87,Latvia,87640,NA,Jaunā konservatīvā partija,New Conservative Party,2018,2018,0,13.67,NA,2018,NA
+87,Latvia,87710,LNNK,Latvijas Nacionālās neatkaribas kustība,Latvian National Independence Movement,1993,1993,0,13.355,NA,1993,NA
+87,Latvia,87721,TB,Tēvzemei un brīvībai,For Fatherland and Freedom,1993,1995,0,11.993,NA,1995,NA
+87,Latvia,87722,TKL-ZP,Tautas Kustība ‘Latvijai'-Zīgerista partija,Popular Movement for Latvia-Zigerista Party,1995,1995,0,14.966,NA,1995,NA
+87,Latvia,87723,TB-LNNK,Apvienība Tēvzemei un brīvībai - Latvijas Nacionālās neatkaribas kustība,For Fatherland and Freedom - Latvian National Independence Movement,1998,2006,1,14.732,NA,1998,NA
+87,Latvia,87730,KPV LV,Kam pieder valsts?,Who owns the state?,2018,2018,0,14.334,NA,2018,NA
+87,Latvia,87810,LZS,Latvijas Zemnieku savienība,Latvian Farmers’ Union,1993,1993,0,10.651,NA,1993,NA
+87,Latvia,87811,LZS-LKDS-LDP,"Koalīcija Latvijas Zemnieku savienība, Latvijas Kristîgi demokratu savienība un Latgales demokrātiskā partija","Coalition of Latvian Farmers' Union, Latvian Christian Democratic Union and Democratic Party of Latgale",1995,1995,1,6.361,NA,1995,NA
+87,Latvia,87901,NA,Latvijas Reģionu apvienība,Latvian Association of Regions,2014,2014,0,6.708,NA,2014,NA
+87,Latvia,87951,L,Līdztiesība,Equal Rights,1993,1993,0,5.763,NA,1993,NA
+88,Lithuania,88031,UdL,Koalicija ‘Už darbą Lietuvai',Working for Lithuania,2004,2004,1,20.646,NA,2004,NA
+88,Lithuania,88041,UTT,Rolando Pakso Koalicijos ‘Už Tvarką ir teisingumą',Coalition of Rolandas Paksas ‘For Order and Justice',2004,2004,1,11.358,NA,2004,NA
+88,Lithuania,88042,NA,Koalicija Darbo partija + Jaunimas,Coalition Labour Party and Youth,2008,2008,1,8.987,NA,2008,NA
+88,Lithuania,88220,LDDP,Lietuvos demokratinė darbo partija,Lithuanian Democratic Labour Party,1992,1996,0,43.976,NA,1992,NA
+88,Lithuania,88320,LSDP,Lietuvos socialdemokratų partija,Lithuanian Social Democratic Party,1992,2020,0,19.176,NA,2012,NA
+88,Lithuania,88321,BSDK,A. Brazausko socialdemokratinė koalicija,A. Brazauskas Social Democratic Coalition,2000,2000,1,31.082,NA,2000,NA
+88,Lithuania,88322,LSDDP,Lietuvos socialdemokratų darbo partija,Social Democratic Labour Party of Lithuania,2020,2020,0,3.28142905410472,NA,2020,NA
+88,Lithuania,88410,NS,Naujoji sąjunga (socialliberalai),New Union Social Liberals,2000,2000,0,19.636,NA,2000,NA
+88,Lithuania,88420,LCS,Lietuvos centro sąjunga,Lithuanian Centre Union,1992,2000,0,8.672,NA,1996,NA
+88,Lithuania,88421,SK,Sajūdis koalicija,Sajudis Coalition,1992,1992,1,21.172,NA,1992,NA
+88,Lithuania,88422,LLS,Lietuvos liberalų sąjunga,Lithuanian Liberal Union,2000,2000,0,17.252,NA,2000,NA
+88,Lithuania,88430,LiCS,Liberalų ir centro sąjunga,Liberal and Centre Union,2004,2008,0,9.189,NA,2004,NA
+88,Lithuania,88440,DP,Darbo Partija,Labour Party,2004,2020,0,28.439,NA,2004,NA
+88,Lithuania,88450,LRLS,Lietuvos respublikos Liberalų sąjūdis,Liberal Movement,2008,2020,0,9.449,NA,2016,NA
+88,Lithuania,88451,LP,Laisvės partija,Freedom Party,2020,2020,0,9.44748452002142,NA,2020,NA
+88,Lithuania,88460,PTT,Partija tvarką ir teisingumąs,Order and Justice,2008,2016,0,12.677,NA,2008,NA
+88,Lithuania,88521,LKDP,Lietuvos krikščionių demokratų partija,Lithuanian Christian Democratic Party,1992,2000,0,10.426,NA,1996,NA
+88,Lithuania,88522,LDP,Lietuvos demokratų partija,Lithuanian Democratic Party,1992,1996,0,NA,NA,NA,NA
+88,Lithuania,88523,LPKTS,Lietuvos politinių kalinių ir tremtinių sąjunga,Lithuanian Union of Political Prisoners and Deportees,1992,1992,0,NA,NA,NA,NA
+88,Lithuania,88529,LKDPK,Lietuvos krikščionių demokratų partija koalicija,Lithuanian Christian Democratic Party Coalition,1992,1992,1,12.61,NA,1992,NA
+88,Lithuania,88620,TS,Tėvynės sąjunga,Homeland Union,1996,2004,0,31.34,NA,1996,NA
+88,Lithuania,88621,TS-LKD,Tėvynės sąjunga- Lietuvos krikščionys demokratai,Homeland Union - Lithuanian Christian Democrats,2008,2020,0,25.7704702261281,NA,2020,NA
+88,Lithuania,88630,TPP,Tautos prisikėlimo partija,National Resurrection Party,2008,2008,0,15.091,NA,2008,NA
+88,Lithuania,88710,LTS,Lietuvių tautininkų sąjunga,Lithuanian National Union,1992,1992,0,1.986,NA,1992,NA
+88,Lithuania,88810,LVP,Lietuvos valstiečių partija,Lithuanian Peasants Party,2000,2000,0,4.081,NA,2000,NA
+88,Lithuania,88820,LVŽS,Lietuvos valstiečių ir žaliųjų sąjunga,Lithuanian Peasant and Green Union,2004,2020,0,22.452,NA,2016,NA
+88,Lithuania,88951,LLRA/AWPL,Lietuvos lenkų rinkimų akcija/Akcja Wyborcza Polaków na Litwie,Election Action of Lithuania’s Poles,1992,2020,0,6.085,NA,2012,NA
+88,Lithuania,88952,DK,Drąsos kelias,The Way of Courage,2012,2012,0,8.342,NA,2012,NA
+89,North Macedonia,89031,GROM,Graganska Opcija za Maekedonija,Coalition Civic Option for Macedonia,2014,2014,1,2.919,NA,2014,NA
+89,North Macedonia,89221,SDSM,Socijaldemokratski Sojuz na Makedonija,Social-Democratic League of Macedonia,1990,2016,0,29.828,NA,2002,NA
+89,North Macedonia,89222,LP,Liberalna Partija,Liberal Party,1990,1994,0,14.728,NA,1990,NA
+89,North Macedonia,89223,MDPSM,Mlada Demokratsko-Progresivna Stranka na Makedonija,Young Democratic Progressive Party of Macedonia,1990,1990,0,0,NA,1990,NA
+89,North Macedonia,89224,LDP,Liberalno Demokratska Partija,Liberal Democratic Party,1998,2016,0,8.324,NA,2002,NA
+89,North Macedonia,89227,SM,Sojuz na Makedonija,Union of Macedonia,1994,1994,1,29.49,NA,1994,NA
+89,North Macedonia,89228,SPM/MDPSM/SRSM,Socijalistička Partija na Makedonija/Mlada Demokratsko-Progresivna Stranka na Makedonija/Sojuz na Reformskite Sili na Makedonija,Joint Candidates of Socialist Party of Macedonia/Young Democratic Progressive Party of Macedonia/Alliance of Reform Forces of Macedonia,1990,1990,1,0.729,NA,1990,NA
+89,North Macedonia,89229,SPM/MDPSM/SRSM/PCER,Socijalistička Partija na Makedonija/Mlada Demokratsko-Progresivna Stranka na Makedonija/Sojuz na Reformskite Sili na Makedonija/Partija za Celosna Emancipacija na Romite,Joint Candidates of Socialist Party of Macedonia/Young Democratic Progressive Party of Macedonia/Alliance of Reform Forces of Macedonia/Party for the Complete Emancipation of the Roma,1990,1990,1,3.227,NA,1990,NA
+89,North Macedonia,89230,NSDP,Nova Socijaldemokratska Partija,New Social Democratic Party,2006,2011,0,6.043,NA,2006,NA
+89,North Macedonia,89320,SPM,Socijalistička Partija na Makedonija,Socialist Party of Macedonia,1990,2011,0,7.967,NA,1990,NA
+89,North Macedonia,89321,DA,Demokratska Alternativa,Democratic Alternative,1998,1998,0,10.726,NA,1998,NA
+89,North Macedonia,89330,DOM,Demokratska Obnova na Makedonija,Democratic Renewal of Macedonia,2011,2016,0,0.773,NA,2016,NA
+89,North Macedonia,89420,SJM,Stranka na Jugoslovenite vo Makedonija,Party of Yugoslavs in Macedonia,1990,1990,0,1.746,NA,1990,NA
+89,North Macedonia,89430,LPM,Liberalna Partija na Makedonija,Liberal Party of Macedonia,2002,2006,0,3.797,NA,2002,NA
+89,North Macedonia,89511,VMRO-NP,Vnatrešna Makedonska Revolucionerna Organizacija - Narodna Partija,Internal Macedonian Revolutionary Organization–People's Party,2006,2006,0,6.091,NA,2006,NA
+89,North Macedonia,89710,VMRO-DPMNE,Vnatrešna Makedonska Revolucionerna Organizacija - Demokratska Partija za Makedonsko Nacionalno Edinstvo,Internal Macedonian Revolutionary Organization - Democratic Party for Macedonian National Unity,1990,2016,0,44.467,NA,2014,NA
+89,North Macedonia,89810,PEI,Partija za Evropska Idnina,Party for European Future,2011,2011,0,2.341,NA,2011,NA
+89,North Macedonia,89910,DPA/PDSh,Demokratska partija na Albancite/Partia Demokratike Shqiptare,Democratic Party of Albanians,2002,2016,0,10.519,NA,2008,NA
+89,North Macedonia,89911,DR-DPA/LR-PDSH,Dviženje za reformi - Demokratska partija na Albancite/Lëvizja Për Reforma - Partia Demokratike Shqiptare,Movement for Reforms - Democratic Party of Albanians,2016,2016,0,NA,NA,NA,NA
+89,North Macedonia,89912,AA/ASh,Alijansa za Albancite/Aleanca për Shqiptarët,Alliance for Albanians,2016,2016,1,3.816,NA,2016,NA
+89,North Macedonia,89916,BESA,Dviženje BESA/Lëvizja BESA,Besa Movement,2016,2016,0,5.015,NA,2016,NA
+89,North Macedonia,89920,DPT/TDP,Demokratska Partija na Turcite/Türk Demokratik Partisī,Democratic Party of Turks,2006,2006,0,1.46,NA,2006,NA
+89,North Macedonia,89930,NDP/RDK,Nacionalna Demokratska Prerodba/Rilindja Demokratike Kombëtare,National Democratic Revival,2011,2014,0,2.669,NA,2011,NA
+89,North Macedonia,89940,DUI/BDI,Demokratska unija za integracija/Bashkimi Demokratik për Integrim,Democratic Union for Integration,2002,2016,0,14.186,NA,2014,NA
+89,North Macedonia,89951,PDP,Partija za Demokratski Prosperitet,Party for Democratic Prosperity,1990,2002,0,19.265,NA,1998,NA
+89,North Macedonia,89952,PDP,Narodna Demokratska Partija/Partisë Demokratike Popullore,People’s Democratic Party,1990,1998,0,2.97,NA,1994,NA
+89,North Macedonia,89953,PCER,Partija za Celosna Emancipacija na Romite,Party for the Complete Emancipation of the Roma,1990,1990,0,0,NA,1990,NA
+89,North Macedonia,89959,PDPM/PDP,Partija za Demokratski Prosperitet vo Makedonija/Partisë Demokratike Popullore,Joint Candidates of Party for Democratic Prosperity in Macedonia/People’s Democratic Party,1990,1990,1,1.377,NA,1990,NA
+90,Moldova,90040,ACUM,Blocul electoral „ACUM Platforma DA și PAS”,"Electoral bloc ""NOW  Platform DA and PAS""",2019,2019,0,26.842,NA,2019,NA
+90,Moldova,90220,PSMUE,Blocul electoral Partidul Socialist şi Mişcarea ‘Unitate-Edinstvo’,Electoral Bloc of the Socialist Party and the Movement ‘Unity',1994,1994,1,22,NA,1994,NA
+90,Moldova,90221,PCRM,Partidul Comuniştilor din Republica Moldova,Party of Communists of the Republic of Moldova,1998,2014,0,50.074,NA,2001,NA
+90,Moldova,90231,PSRM,Partidul Socialiştilor din Republica Moldova,Party of Socialists of the Republic of Moldova,2014,2019,0,31.15,NA,2019,NA
+90,Moldova,90320,BMD,Blocul electoral ‘Moldova Democrată',Electoral Bloc ‘Democratic Moldova',2005,2005,1,28.525,NA,2005,NA
+90,Moldova,90321,AMN,Alianţă Moldova Noastră,Our Moldova Alliance,2009,2009,1,7.35,NA,2009,NA
+90,Moldova,90330,PDM,Partidul Democrat din Moldova,Democratic Party of Moldova,2009,2019,0,23.62,NA,2019,NA
+90,Moldova,90410,PFD,Partidul Forţelor Democratice,Party of Democratic Forces,1998,1998,0,8.837,NA,1998,NA
+90,Moldova,90420,PMDP,Blocul Electoral ‘Pentru o Moldovă Democratică şi Prosperă',Electoral Bloc ‘For a Democratic and Prosperous Moldova',1998,1998,1,18.157,NA,1998,NA
+90,Moldova,90430,PLDM,Partidul Liberal Democrat din Moldova,Liberal Democratic Party of Moldova,2009,2014,0,29.378,NA,2010,NA
+90,Moldova,90520,PPCD,Partidul Popular Creştin şi Democrat,Christian Democratic People’s Party,1994,2005,1,9.073,NA,2005,NA
+90,Moldova,90610,CDM,Blocul Electoral ‘Convenţia Democrată din Moldova',Electoral Bloc ‘Democratic Convention of Moldova',1998,1998,1,19.421,NA,1998,NA
+90,Moldova,90620,PL,Partidul Liberal,Liberal Party,2009,2019,0,14.68,NA,2009,NA
+90,Moldova,90630,ȘOR,Partidul Șor,Șor Party,2019,2019,0,8.316,NA,2019,NA
+90,Moldova,90810,PDAM,Partidul Democrat Agrar din Moldova,Agrarian Democratic Party of Moldova,1994,1994,0,43.179,NA,1994,NA
+90,Moldova,90951,BŢI,Blocul Ţăranilior şi Intelectualilor,Bloc of Peasants and Intellectuals,1994,1994,1,9.21,NA,1994,NA
+90,Moldova,90952,BEAB,Blocul Electoral ‘Alianţa Braghiş',Electoral Block ‘Braghis Alliance',2001,2001,1,13.361,NA,2001,NA
+91,Montenegro,91020,ECG,Koalicija za Evropsku Crnu Goru,Coalition for European Montenegro,2006,2012,1,51.9,NA,2009,NA
+91,Montenegro,91021,NA,Zajedno!,Together!,2023,2023,1,23.2207805949027,NA,2023,NA
+91,Montenegro,91030,NA,Koalicija Ključ,Key Coalition,2016,2016,1,11.052,NA,2016,NA
+91,Montenegro,91040,NA,Mir je naša nacija,Peace is our Nation,2020,2020,1,12.53,NA,2020,NA
+91,Montenegro,91041,NA,Aleksa i Dritan – Hrabro se broji!,Aleksa and Dritan – Count Bravely!,2023,2023,1,12.4753666891508,NA,2023,NA
+91,Montenegro,91060,DF,Demokratiski Front,Democratic Front,2012,2016,1,22.82,NA,2012,NA
+91,Montenegro,91061,AF,Albanski Forum,Albanian Forum,2023,2023,1,1.90684971365843,NA,2023,NA
+91,Montenegro,91062,AA,Albanska Alijansa,Albanian Alliance,2023,2023,1,1.4918858866008,NA,2023,NA
+91,Montenegro,91090,ZBCG,Za budućnost Crne Gore,For the Future of Montenegro,2020,2023,1,32.551,NA,2020,NA
+91,Montenegro,91220,DPS CG,Demokratska Partija Socijalista Crne Gore,Democratic Party of Socialists of Montenegro,1990,2020,0,51.229,NA,1996,NA
+91,Montenegro,91222,PSCG,Partija Socijalista Crne Gore,Socialist Party of Montenegro,1990,1990,0,NA,NA,NA,NA
+91,Montenegro,91223,SP,Socijalisticka Partija,Socialist Party,1990,1990,0,NA,NA,NA,NA
+91,Montenegro,91224,SNP CG,Socijalistička Narodna Partija Crne Gore,Socialist People’s Party of Montenegro,1998,2023,0,36.102,NA,1998,NA
+91,Montenegro,91229,SRSCG,Savez Reformskih Snaga za Crnu Goru,Alliance of Reform Forces for Montenegro,1990,1990,1,14.095,NA,1990,NA
+91,Montenegro,91320,SDPR,Socijaldemokratska Partija Reformista,Social Democratic Party of Reformists,1992,1992,0,4.398,NA,1992,NA
+91,Montenegro,91321,SDP CG,Socijaldemokratska Partija Crne Gore,Social Democratic Party of Montenegro,1996,2020,0,8.62,NA,2002,NA
+91,Montenegro,91322,URA,Ujedinjena reformska akcija,United Reform Action,2016,2020,0,5.54,NA,2020,NA
+91,Montenegro,91323,DZB,Da Živimo Bolje,For a Better Live,1998,1998,1,49.535,NA,1998,NA
+91,Montenegro,91324,SD CG,Socijaldemokrate Crne Gore,Social Democrats of Montenegro,2016,2020,0,4.094,NA,2020,NA
+91,Montenegro,91330,PCG,Pozitivna Crna Gora,Positive Montenegro,2012,2012,0,8.24,NA,2012,NA
+91,Montenegro,91420,LSCG,Liberalni Savez Crne Gore,Liberal Alliance of Montenegro,1990,2002,0,12.041,NA,1992,NA
+91,Montenegro,91421,LPCG,Liberalna Partija Crne Gore,Liberal Party of Montenegro,2006,2006,0,3.76,NA,2006,NA
+91,Montenegro,91430,PzP,Pokret za Promjene,Movement for Changes,2006,2009,0,13.13,NA,2006,NA
+91,Montenegro,91440,DCG,Demokratska Crna Gora,Democratic Montenegro,2016,2016,0,10.015,NA,2016,NA
+91,Montenegro,91445,PES,Pokret Evropa sad,Europe Now Movement,2023,2023,0,25.5270536576334,NA,2023,NA
+91,Montenegro,91610,DEMOS,Demokratski savez,Democratic Alliance,2016,2016,0,NA,NA,NA,NA
+91,Montenegro,91620,HGI,Hrvatska Gradjanska Inicijativa,Croatian Civic Initative,2023,2023,0,0.736023489267151,NA,2023,NA
+91,Montenegro,91710,NS,Narodna Stranka,People’s Party,1990,2006,0,14.806,NA,1996,NA
+91,Montenegro,91711,SRS,Srpska Radikalna Stranka,Serbian Radical Party,1992,1992,0,7.553,NA,1992,NA
+91,Montenegro,91712,SNS,Srpska Narodna Stranka,Serbian People's Party,2001,2002,0,6.98,NA,2002,NA
+91,Montenegro,91910,NOVA,Nova srpska demokratija,New Serbian Democracy,2009,2009,0,9.2,NA,2009,NA
+91,Montenegro,91920,BS,Bošnjačka Stranka,Bosniak Party,2012,2023,0,7.08348212514383,NA,2023,NA
+91,Montenegro,91930,SL,Srpska Lista,Serb list,2006,2006,1,14.68,NA,2006,NA
+91,Montenegro,91951,SNR,Stranka Nacionalne Ravnopravnosti,Party of National Equality,1990,1990,0,NA,NA,NA,NA
+91,Montenegro,91952,DSCG,Demokratski Savez u Crnoj Gori,Democratic League in Montenegro,1990,1990,0,NA,NA,NA,NA
+91,Montenegro,91953,SDACG,Stranka Demokratske Akcije Crne Gore,Democratic Action Party of Montenegro,1996,1996,0,3.462,NA,1996,NA
+91,Montenegro,91959,DK,Demokratska Koalicija,Democratic Coalition,1990,1990,1,10.464,NA,1990,NA
+92,Poland,92021,LiD,Lewica i Demokraci,Left and Democrats,2007,2007,1,13.152,NA,2007,NA
+92,Poland,92022,ZL,Zjednoczona Lewica,United Left,2015,2015,1,7.546,NA,2015,NA
+92,Poland,92023,NA,Lewica,The Left,2019,2019,1,12.56,NA,2019,NA
+92,Poland,92040,KO,Koalicja Obywatelska,Civic Coalition,2019,2019,1,27.397,NA,2019,NA
+92,Poland,92050,PSL,Koalicja Polska,Polish Coalition,2019,2019,1,8.546,NA,2019,NA
+92,Poland,92070,KWiN,Konfederacja Wolność i Niepodległość,Confederation Liberty and Independence,2019,2019,1,6.805,NA,2019,NA
+92,Poland,92210,SLD,Sojusz Lewicy Demokratycznej,Democratic Left Alliance,1991,2011,1,27.133,NA,1997,NA
+92,Poland,92211,SD,Stronnictwo Demokratyczne,Democratic Party,1991,1991,0,NA,NA,NA,NA
+92,Poland,92212,SLD-UP,Koalicja Sojuszu Lewicky Demokratycznej i Unii Pracy,Coalion of the Democratic Left Alliance and the Union of Labour,2001,2001,1,41.04,NA,2001,NA
+92,Poland,92320,NSZZ,Niezależny Samorządny Związek Zawodowy ‘Solidarność’,Independent Self-governing Trade Union ‘Solidarity’,1991,1991,0,4.766,NA,1991,NA
+92,Poland,92321,SP,Solidarność Pracy,Labour Solidarity,1991,1991,0,1.943,NA,1991,NA
+92,Poland,92322,UP,Unia Pracy,Union of Labour,1993,1997,0,7.285,NA,1993,NA
+92,Poland,92410,UD,Unia Demokratyczna,Democratic Union,1991,1993,0,11.626,NA,1991,NA
+92,Poland,92420,KLD,Kongres Liberalno-Demokratyczny,Liberal-Democratic Congress,1991,1991,0,7.066,NA,1991,NA
+92,Poland,92431,PPPP,Polska Partia Przyjacioł Piwa,Polish Beer-Lovers' Party,1991,1991,0,3.088,NA,1991,NA
+92,Poland,92432,UPR,Unia Polityki Realnej,Union of Real Politics,1991,1991,0,2.128,NA,1991,NA
+92,Poland,92433,PPG,Polski Program Gospodarczy (Duże Piwo),Polish Economic Program Large Beer,1991,1991,0,NA,NA,NA,NA
+92,Poland,92434,UW,Unia Wolnósci,Freedom Union,1997,1997,0,13.367,NA,1997,NA
+92,Poland,92435,PO,Platforma Obywatelska,Civic Platform,2001,2015,0,41.512,NA,2007,NA
+92,Poland,92436,PiS,Prawo i Sprawiedliwość,Law and Justice,2001,2019,0,43.593,NA,2019,NA
+92,Poland,92440,RP,Ruch Palikota,Palikot's Movement,2011,2011,0,10.018,NA,2011,NA
+92,Poland,92450,.N,.Nowoczesna,Modern,2015,2015,0,7.601,NA,2015,NA
+92,Poland,92455,NA,Wiosna,Spring,2019,2019,0,NA,NA,NA,NA
+92,Poland,92520,ChDSP,Chrześcijańsko-Demokratyczne Stronnictwo Pracy,Christian Democratic Labour Party,1991,1991,0,2.231,NA,1991,NA
+92,Poland,92521,POC,Porozumienie Obywatelskie Centrum,Centre Citizens’ Alliance,1991,1991,1,8.221,NA,1991,NA
+92,Poland,92522,PChD,Partia Chrześcijańskich Demokratów,Party of Christian Democrats,1991,1991,0,1.054,NA,1991,NA
+92,Poland,92523,RdR,Ruch dla Rzeczpospolitej,Movement for the Republic,1991,1991,0,NA,NA,NA,NA
+92,Poland,92530,WAK,Wyborcza Akcja Katolickia,Catholic Electoral Action,1991,1991,1,8.246,NA,1991,NA
+92,Poland,92620,AWS,Akcja Wyborcza ‘Solidarność',Electoral Action ‘Solidarity',1997,1997,0,33.827,NA,1997,NA
+92,Poland,92621,ROP,Ruch Odbudowy Polski,Movement for the Reconstruction of Poland,1997,1997,0,5.555,NA,1997,NA
+92,Poland,92622,SRP,Samoobrona Rzeczypospolitej Polskiej,Self-Defence of the Polish Republic,2001,2005,0,11.414,NA,2005,NA
+92,Poland,92710,KPN,Konfederacja Polski Niepodległej,Confederation for an Independent Poland,1991,1993,0,7.081,NA,1991,NA
+92,Poland,92711,PZZ,Polski Związek Zachodni,Polish Western Union,1991,1991,0,0.219,NA,1991,NA
+92,Poland,92712,PX,Partia X,Party X,1991,1991,0,0.444,NA,1991,NA
+92,Poland,92713,LPR,Liga Polskich Rodzin,League of Polish Families,2001,2005,0,7.969,NA,2005,NA
+92,Poland,92720,NA,Kukiz'15,Kukiz'15,2015,2015,0,8.809,NA,2015,NA
+92,Poland,92810,PL,Porozumienie Ludowe,Peasant Accord,1991,1991,0,5.162,NA,1991,NA
+92,Poland,92811,PSL,Polskie Stronnictwo Ludowe,Polish Peasants' Party,1991,2015,0,15.398,NA,1993,NA
+92,Poland,92901,BBWR,Bezpartyjny Blok Wspierania Reform,Non-Party Bloc in Support of Reforms,1993,1993,0,5.412,NA,1993,NA
+92,Poland,92952,RAŚ,Ruch Autonomii Śląska,Movement for the Autonomy of Silesia,1991,1991,0,0.337,NA,1991,NA
+92,Poland,92953,MN,Mniejszość Niemiecka,German Minority,1991,2019,0,1.111,NA,1991,NA
+93,Romania,93001,PSD-PUR,Uniunea Naţională PSD+PUR,National Union PSR+PUR,2004,2004,1,36.8,NA,2004,NA
+93,Romania,93002,PSD-PC,Alianţa Politică Partidul Social Democrat + Partidul Conservator,Social Democratic Party + Conservative Party Alliance,2008,2008,1,33.099,NA,2008,NA
+93,Romania,93031,USL,Uniunea Social Liberală,Social Liberal Union,2012,2012,1,58.63,NA,2012,NA
+93,Romania,93041,ADA,Alianţa Dreptate şi Adevăr,Justice and Truth Alliance,2004,2004,1,31.5,NA,2004,NA
+93,Romania,93061,ARD,Alianţa România Dreaptă,Right Romania Alliance,2012,2012,1,16.508,NA,2012,NA
+93,Romania,93111,MER,Mişcarea Ecologistă din România,Ecological Movement of Romania,1990,1990,0,2.618,NA,1990,NA
+93,Romania,93112,PER,Partidul Ecologist Român,Romanian Ecological Party,1990,1990,0,1.694,NA,1990,NA
+93,Romania,93221,PD,Partidul Democrat,Democratic Party,1990,2000,0,66.313,NA,1990,NA
+93,Romania,93222,PSDR,Partidul Socialist Democratic Român,Romanian Socialist Democratic Party,1990,1990,0,1.046,NA,1990,NA
+93,Romania,93223,PSD,Partidul Social Democrat,Social Democratic Party,1992,2016,0,45.476,NA,2016,NA
+93,Romania,93320,PSDR,Partidul Social Democrat Român,Romanian Social Democratic Party,1990,1990,0,0.533,NA,1990,NA
+93,Romania,93322,USD,Uniunea Social Democrat,Social Democratic Union,1996,1996,1,12.928,NA,1996,NA
+93,Romania,93411,CDR,Convenţia Democrată România,Democratic Convention of Romania,1992,1996,1,30.169,NA,1996,NA
+93,Romania,93420,ALDE,Alianța Liberalilor și Democraților,Alliance of Liberals and Democrats,2016,2016,0,5.625,NA,2016,NA
+93,Romania,93430,PNL,Partidul Naţional Liberal,National Liberal Party,1990,2016,0,20.041,NA,2016,NA
+93,Romania,93440,USR,Uniunea Salvati România,Save Romania Union,2016,2016,0,8.871,NA,2016,NA
+93,Romania,93521,PNŢCD,Partidul Naţional Ţărănesc Creştin şi Democrat,Christian Democratic National Peasants’ Party,1990,1990,0,2.563,NA,1990,NA
+93,Romania,93523,PND,Partidul Naţional Democrat,National Democratic Party,1990,1990,0,NA,NA,NA,NA
+93,Romania,93524,FDRT,Frontul Democrat Român din Timişoara,Romanian Democratic Front from Timisoara,1990,1990,1,NA,NA,NA,NA
+93,Romania,93529,GDC,Grupul Democrat de Centru,Democratic Group of the Centre,1990,1990,1,0.481,NA,1990,NA
+93,Romania,93530,PDL,Partidul Democrat Liberal,Democratic Liberal Party,2008,2008,0,32.364,NA,2008,NA
+93,Romania,93540,PMP,Partidul Mișcarea Populară,People's Movement Party,2016,2016,0,5.348,NA,2016,NA
+93,Romania,93711,PUNR,Partidul Unitãţii Naţiunii Române,Romanian National Unity Party,1990,1996,0,7.717,NA,1992,NA
+93,Romania,93712,PRM,Partidul România Mare,Greater Romania Party,1992,2004,0,19.485,NA,2000,NA
+93,Romania,93713,PSM,Partidul Socialist al Muncii,Socialist Labour Party,1992,1992,0,3.036,NA,1992,NA
+93,Romania,93714,PR,Partidul Republican,Republican Party,1990,1990,0,NA,NA,NA,NA
+93,Romania,93719,AUR,Alianţa pentru Unitatea Românilor,Romanian Unity Alliance,1990,1990,1,2.122,NA,1990,NA
+93,Romania,93810,PDAR,Partidul Democrat Agrar din România,Democratic Agrarian Party of Romania,1990,1992,0,2.999,NA,1992,NA
+93,Romania,93951,UDMR/RMDSz,Uniunea Democratã Maghiarã din România/ Romániai Magyar Demokrata Szövetség,Hungarian Democratic Alliance of Romania,1990,2016,0,7.457,NA,1992,NA
+93,Romania,93981,PP-DD,Partidul Poporului - Dan Dianconescu,People's Party - Dan Dianconescu,2012,2012,0,13.992,NA,2012,NA
+94,Russia,94221,KPRF,Kommunisticheskaya Partiya Rossijskoi Federatsii,Communist Party ot the Russian Federation,1993,2011,0,24.776,NA,1999,NA
+94,Russia,94222,APR,Agrarnaya Partiya Rossii,Agrarian Party of Russia,1993,2003,0,7.985,NA,1993,NA
+94,Russia,94223,ZR,Zhenshchiny Rossii,Women of Russia,1993,1995,0,8.13,NA,1993,NA
+94,Russia,94224,DM,Dostoinstvoi i Miloserdie,Dignity and Charity,1993,1993,0,0.698,NA,1993,NA
+94,Russia,94225,VN,Vlast Narodu!,Power to the People!,1995,1995,0,1.639,NA,1995,NA
+94,Russia,94310,Rodina,Rodina - Narodno-Patrioticheskij Soyuz,Motherland - People's Patriotic Union,2003,2003,1,9.164,NA,2003,NA
+94,Russia,94320,RDDR,Rossijskoe Dvizheniye Demokraticheskikh Reform,Russian Movement for Democratic Reform,1993,1993,0,4.077,NA,1993,NA
+94,Russia,94321,IBIR,Blok Ivana Rybkina,Ivan Rybkin’s Bloc,1995,1995,0,1.133,NA,1995,NA
+94,Russia,94421,DVR,Demokraticheskij Vybor Rossii,Russia’s Democratic Choice,1993,1995,0,15.515,NA,1993,NA
+94,Russia,94422,Yabloko,Rossijskaya Obyedinyonnaya Demokraticheskaya Partiya ‘Yabloko',Russian United Democratic Party ‘Yabloko',1993,2003,1,7.857,NA,1993,NA
+94,Russia,94423,PRES,Partiya Rossijskogo Edinstva I Soglasiya,Party of Russian Unity and Accord,1993,1993,0,6.735,NA,1993,NA
+94,Russia,94424,NDR,Nash Dom - Rossiya,Our Home - Russia,1995,1999,0,10.325,NA,1995,NA
+94,Russia,94425,VR,"Vpered, Rossiya!","Forward, Russia!",1995,1995,0,1.979,NA,1995,NA
+94,Russia,94426,PGL,Pamfilova - Gurov - V. Lysenko  Blok (Respublikanskaya Partija Rossii),Pamfilova - Gurov - V. Lysenko Bloc Republican Party of Russia,1995,1995,0,1.63,NA,1995,NA
+94,Russia,94427,DVR-OD,Demokraticheskij Vybor Rossii – Ob’edinennye Demokraty,Russia’s Democratic Choice – United Democrats,1995,1995,1,3.939,NA,1995,NA
+94,Russia,94620,Yedinstvo,Mezhregional’noye Dvizhenie ‘Edinstvo',Inter-Regional Movement ‘Unity',1999,1999,0,23.786,NA,1999,NA
+94,Russia,94621,SPS,Soyuz Pravykh Sil,Union of Right Forces,1999,2003,0,8.685,NA,1999,NA
+94,Russia,94622,OVR,Otechestvo - Vsya Rossiya,Fatherland - All Russia,1999,1999,0,13.594,NA,1999,NA
+94,Russia,94710,BZ,Blok Zhirinovskogo,Zhirinovsky Bloc,1999,1999,1,6.1,NA,1999,NA
+94,Russia,94711,LDPR,Liberal’no Demokraticheskaya Partiya Rossii,Liberal Democratic Party of Russia,1993,2011,0,22.918,NA,1993,NA
+94,Russia,94712,DPR,Demokraticheskaya Partiya Rossii,Democratic Party of Russia,1993,1993,0,5.525,NA,1993,NA
+94,Russia,94713,KRO,Kongress Russkikh Obshchin,Congress of Russian Communities,1995,1995,0,4.39,NA,1995,NA
+94,Russia,94901,SR,Spravedlivaya Rossiya,Just Russia,2007,2011,0,13.456,NA,2011,NA
+94,Russia,94951,ER,Edinaya Rossiya,United Russia,2003,2011,0,65.013,NA,2007,NA
+95,Serbia,95011,MORAMO,"Moramo,",We must,2022,2022,0,4.839348143,NA,2022,NA
+95,Serbia,95021,SPS/JS/ZS,Ivica Dačić — Premijer Srbije,Ivica Dačić — Prime Minister of Serbia,2012,2022,1,15.18,NA,2012,NA
+95,Serbia,95040,ZES,Za Evropsku Srbiju,For a European Serbia Alliance,2008,2008,1,39.252,NA,2008,NA
+95,Serbia,95041,NA,Izbor za bolji život - Boris Tadić,Choice For a Better Life – Boris Tadić,2012,2012,1,23.09,NA,2012,NA
+95,Serbia,95042,NA,Preokret – Čedomir Jovanović,Turnover – Čedomir Jovanović,2012,2012,1,6.83,NA,2012,NA
+95,Serbia,95043,LDP/LSV/SDS,"Boris Tadić, Čedomir Jovanović – Savez za bolju Srbiju","Boris Tadić, Čedomir Jovanović – Alliance for a Better Serbia",2016,2016,1,5.168,NA,2016,NA
+95,Serbia,95044,NA,"Za pravednu Srbiju (DS, Nova, DSHV, ZZS)","For a just Serbia DS, Nova, DSHV, ZZS",2016,2016,1,6.205,NA,2016,NA
+95,Serbia,95045,NDS-Z/LSV/ZZS/VMDK/ZZV/DLR,Nova demokratska stranka - Zelenī/Liga socijaldemokrata Vojvodine/Zajedno za Srbiju/Demokratska zajednica vojvođanskih Mađara/Zajedno za Vojvodinu/Demokratska levica Roma,New Democratic Party-Greens/League of Social Democrats of Vojvodina/Together for Serbia/Democartic Fellowship of Vojvodina Hungarians/Together for Vojvodina/Democratic Left of Roma,2014,2014,1,5.89,NA,2014,NA
+95,Serbia,95046,UZPS,Ujedinjeni za pobedu Srbije,United for the Victory of Serbia,2022,2022,1,14.09214129,NA,2022,NA
+95,Serbia,95060,SPO/NS,Srpski Pokret Obnove/Nova Srbija,Serbian Renewal Movement/New Serbia,2003,2003,1,7.762,NA,2003,NA
+95,Serbia,95065,DSS/NS,Demokratska Stranka Srbije/Nova Srbija,Democratic Party of Serbia/New Serbia,2007,2008,1,18.602,NA,2007,NA
+95,Serbia,95066,Dveri/DSS,Dveri – DSS – Sanda Raskovic Ivic – Bosko Obradovic,Dveri – DPS – Sanda Raskovic Ivic – Bosko Obradovic,2016,2016,1,5.195,NA,2016,NA
+95,Serbia,95067,NADA,Nacionalno demokratska alternativa,National Democratic Alternative,2022,2022,1,5.535495358,NA,2022,NA
+95,Serbia,95070,NA,Pokrenimo Srbiju - Tomislav Nikolic,Let's get Serbia moving - Tomislav Nikolic,2012,2012,1,25.16,NA,2012,NA
+95,Serbia,95071,ZMS,Aleksandar Vučić – Zajedno možemo sve,Aleksandar Vučić – Together We Can Do Everything,2014,2022,1,63.02,NA,2020,NA
+95,Serbia,95072,Dveri-POKS,Srpski pokret Dveri - Pokret obnove Kraljevine Srbije,Serbian Movement Dveri - Movement for the Restoration of the Kingdom of Seria,2022,2022,0,3.919,NA,2022,NA
+95,Serbia,95091,KV,Koalicija Vojvodina,Vojvodina Coalition,1997,1997,1,2.833,NA,1997,NA
+95,Serbia,95093,NA,Akademik Muamer Zukorlić - Samo Pravo - Stranka pravde i pomirenja (SPP) - Demokratska partija Makedonaca (DPM),Academician Muamer Zukorlic - Straight ahead - Party of Justice and Reconciliation SPP - Democratic Party of Macedonians DPM,2020,2020,1,1.038,NA,2020,NA
+95,Serbia,95100,ZS,Zelena stranka,Green Party,2016,2016,0,0.63,NA,2016,NA
+95,Serbia,95221,SPS,Socijalistička Partija Srbije,Socialist Party of Serbia,1990,2007,0,48.051,NA,1990,NA
+95,Serbia,95222,RDSV,Reformska Demokartska - Stranka Vojvodine,Reformist Democratic Party of Vojvodina,1990,1992,0,1.548,NA,1990,NA
+95,Serbia,95223,JUL,Jugoslovenska Levica,Yugoslav Left,1997,1997,0,NA,NA,NA,NA
+95,Serbia,95229,NA,"Koalicija Socijalističke Partije Srbije, Jugoslovenske Levice i Nove Demokratije","Coalition of Socialist Party of Serbia, Yugoslav Left and New Democracy",1997,1997,1,35.676,NA,1997,NA
+95,Serbia,95420,DEPOS,Demokratska Pokret Srbije,Democratic Movement of Serbia,1992,1993,1,17.935,NA,1992,NA
+95,Serbia,95421,GSS,Građanski Savez Srbije,Civic Alliance of Serbia,1993,1993,0,NA,NA,NA,NA
+95,Serbia,95422,ND,Nova Demokratija,New Democracy,1992,1997,0,NA,NA,NA,NA
+95,Serbia,95423,DOS,Demokratska Opozicija Srbije,Democratic Opposition of Serbia,2000,2000,1,65.688,NA,2000,NA
+95,Serbia,95430,DS,Demokratska Stranka,Democratic Party,1990,2014,0,25.523,NA,2007,NA
+95,Serbia,95431,LDP,Liberalno-Demokratska Partija,Liberal Democratic Party,2007,2008,0,5.97,NA,2007,NA
+95,Serbia,95440,DJB,Dosta je bilo – Sasa Radulovic,Now it’s enough – Sasa Radulovic,2016,2016,0,6.206,NA,2016,NA
+95,Serbia,95450,NA,G17 plus,G17plus,2003,2007,0,11.612,NA,2003,NA
+95,Serbia,95451,URS,Ujedninjeni regioni Srbije – Mlađan Dinkić,United Regions of Serbia – Mlađan Dinkić,2012,2012,1,5.77,NA,2012,NA
+95,Serbia,95710,SPO,Srpski Pokret Obnove,Serbian Renewal Movement,1990,1997,0,19.976,NA,1997,NA
+95,Serbia,95711,SRS,Srpska Radikalna Stranka,Serbian Radical Party,1992,2016,0,32.137,NA,2007,NA
+95,Serbia,95712,DSS,Demokratska Stranka Srbije,Democratic Party of Serbia,1993,2014,0,17.958,NA,2003,NA
+95,Serbia,95720,NA,Nijedan od ponudjenih odgovora,None-of-the-above,2012,2012,0,0.59,NA,2012,NA
+95,Serbia,95730,SPAS,Srpski patriotski savez,Serbian Partiotic Alliance,2020,2020,0,3.98,NA,2020,NA
+95,Serbia,95735,SSZ,Srpska stranka Zavetnici,Serbian Party Oathkeepers,2022,2022,0,3.82384126186464,NA,2022,NA
+95,Serbia,95810,SSS,Seljačka Stranka Srbije,Peasants Party of Serbia,1990,1992,0,2.88,NA,1992,NA
+95,Serbia,95901,MK,Madjarska Koalicija,Hungarian Coalition,2008,2008,1,1.848,NA,2008,NA
+95,Serbia,95902,VMSZ,Vajdasági Magyar Szövetség,Alliance of Vojvodina Hungarians,2012,2022,0,2.319,NA,2020,NA
+95,Serbia,95903,SPP,Stranka pravde i pomirenja,Justice and Reconciliation Party,2016,2022,0,0.97066927172458,NA,2022,NA
+95,Serbia,95951,DZVM,Demokratska Zajednica Vojvođanskih Mađara,Democratic Community of Magyars of Vojvodina,1990,1993,0,3.166,NA,1992,NA
+95,Serbia,95952,SDA,Stranka Demokratske Akcije,Party of Democratic Action,1990,2022,0,1.743,NA,1990,NA
+95,Serbia,95954,KAP,Koalicija Albanskih Partija,Coalition of Albanian Parties,1993,1993,1,0.711,NA,1993,NA
+95,Serbia,95955,PVD/PDD,Partia për veprim demokratik/Partija za Demokratsko Delovanje,Party for Democratic Activity,1993,2020,0,0.699,NA,2014,NA
+96,Slovakia,96111,SZ,Strana zelených Slovenska,Green Party of Slovakia,1990,1990,0,3.49,NA,1990,NA
+96,Slovakia,96210,ZRS,Zdruzenie robotníkov Slovenska,Workers’ Association of Slovakia,1994,1994,0,7.349,NA,1994,NA
+96,Slovakia,96220,SDľ,Strana demokratickej ľavice,Party of the Democratic Left,1990,2002,0,14.702,NA,1992,NA
+96,Slovakia,96221,SV,Spoločná Voľba,Common Choice,1994,1994,1,10.416,NA,1994,NA
+96,Slovakia,96222,KSS,Komunistická strana Slovenska,Communist Party of Slovakia,2002,2002,0,6.326,NA,2002,NA
+96,Slovakia,96420,DS,Democratická Strana,Democratic Party,1990,1990,0,4.4,NA,1990,NA
+96,Slovakia,96421,DÚS,Demokratická Únia Slovenska,Democratic Union of Slovakia,1994,1994,0,8.571,NA,1994,NA
+96,Slovakia,96422,SOP,Strana občianskeho porozumenia,Party of Civic Understanding,1998,1998,0,8.018,NA,1998,NA
+96,Slovakia,96423,Smer,Smer-Sociálna Demokracia,Direction-Social Democracy,2002,2016,0,44.417,NA,2012,NA
+96,Slovakia,96424,ANO,Aliancia nového občana,Alliance of the New Citizen,2002,2002,0,8.011,NA,2002,NA
+96,Slovakia,96430,VPN,Verejnosť proti násiliu,Public Against Violence,1990,1990,0,29.35,NA,1990,NA
+96,Slovakia,96431,ADSR,Aliancia demokratov Slovenskej republiky,Alliance of Democrats of the Slovak Republic,1992,1992,0,NA,NA,NA,NA
+96,Slovakia,96440,SASKA,Sloboda a Solidarita,Freedom and Solidarity,2010,2016,0,12.149,NA,2010,NA
+96,Slovakia,96521,KDH,Kresťanskodemokratické hnutie,Christian Democratic Movement,1990,2016,0,19.21,NA,1990,NA
+96,Slovakia,96522,SDK,Slovenská demokratická koalicia,Slovak Democratic Coalition,1998,1998,1,26.331,NA,1998,NA
+96,Slovakia,96523,SDKÚ-DS,Slovenská demokratická a kresťanská únia - Demokratická strana,Slovak Democratic and Christian Union - Democartic Party,2002,2012,0,18.358,NA,2006,NA
+96,Slovakia,96610,OKS,Občianska konzervatívna strana,Civic Conservative Party,2010,2010,0,2.322,NA,2010,NA
+96,Slovakia,96620,OľaNO,Obyčajní Ľudia a nezávislé osobnosti,Ordinary People and Independent Personalities,2012,2016,0,11.029,NA,2016,NA
+96,Slovakia,96630,NA,Sieť,Network,2016,2016,0,5.607,NA,2016,NA
+96,Slovakia,96710,SNS,Slovenská národná strana,Slovak National Party,1990,2016,0,13.94,NA,1990,NA
+96,Slovakia,96711,HZDS,Hnutie za demokratické Slovensko,Movement for a Democratic Slovakia,1992,2010,0,37.26,NA,1992,NA
+96,Slovakia,96712,NDS,Národnodemokratická strana - Nová alternatíva,National Democratic Party - New Alternative,1994,1994,0,NA,NA,NA,NA
+96,Slovakia,96720,ĽSNS,Kotleba – Ľudová strana Naše Slovensko,Kotleba – People's Party Our Slovakia,2016,2016,0,8.044,NA,2016,NA
+96,Slovakia,96725,NA,Sme Rodina,We Are Family,2016,2016,0,6.629,NA,2016,NA
+96,Slovakia,96951,ESWS,Együttélés/Spolužitie/Wspólnota/Souižtí,Coexistence,1992,1994,0,NA,NA,NA,NA
+96,Slovakia,96952,SMK/MKP,Strana maďarskej koalície/Magyar koalícío partja,Party of the Hungarian Coalition,1990,2006,1,11.685,NA,2006,NA
+96,Slovakia,96953,MKdH/MKdM,Maďarská kresťanskodemokratické hnutie/Magyar Kereszténydemokrata Mozgalom,Hungarian Christian Democratic Movement,1994,1994,0,NA,NA,NA,NA
+96,Slovakia,96954,MOS/MPP,Maďarská občianska strana/Magyar Polgári Párt,Hungarian Civic Party,1994,1994,0,NA,NA,NA,NA
+96,Slovakia,96955,NA,Most-Híd,Bridge,2010,2016,0,6.9,NA,2012,NA
+97,Slovenia,97020,ZL,Združena levica,United Left,2014,2014,1,5.969,NA,2014,NA
+97,Slovenia,97110,ZS,Zeleni Slovenije,Greens of Slovenia,1990,1992,0,8.839,NA,1990,NA
+97,Slovenia,97220,ZKS,Zveza Komunistov Slovenije,League of Communists of Slovenia,1990,1990,0,17.28,NA,1990,NA
+97,Slovenia,97223,ZL,Združena Lista,"Unity, Asssociated List",1992,1992,1,13.577,NA,1992,NA
+97,Slovenia,97230,NA,Levica,The Left,2018,2018,0,9.326,NA,2018,NA
+97,Slovenia,97320,SDSS,Socialdemokratska Stranka Slovenije,Social-Democratic Party of Slovenia,1990,2000,0,16.131,NA,1996,NA
+97,Slovenia,97321,ZLSD,Združena Lista Socialninh Demokratov,Associated List of Social Democrats,1996,2000,0,12.08,NA,2000,NA
+97,Slovenia,97322,SD,Socialni Demokrati,Social Democratic Party,2004,2018,0,30.45,NA,2008,NA
+97,Slovenia,97330,SDS,Slovenska Demokratska Stranka,Slovenian Democratic Party,2004,2018,0,29.257,NA,2008,NA
+97,Slovenia,97340,PS,Lista Zorana Jankovića - Pozitivna Slovenija,Zoran Janković's List - Positive Slovenia,2011,2011,0,28.512,NA,2011,NA
+97,Slovenia,97341,LMŠ,Lista Marjana Šarca,List of Marjan Šarec,2018,2018,0,12.597,NA,2018,NA
+97,Slovenia,97421,LDS,Liberalna Democracija Slovenije,Liberal Democracy of Slovenia,1990,2011,0,36.26,NA,2000,NA
+97,Slovenia,97430,DSS,Demokratska Stranka Slovenje,Democratic Party of Slovenia,1990,1992,0,9.513,NA,1990,NA
+97,Slovenia,97440,NA,Zares,For Real,2008,2011,0,9.367,NA,2008,NA
+97,Slovenia,97450,LGV,Državljanska lista Gregorja Viranta,Gregor Virant's Civic List,2011,2011,0,8.372,NA,2011,NA
+97,Slovenia,97460,SAB,Stranka Alenke Bratušek,Party of Alenka Bratušek,2014,2018,0,5.105,NA,2018,NA
+97,Slovenia,97461,SMC,Stranka modernega centra,Modern Centre Party,2014,2018,0,34.492,NA,2014,NA
+97,Slovenia,97520,SKD,Slovenski Krscanski Demokrati,Slovenian Christian Democrats,1990,1996,0,14.509,NA,1992,NA
+97,Slovenia,97521,SLS,Slovenska Ljudska Stranka,Slovenian People's Party,1990,2011,0,19.378,NA,1996,NA
+97,Slovenia,97522,Nsi,Nova Slovenija Krščanski Ljudska Stranka,New Slovenian Christian People’s Party,2000,2018,0,9.091,NA,2004,NA
+97,Slovenia,97710,SNS,Slovenska Nacionalna Stranka,Slovenian National Party,1992,2018,0,10.021,NA,1992,NA
+97,Slovenia,97810,SKZ,Slovenska Kmecka Zveza,Slovenian Peasant League,1990,1990,0,NA,NA,NA,NA
+97,Slovenia,97951,DeSUS,Demokraticna Stranka Upokojencev Slovenije,Democratic Party of Pensioners of Slovenia,1996,2018,0,10.176,NA,2014,NA
+97,Slovenia,97952,SMS,Stranka Mladih Slovenije,Party of Slovenian Youth,2000,2000,0,4.34,NA,2000,NA
+98,Ukraine,98081,LB,Blok Lytvyna,Lytvyn Bloc,2007,2007,1,4.146,NA,2007,NA
+98,Ukraine,98111,PZU,Partiya Zelenykh Ukrainy,Green Party of Ukraine,1998,1998,0,5.609,NA,1998,NA
+98,Ukraine,98221,KPU,Komunistychna Partiya Ukrainy,Communist Party of Ukraine,1994,2012,0,25.439,NA,1998,NA
+98,Ukraine,98321,SPU,Sotsialistychna Partiya Ukrainy,Socialist Party of Ukraine,1994,2007,0,7.14,NA,2002,NA
+98,Ukraine,98322,PSPU,Prohresyvna Sotsialistychna Partiya Ukrainy,Progressive Socialist Party of Ukraine,1998,1998,0,4.175,NA,1998,NA
+98,Ukraine,98323,SPU-SelPU,Blok Sotsialistychna Partiya Ukrainy ta Selyans’ka Partiya Ukrainy,Bloc Socialist Party of Ukraine and Peasant Party of Ukraine,1998,1998,0,8.828,NA,1998,NA
+98,Ukraine,98324,NA,Vseukrains`ke Ob'ednannya ‘Hromada',All-Ukrainian Association ‘Community',1998,1998,0,4.824,NA,1998,NA
+98,Ukraine,98325,SDPU,Sotsial-Demokratychna Partiya Ukrainy,Social Democractic Party of Ukraine,1994,1994,0,0.384,NA,1994,NA
+98,Ukraine,98340,NA,Opozycijna platforma - Za žittja,Opposition Platform - For Life,2019,2019,0,13.057,NA,2019,NA
+98,Ukraine,98350,NA,Opozycijnyj blok,Opposition Bloc,2019,2019,0,3.033,NA,2019,NA
+98,Ukraine,98421,MBR,Mizhregional`nyj Blok Reform,Interregional Reform Bloc,1994,1994,0,NA,NA,NA,NA
+98,Ukraine,98422,PDVU,Partiya Demokratychnoho Vidrodzhennya Ukrainy,Party of Democratic Rebirth of Ukraine,1994,1994,0,0.883,NA,1994,NA
+98,Ukraine,98423,PT,Partiya Truda,Labour Party,1994,1994,0,0.422,NA,1994,NA
+98,Ukraine,98424,HKU,Hrazhdanskyj Konhres Ukrainy,Civic Congress of Ukraine,1994,1994,0,0.267,NA,1994,NA
+98,Ukraine,98426,NDPU,Narodno-Demokratychna Partiya Ukrainy,People’s Democratic Party of Ukraine,1998,1998,0,5.171,NA,1998,NA
+98,Ukraine,98427,SDPU(O),Sotsial-Demokratychna Partiya Ukrainy (Obyednana),Social Democratic Party of Ukraine United,1998,2002,0,6.52,NA,2002,NA
+98,Ukraine,98428,NA,"Vpered, Ukraina","Forward, Ukraine!",1998,1998,0,1.794,NA,1998,NA
+98,Ukraine,98429,ZYU,Za Yedinu Ukrainu!,For a United Ukraine!,2002,2002,1,12.35,NA,2002,NA
+98,Ukraine,98440,NA,Sluha Narodu,Servant of the People,2019,2019,0,43.165,NA,2019,NA
+98,Ukraine,98450,NA,Holos,Voice,2019,2019,0,5.828,NA,2019,NA
+98,Ukraine,98521,KhDPU,Khrystyyans`ko-Demokratychna Partiya Ukrainy,Christian Democratic Party of Ukraine,1994,1998,0,1.34,NA,1998,NA
+98,Ukraine,98611,Rukh,Narodnyi Rukh Ukrainy,Popular Movement of Ukraine,1994,1998,0,9.702,NA,1998,NA
+98,Ukraine,98612,URP,Ukrainska Respublikanska Partiya,Ukrainian Republican Party,1994,1994,0,2.684,NA,1994,NA
+98,Ukraine,98613,DPU,Demokratychna Partiya Ukrainy,Democratic Party of Ukraine,1994,1994,0,1.153,NA,1994,NA
+98,Ukraine,98614,NF,Viborchyj Blok ‘Natsional`nyi Front',Electoral Bloc ‘National Front',1998,1998,0,2.804,NA,1998,NA
+98,Ukraine,98615,NU-NS,‘Nasha Ukraina - Narodna Samooborona',‘Our Ukraine - People's Self-Defense',2002,2007,1,24.49,NA,2002,NA
+98,Ukraine,98616,BYuT,Viborchiy Blok Yuliyi Tymoshenko,Juliya Tymoshenko Election Bloc,2002,2007,1,32.12,NA,2007,NA
+98,Ukraine,98617,NA,Vseukrayins'ke Obyednannya Bat'kivshchyna,All-Ukrainian Union ‘Fatherland',2012,2019,0,25.55,NA,2012,NA
+98,Ukraine,98618,NA,Narodnyj Front,People's Front,2014,2014,0,22.141,NA,2014,NA
+98,Ukraine,98620,NA,Ob'yednannya  ‘Samopomich',Union ‘Self Help',2014,2014,0,10.977,NA,2014,NA
+98,Ukraine,98630,UDAR,Ukrajinskyj Demokratytschnyj Aljans za Reformy,Ukrainian Democratic Alliance for Reform,2012,2012,0,13.969,NA,2012,NA
+98,Ukraine,98631,NA,Yevropeys'ka Solidarnist',European Solidarity,2014,2019,0,21.82,NA,2014,NA
+98,Ukraine,98711,KUN,Konhres Ukrains`kykh Natsionalistiv,Congress of Ukrainian Nationalists,1994,1994,0,1.331,NA,1994,NA
+98,Ukraine,98712,UKRP,Ukrains`ka Konservatyvna Respublikans`ka Partiya,Ukrainian Conservative Republican Party,1994,1994,0,0.365,NA,1994,NA
+98,Ukraine,98713,UNA,Ukrains`ka Natsional`na Asambleya,Ukrainian National Assembly,1994,1994,0,NA,NA,NA,NA
+98,Ukraine,98720,NA,Vseukrayinske obyednannia ‘Svoboda',All-Ukrainian Union ‘Freedom',2012,2014,0,10.447,NA,2012,NA
+98,Ukraine,98730,NA,Radikal`na Partiya Oleha Lyashka,Radical Party of Oleh Lyashko,2014,2014,0,7.447,NA,2014,NA
+98,Ukraine,98810,SelPU,Selyans’ka Partiya Ukrainy,Peasant Party of Ukraine,1994,1994,0,2.93,NA,1994,NA
+98,Ukraine,98811,APU,Ahrarna Partiya Ukrainy,Agrarian Party of Ukraine,1998,1998,0,3.799,NA,1998,NA
+98,Ukraine,98910,NA,Opozycijnyj Blok,Opposition Bloc,2014,2014,0,9.434,NA,2014,NA
+98,Ukraine,98951,PEVK,Partiya Ekonomycheskoho Vozrozhdeniya Kryma,Party of Economic Revival of Crimea,1994,1994,0,0.077,NA,1994,NA
+98,Ukraine,98952,PR,Partiya Rehioniv,Party of Regions,2006,2012,0,35.939,NA,2007,NA
+113,South Korea,113320,DLP,Minju Nodong Dang,Democratic Labour Party,2000,2008,0,13.031,NA,2004,NA
+113,South Korea,113321,UPP,Tonghap Jinbo Dang,United Progressive Party,2012,2012,0,10.3,NA,2012,NA
+113,South Korea,113322,JP,Jeongui Dang,Justice Party,2016,2020,0,9.67,NA,2020,NA
+113,South Korea,113420,DP,Minju Dang - Deobureo-shimin-dang,Democratic Party - including Platform Party,1992,1996,0,29.2,NA,1992,NA
+113,South Korea,113421,NCNP,Sae Jungchi Kukmin Hoiee,National Congress for New Politics,1996,1996,0,25.299,NA,1996,NA
+113,South Korea,113422,Uri,Uri Dang,Uri Party,2004,2004,0,38.269,NA,2004,NA
+113,South Korea,113430,MDP,Saecheonnyeonminju Dang,Millenium Democratic Party,2000,2004,0,35.867,NA,2000,NA
+113,South Korea,113440,DP,Minju Dang,Democratic Party,2008,2012,0,36.5,NA,2012,NA
+113,South Korea,113441,DPK,Deobureominju Dang,Democratic Party,2016,2020,0,33.359,NA,2020,NA
+113,South Korea,113442,PP,Gungminui Dang,People's Party,2016,2016,0,26.748,NA,2016,NA
+113,South Korea,113443,NA,Yeollin-minju-dang,Open Democratic Party,2020,2020,0,5.422,NA,2020,NA
+113,South Korea,113450,PP,Gungminuidang,People Party,2020,2020,0,6.798,NA,2020,NA
+113,South Korea,113620,DLP,Minju Dayu Dang,Democratic Liberal Party,1992,1992,0,38.5,NA,1992,NA
+113,South Korea,113621,NUP,Minjok T'ongil-tang,National Unification Party,1992,1992,0,17.4,NA,1992,NA
+113,South Korea,113622,NKP,Shin Hankuk Dang,New Korea Party,1996,1996,0,34.517,NA,1996,NA
+113,South Korea,113630,NFP,Saenuri Dang,New Frontier Party,2000,2016,0,42.8,NA,2012,NA
+113,South Korea,113631,UFP,Miraetonghapdang -Miraehangukdang,United Future Party - including Future Korea Party,2020,2020,0,33.841,NA,2020,NA
+113,South Korea,113650,ULD,Jayu Minju Yonmaeng,United Liberal Party,1996,2004,0,16.173,NA,1996,NA
+113,South Korea,113651,LFP,Jayou Seonjin Dang,Liberty Forward Party,2008,2012,0,6.829,NA,2008,NA
+150,Argentina,150021,UNA,Unidos por una Nueva Alternativa,United for a New Alternative,2015,2015,1,NA,21.3902558252959,NA,2015
+150,Argentina,150022,FPL + UCeDé,Frente por la Lealtad y Unión del Centro Democrático,Front for Loyalty and Union of the Democratic Centre,2003,2003,1,NA,24.25,NA,2003
+150,Argentina,150023,CC,Coalición Cívica,Civic Coalition,2007,2007,1,NA,23.07,NA,2007
+150,Argentina,150024,ACyS,Acuerdo Cívico y Social,Social and Civic Agreement,2009,2009,1,28.8,NA,2009,NA
+150,Argentina,150025,NA,Frente de Todos,Everyone's Front,2003,2019,1,49.1,54.11,2011,2011
+150,Argentina,150026,FAP,Frente Amplio Progressista,Broad Progressive Front,2011,2013,1,12.5,16.81,2011,2011
+150,Argentina,150027,NA,Compromiso Federal,Federal Commitment,2007,2011,1,5.8,8,2011,2011
+150,Argentina,150028,NA,Concertación Justicialista para el Cambio,Justicialist Coalition for Change,1999,1999,1,35.936,38.6865849521122,1999,1999
+150,Argentina,150029,FREJUPO,Frente Justicialista de Unidad Popular,Justicialist Party of Popular Unity,1989,1989,1,44.684,47.49,1989,1989
+150,Argentina,150031,UNA,Una Nación Avanzada,An Advanced Union,2007,2007,1,NA,16.96,NA,2007
+150,Argentina,150032,ALIANZA,"Alianza pol el Trabajo, la Justiciay la Educación","Aliance for Work, Justice, and Education",1999,1999,1,43.764,48.3652471608538,1999,1999
+150,Argentina,150033,NA,Consenso Federal,Federal Consensus,2019,2019,1,NA,6.14,NA,2019
+150,Argentina,150040,NA,Allianza de Centro,Center Alliance,1989,1989,1,9.595,6.87,1989,1989
+150,Argentina,150061,NA,Alianza Unión-PRO,Alliance Union-PRO,2009,2009,1,19.21,NA,2009,NA
+150,Argentina,150062,NA,Juntos por el Cambio,Together for Change,2015,2019,1,NA,40.28,NA,2019
+150,Argentina,150201,PJ,Partido Justicialista,Justicialist Party,1995,1995,0,43.026,49.9028131945482,1995,1995
+150,Argentina,150202,FREPASO,Frente para un País Solidario,Front for a Country in Solidarity,1995,1995,0,20.689,29.2956174215002,1995,1995
+150,Argentina,150205,MP,Frente del Movimiento Popular,Front of the popular movement,2003,2003,0,NA,14.11,NA,2003
+150,Argentina,150210,ARI,Alternativa para una República de Iguales,Alternative for a Republic of Equals,2003,2003,0,NA,14.1,NA,2003
+150,Argentina,150220,NA,Nuevo Encuentro,New Encounter,2009,2009,0,NA,NA,NA,NA
+150,Argentina,150221,MPN,Moviemiento Popular Neuquino,Neuquén People's Movement,2009,2009,0,NA,NA,NA,NA
+150,Argentina,150222,NA,Es posible,It is possible,2009,2009,0,NA,NA,NA,NA
+150,Argentina,150230,NA,Frente Popular,Popular Front,2011,2011,0,3.7,5.86,2011,2011
+150,Argentina,150301,UCR,Unión Cívica Radical,Civic Radical Union,1989,2013,0,28.749,37.09815,1989,1989
+150,Argentina,150401,RECREAR,Recrear para el Crecimiento,Recreate for Growth,2003,2003,0,NA,16.37,NA,2003
+150,Argentina,150601,AR,Acción por la República,Action for the Republic,1999,1999,0,8.114,9.81265432035244,1999,1999
+151,Bolivia,151062,PPB-CN,Plan Progreso para Bolivia–Convergencia Nacional,Plan Progress for Bolivia – National Convergence,2009,2009,1,26.46414212,26.4641421179169,2009,2009
+151,Bolivia,151250,MAS-IPSP,Movimiento Al Socialismo - Instrumento Político por la Soberanía de los Pueblos,Movement towards Socialism - Political Instrument for the Sovereignty of the Peoples,2009,2014,0,64.2231385,64.2231385013396,2009,2009
+151,Bolivia,151255,AS,Alianza Social,Social Alliance,2009,2009,0,2.313592649,2.31359264866394,2009,2009
+151,Bolivia,151540,PDC,Partido Demócrata Cristiano,Christian Democratic Party,2014,2014,0,9.04,9.04,2014,2014
+151,Bolivia,151610,MNR,Movimiento Nacionalista Revolucionario,Nationalist Revolutionary Movement,2009,2009,0,0,0,2009,2009
+151,Bolivia,151617,APB,Autonomía para Bolivia,Autonomy for Bolivia,2009,2009,0,0,0,2009,2009
+151,Bolivia,151640,UD,Unidad Democráta,Democratic Union,2009,2014,0,24.23,24.23,2014,2014
+152,Colombia,152021,Decentes,Lista de la Decencia,Decency List,2018,2018,1,NA,25.5395775866589,NA,2018
+152,Colombia,152031,PDA-UP,Polo Democrático Alternativo - Unión Patriótica,Alternative Democratic Pole - Patriotic Union,2014,2014,1,NA,16.2106408057584,NA,2014
+152,Colombia,152041,UN,Unidad Nacional,National Unity,2014,2014,1,NA,27.3305526676511,NA,2014
+152,Colombia,152042,NA,Mejor Vargas Lleras,Best Vargas Lleras,2018,2018,1,NA,7.41161747243123,NA,2018
+152,Colombia,152061,NA,Gran Alianza por el Cambio,Great Alliance for Change,1998,1998,1,NA,34.37,NA,1998
+152,Colombia,152062,NA,Alianza Grande de Colombia,Grand Alliance of Colombia,2018,2018,1,NA,39.8508842622318,NA,2018
+152,Colombia,152111,AV,Alianza Verde,Green Alliance,2010,2014,0,NA,21.8433749986758,NA,2010
+152,Colombia,152311,PDI,Polo Democrático,Democratic Pole,2002,2002,0,NA,6.26634593302639,NA,2002
+152,Colombia,152321,PDA,Polo Democrático Alternativo,Alternative Democratic Pole,2006,2010,0,NA,22.4534424094353,NA,2006
+152,Colombia,152331,MRD,Reconstrucción Democrática Nacional,National Democratic Reconstruction,2006,2006,0,NA,0.366485529054409,NA,2006
+152,Colombia,152421,PLC,Partido Liberal Colombiano,Colombian Liberal Party,1998,2010,0,NA,35.1824333688172,NA,1998
+152,Colombia,152422,PCR,Partido Cambio Radical,Party of Radical Change,2010,2010,0,NA,10.2701682169207,NA,2010
+152,Colombia,152424,ASI,Alianza Social Independiente,Independent Social Alliance,2006,2006,0,NA,1.25950830688789,NA,2006
+152,Colombia,152612,Si,Movimiento Sí Colombia,Movement Yes Colombia,1998,2002,0,NA,27.0864077108052,NA,1998
+152,Colombia,152621,PCC,Partido Conservador Colombiano,Colombian Conservative Party,2010,2014,0,NA,16.519256620291,NA,2014
+152,Colombia,152622,PC,Primero Colombia,Colombia First,2002,2006,0,NA,63.5655883389343,NA,2006
+152,Colombia,152623,CD,Centro Democrático,Democratic Center,2014,2014,0,NA,31.1229082926635,NA,2014
+152,Colombia,152952,PU,Partido de la U,Party of U,2010,2010,0,NA,47.4055685928176,NA,2010
+152,Colombia,152981,CC,Coalicion Colombia,Colombian Coalition,2018,2018,1,NA,24.1625815660127,NA,2018
+153,Costa Rica,153321,PLN,Partido Liberación Nacional,National Liberation Party,1990,2018,0,NA,49.6168370247038,NA,1994
+153,Costa Rica,153322,FA,Frente Amplio,Broad Front,2014,2018,0,NA,17.2456253356893,NA,2014
+153,Costa Rica,153331,PAC,Partido Acción Ciudadana,Citizen’s Action Party,2002,2018,0,NA,39.8020433598195,NA,2006
+153,Costa Rica,153420,PML,Partido Movimiento Libertario,Libertarian Movement Party,2002,2014,0,NA,20.9167110074487,NA,2010
+153,Costa Rica,153521,PUSC,Partido Unidad Social Cristiana,Social Christian Unity Party,1990,2018,0,NA,51.4886428161605,NA,1990
+153,Costa Rica,153522,PRN,Partido Restauración Nacional,National Restoration Party,2018,2018,0,NA,24.992098657027,NA,2018
+153,Costa Rica,153523,PRSC,Partido Republicano Social Cristiano,Social Christian Republican Party,2018,2018,0,NA,4.9400913446299,NA,2018
+153,Costa Rica,153620,PIN,Partido Integración Nacional,National Integration Party,2018,2018,0,NA,9.5420376971797,NA,2018
+154,Ecuador,154001,PSP-MUPP-NP,Partido Sociedad Patriótica - Movimiento de Unidad Plurinacional Pachakutik - Nuevo País,Patriotic Society Party - Pachakutik Plurinational Unity Movement - New Country,2002,2002,1,NA,20.6409593664686,NA,2002
+154,Ecuador,154021,NA,Unidad Plurinacional de las Izquierdas,Plurinational Unity of the Lefts,2013,2013,1,NA,3.26063875227298,NA,2013
+154,Ecuador,154022,NA,Binomio Roldós-Padilla,Pairing Roldós-Padilla,2002,2002,1,NA,15.3986643561145,NA,2002
+154,Ecuador,154031,RED-ID,Alianza Izquierda Democrática - Red Ética y Democracia,Democratic Left Alliance - Ethics and Democracy Network,2006,2006,1,NA,14.8371621481723,NA,2006
+154,Ecuador,154032,NA,Acuerdo Nacional por el Cambio,National Agreement for Change,2017,2017,1,NA,6.71467657647687,NA,2017
+154,Ecuador,154210,MUPP-NP,Movimiento de Unidad Plurinacional Pachakutik - Nuevo País,Pachakutik Plurinational Unity Movement - New Country,1996,2006,0,NA,20.6083138394601,NA,1996
+154,Ecuador,154321,ID,Izquierda Democrática,Democratic Left,2002,2002,0,NA,13.9662197741302,NA,2002
+154,Ecuador,154322,Alianza PAIS,Movimiento Alianza Patria Altiva i Soberana,Proud and Sovereign Fatherland Alliance Movement,2006,2017,0,NA,57.1663583728362,NA,2013
+154,Ecuador,154510,DP - UDC,Democracia Popular - Unión Demócrata Cristiana,Popular Democracy - Christian Democratic Union,1996,1996,0,NA,13.4776509917727,NA,1996
+154,Ecuador,154521,PSC,Partido Social Cristiano,Social Christian Party,1996,2017,0,NA,27.1698308337778,NA,1996
+154,Ecuador,154711,PRIAN,Partido Renovador Institucional de Acción Nacional,Institutional Renewal Party of National Action,2002,2009,0,NA,26.829542691513,NA,2006
+154,Ecuador,154712,CREO,Creando Oportunidades,Creating Opportunities,2013,2017,0,NA,28.0900651787478,NA,2017
+154,Ecuador,154951,PRE,Partido Roldosista Ecuatoriano,Ecuadorian Roldosist Party,1996,2006,0,NA,26.2765949628111,NA,1996
+154,Ecuador,154952,PSP,Partido Sociedad Patriótica,Patriotic Society Party,2006,2017,0,NA,28.2379653437156,NA,2009
+155,Chile,155021,NA,Nueva Mayoría por Chile,New Majority for Chile,1989,2017,1,55.3,57.98,1993,1993
+155,Chile,155023,NA,Nueva Mayoría para Chile,New Majority for Chile,2009,2009,1,4.6,20.13,2009,2009
+155,Chile,155024,NA,"Si tú quieres, Chile cambia","If you want it, Chile changes",2013,2013,1,5.43,10.98,2013,2013
+155,Chile,155025,PODEMOS,Juntos-Podemos-Más por Chile,Together we can do more for Chile,2005,2009,1,7.4,6.21,2005,2009
+155,Chile,155026,FA,Frente Amplio,Broad Front,2017,2017,1,16.488,20.2724278363948,2017,2017
+155,Chile,155027,NA,Apruebo Dignidad,Approve Dignity,2021,2021,1,NA,25.8272127888734,NA,2021
+155,Chile,155030,NPS,Nuevo Pacto Social,New Social Pact,2021,2021,1,NA,11.6048739306362,NA,2021
+155,Chile,155061,NA,Chile Podemos Más,Chile we can do more,1989,2021,1,43.4,48.7,2009,1999
+155,Chile,155062,FSC,Frente Social Cristiano,Christian Social Front,2021,2021,1,NA,27.9137102852472,NA,2021
+155,Chile,155201,PRO,Partido Progresista,Progressive Party,2017,2021,0,3.328,7.60327031193429,2017,2021
+155,Chile,155401,PDG,Partido de la Gente,Party of the People,2021,2021,0,NA,12.7974977400191,NA,2021
+155,Chile,155501,PDC,Partido Demócrata Cristiano,Christian Democratic Party,2017,2017,0,10.281,5.8752658978104,2017,2017
+155,Chile,155601,UDI,Unión Demócrata Independiente,Independent Democratic Union,2005,2005,0,22.36,23.23,2005,2005
+155,Chile,155602,RN,Renovación Nacional,National Renewal,2005,2005,0,14.12,25.41,2005,2005
+155,Chile,155620,NA,Liberal-Socialista Chileno,Liberal-Socialists of Chile,1989,1989,1,NA,15.43,NA,1989
+155,Chile,155980,NA,Candidato independiente,Independent,2017,2017,0,NA,7.9295878,NA,2017
+160,Panama,160031,NA,Uniendo fuerzas,Joining forces,1994,2019,1,NA,47.4410742291603,NA,2004
+160,Panama,160041,NA,Cambio 94,Change 94,1994,1994,1,NA,16.0465822557,NA,1994
+160,Panama,160051,AAO,Alianza Accion Opositora,Oppositon Action Alliance,1999,1999,1,NA,17.3840878301217,NA,1999
+160,Panama,160061,APP,Alianza Panamá Podemos,Panama We Can Alliance,1994,2019,1,NA,44.797132192593,NA,1999
+160,Panama,160062,LBV,Lo Bueno Vuelve,For a Good Return,2009,2019,1,NA,60.0300549599824,NA,2009
+160,Panama,160221,FAD,Frente Amplio por la Democracia,Broad Front for Democracy,2014,2019,0,NA,0.689147604830345,NA,2019
+160,Panama,160321,PRD,Partido Revolucionario Democrático,Democratic Revolutionary Party,2014,2014,0,NA,28.1437513280646,NA,2014
+160,Panama,160521,PDC,Partido Demócrata Cristiano,Christian Democratic Party,1994,1994,0,NA,2.38797799865772,NA,1994
+160,Panama,160624,PPD,Partido Panamenista Doctrinario,Doctrinaire Panameñista Party,1994,1994,0,NA,0.343817840284053,NA,1994
+160,Panama,160630,CD,Cambio Democrático,Democratic Change,2004,2004,0,NA,5.30276902592114,NA,2004
+160,Panama,160711,PS,Partido Solidaridad,Solidarity Party,2004,2004,0,NA,30.8745489634414,NA,2004
+160,Panama,160953,MPE,Movimiento Papa Egoro,Papa Egoro Movement,1994,1994,0,NA,17.0976262696327,NA,1994
+160,Panama,160954,NA,Candidato Independiente,Independent,2019,2019,0,NA,0.580634850509939,NA,2019
+160,Panama,160955,NA,Candidato Independiente,Independent,2019,2019,0,NA,18.7791195401339,NA,2019
+160,Panama,160956,NA,Candidato Independiente,Independent,2019,2019,0,NA,4.76555239201403,NA,2019
+162,Uruguay,162210,UP,Unidad Popular,Popular Assembly,2014,2014,1,1.171,1.17138113897187,2014,2014
+162,Uruguay,162310,FA,Frente Amplio,Broad Front,2014,2014,1,49.446,49.4460255263346,2014,2014
+162,Uruguay,162410,PC,Partido Colorado,Colorado Party,2014,2014,0,13.327,13.327256049818,2014,2014
+162,Uruguay,162510,PI,Partido Independiente,Independent Party,2014,2014,0,3.199,3.19903147108626,2014,2014
+162,Uruguay,162610,PN,Partido Nacional,National Party,2014,2014,0,31.938,31.9384790573497,2014,2014
+168,Dominican Republic,168321,PRD,Partido Revolucionario Dominicano,Dominican Revolutionary Party,1996,2012,0,NA,49.8692569462529,NA,2000
+168,Dominican Republic,168322,PRM,Partido Revolucionario Moderno,Modern Revolutionary Party,2016,2016,0,NA,34.979075070637,NA,2016
+168,Dominican Republic,168331,PLD,Partido de la Liberación Dominicana,Dominican Liberation Party,1996,2016,0,NA,61.7402611425981,NA,2016
+168,Dominican Republic,168510,PRSC,Partido Reformista Social Cristiano,Social Christian Reformist Party,1996,2008,0,NA,24.6000395640938,NA,2000
+171,Mexico,171031,AM,Alianza por México 2000,Alliance for Mexico 2000,2000,2000,1,16.917,17.001775,2000,2000
+171,Mexico,171032,NA,Compromiso por México,Commitment for Mexico,2006,2012,1,28.904,22.749297,2006,2006
+171,Mexico,171033,NA,Coalición ‘Por el Bien de Todos',Coalition ‘For the Good of All',2006,2006,1,29.737,NA,2006,NA
+171,Mexico,171034,NA,Coalición ‘Salvemos a México',Coalition ‘We save Mexico',2009,2009,1,NA,NA,NA,NA
+171,Mexico,171035,NA,Movimiento Progresista,Progressive Movement,2012,2012,1,NA,NA,NA,NA
+171,Mexico,171101,PVEM,Partido Verde Ecologista de México,Mexican Green Ecologist Party,1997,2018,0,7.671,NA,2003,NA
+171,Mexico,171201,PCM,Partido Comunista Mexicano,Mexican Communist Party,1979,1979,0,5.436,NA,1979,NA
+171,Mexico,171202,PRT,Partido Revolucionario de los Trabajadores,Revolutionary Workers’ Party,1985,1985,0,1.708,NA,1985,NA
+171,Mexico,171203,PSUM,Partido Socialista Unificado de México,Unified Socialist Party of Mexico,1982,1985,0,4.424,3.646946,1982,1982
+171,Mexico,171210,MORENA,Movimiento Regeneración Nacional,National Regeneration Movement,2015,2018,0,38.797,NA,2018,NA
+171,Mexico,171301,PRI,Partido Revolucionario Institucional,Institutional Revolutionary Party,1946,2018,0,90.654,100,1961,1976
+171,Mexico,171302,PPS,Partido Popular Socialista,Popular Socialist Party,1970,1991,0,2.18,NA,1982,NA
+171,Mexico,171303,PARM,Partido Auténtico de la Revolución Mexicana,Authentic Party of the Mexican Revolution,1970,1991,0,2.458,NA,1985,NA
+171,Mexico,171304,PC,Partido Cardenista,Party of Cardenists,1979,1991,0,4.338,NA,1991,NA
+171,Mexico,171305,PRD,Partido de la Revolución Democrática,Democratic Revolutionary Party,1991,2018,0,25.731,32.402457,1997,2012
+171,Mexico,171306,PT,Partido del Trabajo,Labor Party,1994,2018,0,4.83,2.74,2012,1994
+171,Mexico,171307,FDN,Frente Democrático Nacional,National Democratic Front,1988,1988,1,28.958,31.058212,1988,1988
+171,Mexico,171308,PMT,Partido Mexicano de los Trabajadores,Mexican Workers’ Party,1985,1985,0,1.717,NA,1985,NA
+171,Mexico,171309,PANAL,Partido Nueva Alianza,New Alliance Party,2006,2018,0,4.662,2.345366,2006,2012
+171,Mexico,171310,PSD,Partido Socialdemócrata,Social Democratic Party,2006,2009,0,2.106,2.760921,2006,2006
+171,Mexico,171311,NA,Movimiento Ciudadano,Citizens' Movement,2003,2018,0,6.405,NA,2015,NA
+171,Mexico,171601,NA,Allianza por el cambio,Alliance for Change,1946,2018,0,34.611,43.43104,2000,2000
+171,Mexico,171611,PES,Partido Encuentro Social,Social Encounter Party,2015,2018,0,3.49,NA,2015,NA
+179,Peru,179021,GP,Gana Perú,Peru Wins,2011,2011,1,NA,31.6994082744897,NA,2011
+179,Peru,179031,FA,"El Frente Amplio por Justicia, Vida y Libertad","The Broad Front for Justice, Life and Liberty",2016,2016,1,NA,18.7412855277816,NA,2016
+179,Peru,179041,PP,Alianza Perú Posible,Alliance Possible Peru,2011,2011,1,NA,15.6314297860958,NA,2011
+179,Peru,179042,A,Alianza por el Progreso del Peru,Alliance for Progress of Peru,2016,2016,1,NA,NA,NA,NA
+179,Peru,179043,FC,Frente de Centro,Center Front,2006,2006,1,NA,5.7526179423293,NA,2006
+179,Peru,179051,UN,Unidad Nacional,National Unity,2006,2006,1,NA,23.8141614295601,NA,2006
+179,Peru,179052,AGC,Alianza por el Gran Cambio,Alliance for the Great Change,2011,2011,1,NA,18.5117759664448,NA,2011
+179,Peru,179061,AF,Alianza por el Futuro,Alliance for the Future,2006,2006,1,NA,7.43292369241372,NA,2006
+179,Peru,179321,PAP,Partido Aprista Peruano,Peruvian Aprista Party,2006,2006,0,NA,24.323945847727,NA,2006
+179,Peru,179421,UPP,Unión por el Perú,Union for Peru,2006,2006,0,NA,30.6162128519798,NA,2006
+179,Peru,179422,AP,Accion Popular,Popular Action,2016,2016,0,NA,6.97099107876635,NA,2016
+179,Peru,179611,PPK,Peruanos por el Kambio,Peruvians for Change,2016,2016,0,NA,21.0471375657971,NA,2016
+179,Peru,179625,FP,Fuerza Popular,People’s Force,2011,2016,0,NA,39.8632072725789,NA,2016
+179,Peru,179982,ASN,Alianza Solidaridad Nacional,National Solidarity Alliance,2011,2011,1,NA,9.8322316751715,NA,2011
+179,Peru,179983,AP,Alianza Popular,Popular Alliance,2016,2016,1,NA,5.82965882391057,NA,2016
+180,Brazil,180110,PV,Partido Verde,Green Party,2010,2010,0,NA,19.33,NA,2010
+180,Brazil,180230,NA,Federação Brasil da esperança,Brazil of Hope,1989,2022,1,NA,48.4307198598687,NA,2022
+180,Brazil,180231,NA,Frente de Esquerda,Left Front,2006,2006,1,NA,6.85,NA,2006
+180,Brazil,180232,PPS,Partido Popular Socialista,Socialist People's Party,1998,1998,0,NA,10.9656831059408,NA,1998
+180,Brazil,180240,NA,Unidos pelo Brasil,United for Brazil,2002,2014,1,NA,21.32,NA,2014
+180,Brazil,180250,PDT,Partido Democrático Trabalhista,Democratic Labour Party,1989,1989,0,NA,16.5145169509974,NA,1989
+180,Brazil,180251,NA,Coligação Brasil Soberano,Soverign Brazil,2018,2018,1,NA,12.4654625256288,NA,2018
+180,Brazil,180309,PSDB,Partido da Social Democracia Brasileira,Party of Brazilian Social Democracy,1989,1989,0,NA,11.5168683361982,NA,1989
+180,Brazil,180310,NA,Coligação para unir o Brasil,To unite Brazil,1994,2018,1,NA,54.2803869164253,NA,1994
+180,Brazil,180311,NA,Brasil Para Todos,Brazil for Everyone,2022,2022,1,NA,4.15751897371929,NA,2022
+180,Brazil,180320,NA,Coligação Frente Trabalhista,Labour Front Coalition,2002,2002,1,NA,11.9723701441637,NA,2002
+180,Brazil,180410,NA,Movimento Brasil Novo,New Brazil Movement,1989,1989,1,NA,30.4791,NA,1989
+180,Brazil,180610,PDS,Partido Democrático Social,Democratic Social Party,1989,1989,0,NA,8.85330064392473,NA,1989
+180,Brazil,180620,NA,Pelo Bem do Brasil,For the Good of Brazil,2018,2022,1,NA,46.0314481312036,NA,2018
+180,Brazil,180710,PRONA,Partido da Reedificação da Ordem Nacional,Party of the Reconstruction of the National Order,1994,1994,0,NA,7.37919966506793,NA,1994
+181,South Africa,181210,EEF,Economic Freedom Fighters,Economic Freedom Fighters,2014,2019,0,10.791,NA,2019,NA
+181,South Africa,181310,ANC,African National Congress,African National Congress,1994,2019,0,69.693,NA,2004,NA
+181,South Africa,181311,UDM,United Democratic Movement,United Democratic Movement,2019,2019,0,0.448,NA,2019,NA
+181,South Africa,181320,NA,Good,Good,2019,2019,0,0.404,NA,2019,NA
+181,South Africa,181325,NFP,National Freedom Party,National Freedom Party,2019,2019,0,0.351,NA,2019,NA
+181,South Africa,181410,DP,Democratic Party,Democratic Party,1994,1999,0,9.56,NA,1999,NA
+181,South Africa,181411,DA,Democratic Alliance,Democratic Alliance,2004,2019,0,22.234,NA,2014,NA
+181,South Africa,181420,COPE,Congress of the People,Congress of the People,2009,2019,0,7.415,NA,2009,NA
+181,South Africa,181510,ACDP,African Christian Democratic Party,African Christian Democratic Party,2019,2019,0,0.839,NA,2019,NA
+181,South Africa,181520,ATM,African Transformation Movement,African Transformation Movement,2019,2019,0,0.441,NA,2019,NA
+181,South Africa,181710,FF+,Freedom Front Plus,Freedom Front Plus,2019,2019,0,2.379,NA,2019,NA
+181,South Africa,181910,IFP,Inkatha Freedom Party,Inkatha Freedom Party,1999,2019,0,8.584,NA,1999,NA
+181,South Africa,181980,AIC,African Independent Congress,African Independent Congress,2019,2019,0,0.276,NA,2019,NA
