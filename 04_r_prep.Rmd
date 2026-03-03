@@ -1,0 +1,308 @@
+---
+title: "04_r_prep"
+output: html_document
+date: "2023-09-29"
+---
+
+## Overview
+
+This script runs **after** `03_main_analyses.ipynb`. It uses the preprocessed
+manifesto data and processed Twitter data that the Python notebook produces to
+run all Wordfish benchmark models used for validation in Step 5.
+
+Prerequisites:
+- `03_main_analyses.ipynb` must have been run through at minimum:
+  - **Section 3.1** (Data Preparation) — produces `data/py_outputs/manifesto.csv`
+  - **Section 3.5** (Twitter fine-tuning) — produces `data/py_outputs/tw_processed.csv`
+
+Outputs (all consumed by `04_visualizations.Rmd`):
+- `data/r_outputs/wf_gen_all_countries.csv`
+- `data/r_outputs/wf_topic_all_countries.csv`
+- `data/r_outputs/wf_ep.csv`
+- `data/r_outputs/wf_welfare.csv`
+- `data/r_outputs/wf_tw.csv`
+
+## Load packages
+```{r setup, include=FALSE}
+rm(list=ls())
+pacman::p_load(quanteda, quanteda.textmodels, tidyverse, readr, ggplot2, rstatix,
+               grid, gridExtra, viridis, ggsci, ggpubr, ragg, scales, openxlsx,
+               countrycode)
+
+manifesto <- read_csv("data/py_outputs/manifesto.csv")
+manifesto_text_en <- manifesto %>% filter(!countryname %in% c("Iceland", "Spain"))
+countries <- unique(manifesto_text_en$countryname)
+tw_df <- read_csv("data/py_outputs/tw_processed.csv")
+```
+
+## Wordfish - Gen
+
+```{r wf_gen}
+
+
+all_results <- list()
+
+# Get unique countries in the dataset
+
+# Loop through each country and process it
+for (country_name in countries) {
+  manifesto_country <- manifesto_text_en %>%
+    filter(countryname == country_name)
+  print(country_name)
+  grouped_texts <- manifesto_country %>%
+        group_by(party, election) %>%
+        summarise(
+          text_new = paste(text_en, collapse = " "),
+          num_speeches = n(),
+          .groups = "drop"
+        ) %>%
+        filter(!is.na(text_new))
+
+  dfmat <- corpus(grouped_texts, text_field = "text_new") %>%
+               tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
+               tokens_remove(stopwords("en")) %>%
+               dfm() %>%
+               dfm_trim(min_termfreq = 15, max_docfreq = 0.75, docfreq_type = "prop", verbose = TRUE)
+
+  wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", tol=c(1e-4,1e-6))
+  
+  # Add country name to the results
+  results_country <- grouped_texts %>% 
+        select(-text_new) %>%
+        mutate(
+          country = country_name,
+          wf_score = wf_mod$theta,
+          wf_se = wf_mod$se.theta
+        )
+  
+  # Store the results in a list
+  all_results[[country_name]] <- results_country
+}
+
+# Combine all results into one data frame
+all_results_combined <- bind_rows(all_results)
+
+# Save to CSV file
+write_csv(all_results_combined, "data/r_outputs/wf_gen_all_countries.csv")
+
+```
+
+
+
+## Wordfish - Topic
+
+```{r wf_env}
+
+all_results <- list()
+
+manifesto_topic <- manifesto_text_en %>% filter(topic %in% c("Economics", "Labour and Social Welfare", "Immigration",
+                                                             "European Integration", "Environment - Growth"))
+    
+for (country_name in countries) {
+    print(country_name)
+    
+    # Filter data by country
+    manifesto_country <- manifesto_topic %>%
+        filter(countryname == country_name)
+        
+    # Loop through each topic within the current country
+    for (topic_name in unique(manifesto_country$topic)) {
+        
+        # Print topic name for debugging or tracking purposes
+        print(topic_name)
+        
+        # Filter data by topic and then group by party, election
+        grouped_texts <- manifesto_country %>%
+            filter(topic == topic_name) %>%
+            group_by(party, election) %>%
+            summarise(
+                text_new = paste(text_en, collapse = " "),
+                num_speeches = n(),
+                doc_id = cur_group_id(),
+                .groups = "drop"
+            ) %>%
+            filter(!is.na(text_new))
+        
+        # Create a document-feature matrix (DFM) and clean it
+        dfmat <- corpus(grouped_texts, text_field = "text_new", docid_field = "doc_id") %>%
+            tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
+            tokens_remove(stopwords("en")) %>%
+            dfm() %>%
+            dfm_trim(min_termfreq = 20, max_docfreq = 0.75, docfreq_type = "prop", verbose = TRUE)
+         
+        # Run Wordfish model
+        wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson")
+        # Identify documents retained after dfm_trim
+        retained_docs <- docnames(wf_mod)
+        
+        # Filter manifesto_topic to include only retained documents
+        grouped_texts <- grouped_texts %>%
+            filter(doc_id %in% retained_docs)
+        # Prepare results for the current topic within the country
+        results_topic_country <- grouped_texts %>%
+            select(-text_new) %>%
+            mutate(
+                country = country_name,
+                topic = topic_name,
+                wf_score = wf_mod$theta,
+                wf_se = wf_mod$se.theta
+            )
+        
+        # Store the results in a list by combining both country and topic names
+        all_results[[paste(country_name, topic_name, sep = "_")]] <- results_topic_country
+    }
+}
+
+# Combine all results into a single data frame
+all_results_combined <- bind_rows(all_results, .id = "country_topic")
+
+
+# Optionally, save the results to a file
+write.csv(all_results_combined, "data/r_outputs/wf_topic_all_countries.csv", row.names = FALSE)
+
+```
+
+
+## Wordfish - Environment Protection
+
+```{r wf_ep}
+
+manifesto_ep <- manifesto_text_en %>% filter(cmp_code == "501")
+
+all_results <- list()
+# Loop through each country and process it
+for (country_name in countries) {
+      manifesto_country <- manifesto_ep %>%
+        filter(countryname == country_name)
+      print(country_name)
+      grouped_texts <- manifesto_country %>%
+            group_by(party, election) %>%
+            summarise(
+              text_new = paste(text_en, collapse = " "),
+              num_speeches = n(),
+              doc_id = cur_group_id(),
+              .groups = "drop"
+            ) %>%
+            filter(!is.na(text_new))
+    
+      dfmat <- corpus(grouped_texts, text_field = "text_new", docid_field = "doc_id") %>%
+                   tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
+                   tokens_remove(stopwords("en")) %>%
+                   dfm() %>%
+                   dfm_trim(min_termfreq = 10, max_docfreq = 0.75, docfreq_type = "prop", verbose = TRUE)
+    
+      wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", sparse = TRUE)
+      
+      # Add country name to the results
+      retained_docs <- docnames(wf_mod)
+        
+        # Filter manifesto_topic to include only retained documents
+      grouped_texts <- grouped_texts %>%
+            filter(doc_id %in% retained_docs)
+      results_country <- grouped_texts %>% 
+            select(-text_new) %>%
+            mutate(
+              country = country_name,
+              wf_score = wf_mod$theta,
+              wf_se = wf_mod$se.theta
+            )
+      
+      # Store the results in a list
+      all_results[[country_name]] <- results_country
+}
+
+# Combine all results into one data frame
+all_results_combined <- bind_rows(all_results)
+
+# Save to CSV file
+write_csv(all_results_combined, "data/r_outputs/wf_ep.csv")
+
+```
+
+## Wordfish - Welfare Expansion/Retrenchment
+
+```{r wf_growth}
+
+manifesto_welfare = manifesto_text_en %>% filter(cmp_code %in% c("504","505"))
+
+all_results <- list()
+# Loop through each country and process it
+for (country_name in countries) {
+      manifesto_country <- manifesto_welfare %>%
+        filter(countryname == country_name)
+      print(country_name)
+      grouped_texts <- manifesto_country %>%
+            group_by(party, election) %>%
+            summarise(
+              text_new = paste(text_en, collapse = " "),
+              num_speeches = n(),
+              doc_id = cur_group_id(),
+              .groups = "drop"
+            ) %>%
+            filter(!is.na(text_new))
+    
+      dfmat <- corpus(grouped_texts, text_field = "text_new", docid_field = "doc_id") %>%
+                   tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
+                   tokens_remove(stopwords("en")) %>%
+                   dfm() %>%
+                   dfm_trim(min_termfreq = 10, max_docfreq = 0.75, docfreq_type = "prop", verbose = TRUE)
+    
+      wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", sparse = TRUE)
+      
+      # Add country name to the results
+      retained_docs <- docnames(wf_mod)
+        
+        # Filter manifesto_topic to include only retained documents
+      grouped_texts <- grouped_texts %>%
+            filter(doc_id %in% retained_docs)
+      results_country <- grouped_texts %>% 
+            select(-text_new) %>%
+            mutate(
+              country = country_name,
+              wf_score = wf_mod$theta,
+              wf_se = wf_mod$se.theta
+            )
+      
+      # Store the results in a list
+      all_results[[country_name]] <- results_country
+}
+
+# Combine all results into one data frame
+all_results_combined <- bind_rows(all_results)
+
+
+write.csv(all_results_combined, "data/r_outputs/wf_welfare.csv", row.names = FALSE)
+
+```
+
+## Wordfish - Twitter
+
+```{r wf_tw}
+
+grouped_texts <- tw_df %>%
+    group_by(topic, lr) %>%
+    summarise(
+      text_new = paste(text, collapse = " "),
+      num_speeches = n(),
+      doc_id = cur_group_id(),
+      .groups = "drop"
+    ) %>%
+    filter(!is.na(text_new))
+dfmat <- corpus(grouped_texts, text_field = "text_new", docid_field = "doc_id") %>%
+              tokens(remove_punct = TRUE, remove_numbers = TRUE, remove_symbols = TRUE) %>%
+              tokens_remove(stopwords("en")) %>%
+              dfm() %>%
+              dfm_trim(min_termfreq = 10, max_docfreq = 0.75, docfreq_type = "prop", verbose = TRUE)
+
+wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson")
+    
+results_tw <- grouped_texts %>% 
+    select(-text_new) %>%
+    mutate(
+      wf_score = wf_mod$theta,
+      wf_se = wf_mod$se.theta
+    )
+
+
+write.csv(results_tw, "data/r_outputs/wf_tw.csv", row.names = FALSE)
+```

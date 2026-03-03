@@ -10,6 +10,10 @@
 /data/r_outputs
 /data/py_outputs
 data/r_outputs/pulled_manifestoes.csv
+/data/temps
 /utils/legacy.py
 data/py_outputs/cs_topic.csv
-manifesto_apikey.txt
+
+# API keys — never commit; see REPLICATION_GUIDE.md for setup instructions
+manifesto_apikey.txt__pycache__/
+*.pyc
