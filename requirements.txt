@@ -1,0 +1,39 @@
+# Python dependencies for ContextScale
+# Tested with Python 3.11.14 (conda environment: ai-research)
+# Install with: pip install -r requirements.txt
+#
+# GPU note: torch is listed as the CPU-compatible version.
+# For CUDA 13.0 (as used in development), replace with:
+#   pip install torch==2.9.0+cu130 torchvision==0.24.0+cu130 \
+#       --index-url https://download.pytorch.org/whl/cu130
+
+# Core deep learning
+torch==2.9.0
+torchvision==0.24.0
+accelerate==1.10.1
+peft==0.17.1
+safetensors==0.6.2
+
+# Transformers & NLP
+transformers==4.57.1
+tokenizers==0.22.1
+huggingface-hub==0.35.3
+datasets==4.2.0
+
+# Classical NLP
+gensim==4.3.3
+spacy==3.8.7
+nltk==3.9.2
+
+# Data science
+numpy==1.26.4
+pandas==2.3.3
+scikit-learn==1.7.2
+scipy==1.13.1
+
+# Visualisation (used in notebook)
+matplotlib==3.10.7
+seaborn==0.13.2
+
+# Utilities
+tqdm==4.67.1

@@ -14,10 +14,11 @@ Final datasets and trained model weights are shared via [PSRM Dataverse](https:/
 
 ```
 ContextScale/
-├── 01_manifesto_pull.Rmd      # Step 1 (R): Pull manifesto data from CMP API
-├── 02_r_prep.Rmd              # Step 2 (R): Wordfish models & data preparation
+├── 01_manifesto_pull.Rmd      # Step 1 (R):      Pull manifesto data from CMP API
+├── 02_r_prep.Rmd              # Step 2 (R):      CHES cleaning + coalition agreement prep
 ├── 03_main_analyses.ipynb     # Step 3 (Python): Model training, ablation, scaling
-├── 04_visualizations.Rmd      # Step 4 (R): All figures and tables in the paper
+├── 04_r_prep.Rmd              # Step 4 (R):      Wordfish benchmarks (runs AFTER Step 3)
+├── 05_visualizations.Rmd      # Step 5 (R):      All figures and tables in the paper
 ├── train.py                   # Standalone training script (CLI interface)
 ├── utils/
 │   ├── functions.py           # Data preprocessing, training/eval loops, scaling
@@ -42,26 +43,50 @@ ContextScale/
 
 ## Replication Instructions
 
-The analysis pipeline consists of four sequential steps. Steps 1–2 and Step 4 run in **R**; Step 3 runs in **Python**.
+The pipeline runs in this order: **1 → 2 → 3 → 4 → 5**.
+Steps 1, 2, 4, and 5 run in **R**; Step 3 runs in **Python**.
+
+> `04_r_prep.Rmd` (Wordfish models) must run **after** `03_main_analyses.ipynb` because
+> the Wordfish scripts require the preprocessed manifesto data (`data/py_outputs/manifesto.csv`)
+> and processed Twitter data (`data/py_outputs/tw_processed.csv`) that the Python notebook produces.
 
 ### Prerequisites
 
-**R packages** (install via `pacman::p_load` or `install.packages`):
+**R packages** — restore the exact pinned environment using [`renv`](https://rstudio.github.io/renv/):
 ```r
-pacman::p_load(tidyverse, manifestoR, quanteda, quanteda.textmodels,
-               ggplot2, viridis, ggsci, ggpubr, ragg, scales, gt,
-               rstatix, gridExtra, openxlsx, countrycode, scico, caret)
+install.packages("renv")
+renv::restore()
 ```
 
-**Python packages:**
-```bash
-pip install torch transformers datasets scikit-learn pandas numpy \
-            gensim spacy nltk safetensors
+Or install manually:
+```r
+install.packages("pacman")
+pacman::p_load(tidyverse, manifestoR, quanteda, quanteda.textmodels,
+               ggplot2, viridis, ggsci, ggpubr, ragg, scales, gt,
+               rstatix, gridExtra, openxlsx, countrycode, scico, caret,
+               ggExtra, rempsyc, flextable, magrittr, grid, readr, dplyr)
 ```
+
+**Python environment (recommended — Conda):**
+```bash
+conda env create -f environment.yml
+conda activate contextscale
+```
+
+Or via pip:
+```bash
+pip install -r requirements.txt
+```
+
+See [`requirements.txt`](requirements.txt) and [`environment.yml`](environment.yml) for pinned package versions (Python 3.11.14, PyTorch 2.9.0).
 
 A CUDA-capable GPU (≥8 GB VRAM) is strongly recommended for Step 3.
 
-**Manifesto API key:** Register at [manifesto-project.wzb.eu](https://manifesto-project.wzb.eu/) and place your API key in `manifesto_apikey.txt` in the root folder.
+**Manifesto API key:** Register for a free key at [manifesto-project.wzb.eu](https://manifesto-project.wzb.eu/). Create a file `manifesto_apikey.txt` in the repository root and paste your key into it:
+```bash
+echo "YOUR_API_KEY_HERE" > manifesto_apikey.txt
+```
+This file is git-ignored and will never be committed. Alternatively, download the pre-generated manifesto CSVs directly from [Dataverse](https://dataverse.harvard.edu/dataverse/PSRM) and skip Step 1.
 
 ---
 
@@ -78,18 +103,26 @@ This R script uses the `manifestoR` package to download annotated manifesto quas
 
 ---
 
-### Step 2 — R Data Preparation (`02_r_prep.Rmd`)
+### Step 2 — R Preparation (`02_r_prep.Rmd`)
 
-This R script prepares the Wordfish benchmarks and supplementary datasets used for validation.
+Runs immediately after Step 1. Produces inputs that `03_main_analyses.ipynb` needs.
 
 **What it does:**
 1. **CHES data cleaning** — processes the Chapel Hill Expert Survey (1999–2019) and saves `data/r_outputs/ches_cleaned.csv`.
-2. **Wordfish — general** — runs country-by-country Wordfish models on the full manifesto corpus; saves `data/r_outputs/wf_gen_all_countries.csv`.
-3. **Wordfish — by topic** — runs Wordfish separately for each country × topic combination (Economics, Labour & Social Welfare, Immigration, European Integration, Environment–Growth); saves `data/r_outputs/wf_topic_all_countries.csv`.
-4. **Wordfish — environment protection** — runs Wordfish on CMP code 501 only; saves `data/r_outputs/wf_ep.csv`.
-5. **Wordfish — welfare** — runs Wordfish on CMP codes 504–505; saves `data/r_outputs/wf_welfare.csv`.
-6. **Wordfish — Twitter** — runs Wordfish on the processed Twitter dataset; saves `data/r_outputs/wf_tw.csv`.
-7. **Coalition agreements** — prepares coalition contract texts for subsequent scaling.
+2. **Coalition agreements** — reads the hand-coded coalition agreement Excel files and saves `data/r_outputs/coalitionagree_texts.csv` (used by Section 3.7 of the Python notebook).
+
+---
+
+### Step 4 — Wordfish Benchmarks (`04_r_prep.Rmd`)
+
+> **Runs after Step 3**, not before. Requires `data/py_outputs/manifesto.csv` (from §3.1 of the Python notebook) and `data/py_outputs/tw_processed.csv` (from §3.5).
+
+**What it does:**
+1. **Wordfish — general** — country-by-country Wordfish; saves `data/r_outputs/wf_gen_all_countries.csv`.
+2. **Wordfish — by topic** — per country × topic; saves `data/r_outputs/wf_topic_all_countries.csv`.
+3. **Wordfish — environment protection** — CMP code 501; saves `data/r_outputs/wf_ep.csv`.
+4. **Wordfish — welfare** — CMP codes 504–505; saves `data/r_outputs/wf_welfare.csv`.
+5. **Wordfish — Twitter** — saves `data/r_outputs/wf_tw.csv`.
 
 > **Note:** Wordfish models are run separately per country (and per topic) because Wordfish positions are not comparable across estimation contexts.
 
@@ -187,9 +220,9 @@ python train.py --num_models 5 --epochs 5
 
 ---
 
-### Step 4 — Visualizations (`04_visualizations.Rmd`)
+### Step 5 — Visualizations (`05_visualizations.Rmd`)
 
-This R notebook produces all figures and tables in the paper. Run after completing Steps 1–3.
+This R notebook produces all figures and tables in the paper. Run after completing all previous steps.
 
 **Inputs loaded:**
 - ContextScale scores: `data/py_outputs/ensemble_full_dataset.csv`, `data/py_outputs/cs_tw.csv`
@@ -204,9 +237,41 @@ This R notebook produces all figures and tables in the paper. Run after completi
 
 ## Data Availability
 
-The Manifesto corpus requires a free API key from [manifesto-project.wzb.eu](https://manifesto-project.wzb.eu/). The CHES dataset is available at [chesdata.eu](https://www.chesdata.eu/). The MOTN Twitter datasets are from the paper **Sentiment is Not Stance: Target-Aware Opinion Classification for Political Text Analysis** (https://www.cambridge.org/core/journals/political-analysis/article/sentiment-is-not-stance-targetaware-opinion-classification-for-political-text-analysis/743A9DD62DF3F2F448E199BDD1C37C8D).
+All data and trained model weights needed to replicate the paper are archived on **[Harvard Dataverse (PSRM)](https://dataverse.harvard.edu/dataverse/PSRM)**. The Dataverse deposit includes:
 
-Final scaled datasets (party position scores) are available on [PSRM Dataverse](https://dataverse.harvard.edu/).
+- Pre-generated manifesto corpus CSVs (`data/r_outputs/pulled_manifestoes.csv`, `pulled_manifestoes_test.csv`)
+- All intermediate outputs (`data/r_outputs/`, `data/py_outputs/`)
+- Trained ensemble model weights (`.safetensors`)
+- Final scaled party position datasets (`results/datasets/`)
+
+### Data sources
+
+| Dataset | Source | Version | Notes |
+|---------|--------|---------|-------|
+| Manifesto corpus (text) | [manifesto-project.wzb.eu](https://manifesto-project.wzb.eu/) | MPDS2024a | Requires free API key; pre-generated CSVs on Dataverse |
+| CMP metadata | [manifesto-project.wzb.eu](https://manifesto-project.wzb.eu/) | MPDS2024a | Included in `data/CMP/` |
+| CHES expert survey | [chesdata.eu](https://www.chesdata.eu/) | Means v3, 1999–2019 | Included in `data/ches/` |
+| Coalition agreements | Author-coded | — | Included in `data/coalitionagree/` |
+| Twitter ground-truth (MOTN) | [Hegelich & Janetzko 2016](https://www.cambridge.org/core/journals/political-analysis/article/sentiment-is-not-stance-targetaware-opinion-classification-for-political-text-analysis/743A9DD62DF3F2F448E199BDD1C37C8D) | — | Included in `data/MOTN/` |
+
+### Trained model weights
+
+Model weights are available as `.zip` packages on Dataverse. Download and unzip into `results/models/`:
+
+```bash
+# After downloading from Dataverse:
+unzip ensemble_weights.zip -d results/models/ensemble/
+unzip ablation_weights.zip -d results/models/
+```
+
+Weights can then be loaded directly:
+```python
+from safetensors.torch import load_file
+state_dict = load_file("results/models/ensemble/model_ensemble_0.safetensors")
+model.load_state_dict(state_dict)
+```
+
+See [REPLICATION_GUIDE.md](REPLICATION_GUIDE.md) for the full list of available model packages and detailed setup instructions.
 
 ---
 
