@@ -2,6 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
+.RProfile
+ContextScale.Rproj
 *.json
 *.pt
 /results/models
@@ -10,6 +12,8 @@
 /data/py_outputs
 /utils/legacy.py
 /data/coalitionagree
+/renv
+
 # Replication script logs
 /logs/
 
