@@ -69,8 +69,8 @@ def load_and_prepare_data():
     print("Loading manifesto data...")
     
     # Check if preprocessed data exists
-    manifesto_path = 'data/temps/manifesto.csv'
-    manifesto_regrouped_path = 'data/temps/manifesto_regrouped.csv'
+    manifesto_path = 'data/py_outputs/manifesto.csv'
+    manifesto_regrouped_path = 'data/py_outputs/manifesto_regrouped.csv'
     
     if os.path.exists(manifesto_path) and os.path.exists(manifesto_regrouped_path):
         print("Found preprocessed data, loading...")
@@ -109,7 +109,7 @@ def load_and_prepare_data():
         manifesto_regrouped = manifesto_regrouped.drop_duplicates().reset_index(drop=True)
         
         # Save preprocessed data
-        os.makedirs('data/temps', exist_ok=True)
+        os.makedirs('data/py_outputs', exist_ok=True)
         manifesto_regrouped.to_csv(manifesto_regrouped_path, encoding='utf-8', index=False)
         manifesto.to_csv(manifesto_path, encoding='utf-8', index=False)
     
@@ -136,15 +136,15 @@ def create_dataset(manifesto_reduced):
     manifesto_dataset = manifesto_dataset.class_encode_column('topic_sentiment')
     
     # Save class labels
-    os.makedirs('data/temps', exist_ok=True)
+    os.makedirs('data/py_outputs', exist_ok=True)
     
     topic_labels = manifesto_dataset.features['topic'].names
-    with open('data/temps/topic_labels', 'wb') as fp:
+    with open('data/py_outputs/topic_labels', 'wb') as fp:
         pickle.dump(topic_labels, fp)
     print(f"Topic labels: {topic_labels}")
     
     sentiment_labels = manifesto_dataset.features['sentiment'].names
-    with open('data/temps/sentiment_labels', 'wb') as fp:
+    with open('data/py_outputs/sentiment_labels', 'wb') as fp:
         pickle.dump(sentiment_labels, fp)
     print(f"Sentiment labels: {sentiment_labels}")
     
