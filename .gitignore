@@ -4,14 +4,12 @@
 .Ruserdata
 *.json
 *.pt
-/results/
-/data/coalitionagree
+/results/models
+/results/datasets
 /data/r_outputs
 /data/py_outputs
-/data/temps
 /utils/legacy.py
-data/py_outputs/cs_topic.csv
-
+/data/coalitionagree
 # Replication script logs
 /logs/
 

@@ -25,6 +25,8 @@ dependencies:
     - matplotlib==3.10.7
     - seaborn==0.13.2
     - tqdm==4.67.1
+    - jupyter==1.1.1
+    - nbconvert==7.16.4
 # Create environment:  conda env create -f environment.yml
 # Activate:            conda activate contextscale
 # GPU note: Replace torch/torchvision pip entries with CUDA-specific wheels

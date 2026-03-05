@@ -6,14 +6,14 @@ date: "2023-09-29"
 
 ## Overview
 
-This script runs **after** `03_main_analyses.ipynb`. It uses the preprocessed
+This script runs **after** `03a_main_analyses.ipynb`. It uses the preprocessed
 manifesto data and processed Twitter data that the Python notebook produces to
 run all Wordfish benchmark models used for validation in Step 5.
 
 Prerequisites:
-- `03_main_analyses.ipynb` must have been run through at minimum:
+- `03a_main_analyses.ipynb` must have been run through at minimum:
   - **Section 3.1** (Data Preparation) — produces `data/py_outputs/manifesto.csv`
-  - **Section 3.5** (Twitter fine-tuning) — produces `data/py_outputs/tw_processed.csv`
+  - **Section 3.4** (Twitter fine-tuning) — produces `data/py_outputs/tw_processed.csv`
 
 Outputs (all consumed by `04_visualizations.Rmd`):
 - `data/r_outputs/wf_gen_all_countries.csv`
@@ -191,7 +191,7 @@ for (country_name in countries) {
                    dfm() %>%
                    dfm_trim(min_termfreq = 10, max_docfreq = 0.75, docfreq_type = "prop", verbose = TRUE)
     
-      wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", sparse = TRUE)
+      wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson")
       
       # Add country name to the results
       retained_docs <- docnames(wf_mod)
@@ -247,7 +247,7 @@ for (country_name in countries) {
                    dfm() %>%
                    dfm_trim(min_termfreq = 10, max_docfreq = 0.75, docfreq_type = "prop", verbose = TRUE)
     
-      wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson", sparse = TRUE)
+      wf_mod <- quanteda.textmodels::textmodel_wordfish(dfmat, dispersion = "poisson")
       
       # Add country name to the results
       retained_docs <- docnames(wf_mod)

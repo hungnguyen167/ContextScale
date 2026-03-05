@@ -26,10 +26,6 @@ wf_gen <- read.csv("data/r_outputs/wf_gen_all_countries.csv")
 wf_topic <- read_csv("data/r_outputs/wf_topic_all_countries.csv")
 wf_tw <- read_csv("data/r_outputs/wf_tw.csv")
 
-## CHES 
-
-ches <- read_csv("data/r_outputs/ches_cleaned.csv")
-
 ## Datasets
 
 manifesto_cs_topic <- read_csv("results/datasets/ensemble_full_dataset.csv")
@@ -307,9 +303,7 @@ agg_png(filename = here::here("results","tabs and figs","figure 2.png"), res = 3
 figure_2
 invisible(dev.off())
 
-agg_tiff(filename = here::here("results","tabs and figs","figure 2.tiff"), res = 360, width = 4800, height = 3600)
-figure_2
-invisible(dev.off())
+
 
 ```
 
@@ -489,7 +483,7 @@ p_cs <- ggplot(fig4_twitter_df %>% filter(method == "ContextScale (Twitter)"),
 # Plot 3: R&C
 p_rc <- ggplot(fig4_twitter_df %>% filter(method == "R&C - Dimension 1 (Twitter)"), 
                aes(x = factor(lr, levels = c("left", "right")), 
-                   y = score*-1, ## flip to make it coherent (left = negative, right = positive)
+                   y = score, 
                    fill = topic)) +
     geom_bar(stat = "identity", position = position_dodge(width = 0.8), color = "black") +
     geom_text(aes(label = paste0("n=", n)), 
@@ -921,7 +915,7 @@ cor_table_all <- bind_rows(cor_table_gen, cor_table_econ, cor_table_eu,
 ```{r figure a2}
 cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#0072B2", "#F0E442", "#D55E00", "#CC79A7")
 
-plot_cor_ches <- ggplot(data = cor_table_all, aes(x = topic, y = abs(cor), fill = factor(techniques))) +
+plot_cor <- ggplot(data = cor_table_all, aes(x = topic, y = abs(cor), fill = factor(techniques))) +
     geom_bar(stat = "identity", position = position_dodge(width = 0.8), color = "black") +
     scale_fill_manual(name = "Techniques",  
                       labels = c("MARPOR - Log", "R&C - Dim 1", "Wordfish"),
@@ -932,7 +926,7 @@ plot_cor_ches <- ggplot(data = cor_table_all, aes(x = topic, y = abs(cor), fill 
     theme_bw(base_size = 18) +
     theme(legend.position = "top")
 
-figure_a2 <- plot_cor_ches
+figure_a2 <- plot_cor
 agg_png(filename = here::here("results", "tabs and figs", "figure A2.png"), res = 360, width = 4800, height = 3200)
 print(figure_a2)
 invisible(dev.off())

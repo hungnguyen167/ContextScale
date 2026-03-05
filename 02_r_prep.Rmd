@@ -6,12 +6,11 @@ date: "2023-09-29"
 
 ## Overview
 
-This script runs **before** `03_main_analyses.ipynb`. It prepares two outputs that
+This script runs **before** `03a_main_analyses.ipynb` and `03b_ablation_study.ipynb`. It prepares one output that
 the Python notebook depends on:
 
-1. **CHES** (`data/r_outputs/ches_cleaned.csv`) — cleaned Chapel Hill Expert Survey data
-2. **Coalition agreements** (`data/r_outputs/coalitionagree_texts.csv`) — coded coalition
-   agreement texts used in Section 3.7 of the Python notebook
+1. **Coalition agreements** (`data/r_outputs/coalitionagree_texts.csv`) — coded coalition
+   agreement texts used in Section 3.6 of `03a_main_analyses.ipynb`
 
 Prerequisites: `01_manifesto_pull.Rmd` must have been run first (produces
 `data/r_outputs/pulled_manifestoes.csv`).
@@ -22,64 +21,6 @@ rm(list=ls())
 pacman::p_load(quanteda, quanteda.textmodels, tidyverse, readr, ggplot2, rstatix,
                grid, gridExtra, viridis, ggsci, ggpubr, ragg, scales, openxlsx,
                countrycode)
-
-ches <- read_csv("data/ches/1999-2019_CHES_dataset_meansv3.csv")
-```
-
-## CHES - Process data
-
-```{r ches}
-
-ches_cleaned <- ches %>%
-    rename(country_id=country) %>%
-    mutate(
-        country = case_when(
-            country_id == 1 ~ "Belgium",
-            country_id == 2 ~ "Denmark",
-            country_id == 3 ~ "Germany",
-            country_id == 4 ~ "Greece",
-            country_id == 5 ~ "Spain",
-            country_id == 6 ~ "France",
-            country_id == 7 ~ "Ireland",
-            country_id == 8 ~ "Italy",
-            country_id == 10 ~ "Netherlands",
-            country_id == 11 ~ "United Kingdom",
-            country_id == 12 ~ "Portugal",
-            country_id == 13 ~ "Austria",
-            country_id == 14 ~ "Finland",
-            country_id == 16 ~ "Sweden",
-            country_id == 20 ~ "Bulgaria",
-            country_id == 21 ~ "Czech Republic",
-            country_id == 22 ~ "Estonia",
-            country_id == 23 ~ "Hungary",
-            country_id == 24 ~ "Latvia",
-            country_id == 25 ~ "Lithuania",
-            country_id == 26 ~ "Poland",
-            country_id == 27 ~ "Romania",
-            country_id == 28 ~ "Slovakia",
-            country_id == 29 ~ "Slovenia",
-            country_id == 31 ~ "Croatia",
-            country_id == 37 ~ "Malta",
-            country_id == 38 ~ "Luxembourg",
-            country_id == 40 ~ "Cyprus",
-            TRUE ~ NA_character_
-        )
-    ) %>%
-    group_by(country, cmp_id, electionyear) %>%
-    summarise(
-        ches_lr = mean(lrgen, na.rm=TRUE),
-        ches_regions = mean(regions, na.rm=TRUE),
-        ches_econ = mean(lrecon, na.rm=TRUE),
-        ches_env = mean(environment, na.rm=TRUE),
-        ches_eu = mean(eu_position, na.rm=TRUE),
-        ches_immgr = mean(immigrate_policy, na.rm=TRUE),
-        ches_wf = mean(redistribution, na.rm = TRUE)
-    ) %>%
-    ungroup() %>%
-    rename(party=cmp_id, election=electionyear)
-
-
-write.csv(ches_cleaned, "data/r_outputs/ches_cleaned.csv", row.names=FALSE)
 ```
 
 ## Prepping data for COALITIONAGREE
