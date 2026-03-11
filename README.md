@@ -2,7 +2,7 @@
 
 Replication repository for:
 
-> Nguyen, Hung H. V. "A Sentiment-Based Approach to Measuring Multidimensional Party Positions using Transformer." *Political Science Research and Methods* (2026). 
+> Nguyen, Hung H. V. "A Sentiment-Based Approach to Measuring Multidimensional Party Positions using Transformer." *Political Science Research and Methods* (Forthcoming, 2026). 
 
 **ContextScale** is a transformer-based framework for scaling party positions from political texts. It uses a deep ensemble of XLM-RoBERTa models with a shared attention architecture (`ContextScalePrediction`) to simultaneously predict topic categories and sentiment/stance from quasi-sentence level manifesto data, producing uncertainty-quantified party position scores. The approach is validated against Wordfish and Doc2Vec (Rheault & Cochrane 2020), and is extended to coalition agreements and Twitter data.
 
@@ -348,6 +348,6 @@ See [REPLICATION_GUIDE.md](REPLICATION_GUIDE.md) for the full list of available 
   author  = {Nguyen, Hung H. V.},
   title   = {A Sentiment-Based Approach to Measuring Multidimensional Party Positions using Transformer},
   journal = {Political Science Research and Methods},
-  year    = {2026}
+  year    = {forthcoming}
 }
 ```
