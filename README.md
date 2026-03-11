@@ -1,4 +1,4 @@
-# ContextScale
+# ContextScale - A Sentiment-Based Approach to Measuring Multidimensional Party Positions using Transformer
 
 Replication repository for:
 
