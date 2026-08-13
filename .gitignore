@@ -6,14 +6,14 @@
 ContextScale.Rproj
 *.json
 *.pt
-/results/models
-/results/datasets
-/data/r_outputs
-/data/py_outputs
+results/models
+results/datasets
+data/r_outputs
+data/py_outputs
 /utils/legacy.py
 /data/coalitionagree
 /renv
-
+.github/
 # Replication script logs
 /logs/
 
