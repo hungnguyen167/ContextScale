@@ -23,7 +23,7 @@ datasets==4.2.0
 # Classical NLP
 gensim==4.3.3
 spacy==3.8.7
-nltk==3.9.2
+nltk==3.10.0
 
 # Data science
 numpy==1.26.4
