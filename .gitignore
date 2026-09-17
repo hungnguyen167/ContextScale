@@ -21,3 +21,4 @@ data/py_outputs
 manifesto_apikey.txt
 __pycache__/
 *.pyc
+audit/
